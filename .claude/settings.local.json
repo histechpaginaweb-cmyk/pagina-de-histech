@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($chrome=\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\"; cmd /c \"`\"$chrome`\" --headless --disable-gpu --no-sandbox --virtual-time-budget=9000 --dump-dom http://localhost:3210 > dom.html 2> chrome_err.txt\"; \"dom lines: \" + \\(\\(Get-Content dom.html | Measure-Object -Line\\).Lines\\); Get-Content chrome_err.txt | Where-Object { $_ -match \"\\(?i\\)console|error|warn|uncaught|hydrat|fail|404|expected\" } | Select-Object -First 30)",
+      "PowerShell(\"err size: \" + \\(if \\(Test-Path chrome_err.txt\\) { \\(Get-Item chrome_err.txt\\).Length } else { 'none' }\\); $chrome=\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\"; cmd /c \"`\"$chrome`\" --headless=new --disable-gpu --no-sandbox --enable-logging=stderr --log-level=0 --virtual-time-budget=8000 --dump-dom http://localhost:3210 > nul 2> chrome_err2.txt\"; \"--- console lines ---\"; Get-Content chrome_err2.txt | Where-Object { $_ -match \"CONSOLE\" } | Select-Object -First 25)",
+      "PowerShell($tmp=@\\(\"hero_fondo.png\",\"L.png\",\"R.png\",\"fin.png\",\"fin2.png\",\"hdr.png\",\"hdr2.png\",\"hdr3.png\"\\); $n=0; foreach\\($f in $tmp\\){ if\\(Test-Path $f\\){ Remove-Item $f -Force; $n++ } }; \"removed $n\"; try { $c = Get-NetTCPConnection -LocalPort 3210 -State Listen -ErrorAction Stop; $c.OwningProcess | Sort-Object -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }; \"server stopped\" } catch { \"no server\" })",
+      "PowerShell($env:PORT=\"3210\"; npm run start)",
+      "Bash(node -e \"import\\('sharp'\\).then\\(async \\({default:sharp}\\)=>{const m=await sharp\\('fondoclaro.jpg'\\).metadata\\(\\);console.log\\('size',m.width,m.height\\);const {data,info}=await sharp\\('fondoclaro.jpg'\\).raw\\(\\).toBuffer\\({resolveWithObject:true}\\);const {width,height,channels}=info;const corners=[[0,0],[width-1,0],[0,height-1],[width-1,height-1],[Math.floor\\(width/2\\),0]];for\\(const [x,y] of corners\\){const i=\\(y*width+x\\)*channels;console.log\\('px',x,y,'=',data[i],data[i+1],data[i+2]\\);}}\\)\")"
+    ]
+  }
+}

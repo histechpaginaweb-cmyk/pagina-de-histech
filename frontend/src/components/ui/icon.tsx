@@ -1,0 +1,77 @@
+import {
+  Activity,
+  Award,
+  Banknote,
+  BrainCircuit,
+  Briefcase,
+  Building2,
+  Calculator,
+  Cloud,
+  Cpu,
+  Eye,
+  Factory,
+  GraduationCap,
+  Heart,
+  HeartHandshake,
+  HeartPulse,
+  Landmark,
+  Layers,
+  Lightbulb,
+  Network,
+  PiggyBank,
+  Server,
+  Settings2,
+  Shield,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Truck,
+  Workflow,
+  type LucideIcon,
+} from "lucide-react";
+
+const registry: Record<string, LucideIcon> = {
+  Activity,
+  Award,
+  Banknote,
+  BrainCircuit,
+  Briefcase,
+  Building2,
+  Calculator,
+  Cloud,
+  Cpu,
+  Eye,
+  Factory,
+  GraduationCap,
+  Heart,
+  HeartHandshake,
+  HeartPulse,
+  Landmark,
+  Layers,
+  Lightbulb,
+  Network,
+  PiggyBank,
+  Server,
+  Settings2,
+  Shield,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Truck,
+  Workflow,
+};
+
+export function Icon({
+  name,
+  className,
+}: {
+  name: string;
+  className?: string;
+}) {
+  const Cmp = registry[name] ?? Sparkles;
+  return <Cmp className={className} aria-hidden />;
+}

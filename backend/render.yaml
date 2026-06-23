@@ -1,0 +1,33 @@
+# Blueprint de Render para el backend de HISTECH.
+# Si conectas el repo con "Blueprint", Render crea el servicio automáticamente.
+# (También puedes crearlo a mano: New → Web Service → root dir "backend".)
+services:
+  - type: web
+    name: histech-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_ORIGIN
+        sync: false # pon aquí tu dominio de Vercel
+      - key: R2_ACCOUNT_ID
+        sync: false # ID de cuenta de Cloudflare
+      - key: R2_ACCESS_KEY_ID
+        sync: false # del API Token de R2
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false # del API Token de R2
+      - key: R2_BUCKET
+        sync: false # nombre del bucket (ej. histech)
+      - key: R2_PUBLIC_URL
+        sync: false # URL pública del bucket (r2.dev o dominio propio)
+      - key: ADMIN_USER
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true # Render genera un secreto aleatorio

@@ -1,0 +1,243 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── HISTECH brand palette — Púrpura Tecnológico ──────────────
+       Fuente única de verdad para CSS sin Tailwind (gradientes raw,
+       canvas, glows). Mantener en sintonía con tailwind.config.ts. */
+    --brand-purple: #7c3aed; /* Primario  — color oficial de marca */
+    --brand-light: #a855f7; /* Secundario — púrpura medio */
+    --brand-lavender: #c084fc; /* Acento     — lavanda */
+    --brand-deep: #6d28d9; /* Profundo   — sombras / profundidad */
+    --brand-purple-rgb: 124, 58, 237;
+    --brand-light-rgb: 168, 85, 247;
+    --brand-lavender-rgb: 192, 132, 252;
+    --brand-deep-rgb: 109, 40, 217;
+
+    /* Superficies (light premium) */
+    --brand-dark: #ffffff; /* base de página (antes oscuro) */
+    --brand-surface: #f7f6fb; /* superficies elevadas suaves */
+    --brand-dark-rgb: 255, 255, 255;
+    --brand-surface-rgb: 247, 246, 251;
+
+    /* Light enterprise theme (premium claro) ─────────────────── */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 221 39% 11%; /* #111827 */
+
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 221 39% 11%;
+
+    --muted: 220 14% 96%; /* #F3F4F6 */
+    --muted-foreground: 215 14% 34%; /* #4B5563 */
+
+    --primary: 262 83% 58%; /* #7C3AED */
+    --primary-foreground: 0 0% 100%;
+
+    --accent: 271 91% 65%; /* #A855F7 */
+    --accent-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%; /* #E5E7EB */
+    --ring: 262 83% 58%;
+
+    --radius: 0.9rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  ::selection {
+    background: rgba(var(--brand-purple-rgb), 0.35);
+    color: #fff;
+  }
+
+  /* Accessible focus ring (WCAG 2.2 — 2.4.11/2.4.13) */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Honour user motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--brand-dark);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--brand-purple), var(--brand-light));
+    border-radius: 999px;
+    border: 2px solid var(--brand-dark);
+  }
+}
+
+@layer components {
+  /* Gradient text used in headlines (corporate purple, legible sobre claro) */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, #7c3aed, #a855f7);
+  }
+
+  .text-gradient-brand {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, #7c3aed, #a855f7);
+  }
+
+  /* Highlight de headline — degradado corporativo morado (#7C3AED → #A855F7). */
+  .text-gradient-grow {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, #7c3aed, #a855f7);
+  }
+
+  /* Glassmorphism surface (light) */
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid #e5e7eb;
+  }
+
+  /* Tarjeta clara premium con hover elegante */
+  .card-surface {
+    @apply relative rounded-2xl border bg-white transition-all duration-300;
+    border-color: #e5e7eb;
+    box-shadow:
+      0 1px 2px rgba(17, 24, 39, 0.04),
+      0 10px 30px -18px rgba(17, 24, 39, 0.12);
+  }
+  .card-surface:hover {
+    transform: translateY(-6px);
+    border-color: rgba(124, 58, 237, 0.4);
+    box-shadow: 0 22px 48px -24px rgba(124, 58, 237, 0.32);
+  }
+
+  /* ── Partner card — Light Premium Technology ─────────────────── */
+  .partner-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 24px;
+    border-radius: 24px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    box-shadow:
+      0 1px 2px rgba(17, 24, 39, 0.04),
+      0 10px 30px -18px rgba(17, 24, 39, 0.12);
+    transition: all 0.3s ease;
+    /* Desktop */
+    width: 280px;
+    height: 120px;
+  }
+  .partner-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(124, 58, 237, 0.4);
+    box-shadow:
+      0 0 0 1px rgba(124, 58, 237, 0.15),
+      0 22px 48px -24px rgba(124, 58, 237, 0.3);
+  }
+
+  /* Tablet */
+  @media (max-width: 1024px) {
+    .partner-card {
+      width: 240px;
+      height: 110px;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .partner-card {
+      width: 220px;
+      height: 100px;
+    }
+  }
+
+  .partner-card__inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .partner-card__inner {
+    position: relative;
+  }
+
+  .partner-card__logo {
+    position: relative;
+    max-width: 180px;
+    max-height: 70px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: filter 0.3s ease;
+  }
+
+  /* Eyebrow / section label (light) */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium uppercase tracking-widest;
+    border-color: #e5e7eb;
+    background: rgba(124, 58, 237, 0.05);
+    color: #6b7280;
+  }
+}
+
+@layer utilities {
+  .container-tight {
+    @apply mx-auto w-full max-w-5xl px-6;
+  }
+  .bg-grid {
+    background-image: theme("backgroundImage.grid-faint");
+    background-size: 48px 48px;
+  }
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+  }
+}

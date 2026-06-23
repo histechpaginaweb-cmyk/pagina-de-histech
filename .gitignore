@@ -1,0 +1,20 @@
+# ── Monorepo HISTECH ──
+# El frontend (frontend/) y el backend (backend/) tienen su propio .gitignore.
+# Aquí solo reglas generales que aplican a todo el repo.
+
+# Dependencias (cubre frontend/node_modules y backend/node_modules)
+node_modules
+
+# Variables de entorno (NUNCA subir)
+.env
+.env*.local
+
+# Caches/builds
+*.tsbuildinfo
+.next
+.vercel
+
+# OS / editor
+.DS_Store
+npm-debug.log*
+*.log

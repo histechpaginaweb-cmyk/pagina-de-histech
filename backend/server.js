@@ -12,7 +12,14 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
 
-const { readProducts, writeProducts, uploadImage, isConfigured } = require("./r2");
+const {
+  readProducts,
+  writeProducts,
+  uploadImage,
+  isConfigured,
+  readServiceTexts,
+  writeServiceTexts,
+} = require("./r2");
 const {
   checkCredentials,
   issueCookie,
@@ -197,6 +204,52 @@ app.post(
     }
   },
 );
+
+// ── TEXTOS DE PÁGINAS DE SERVICIO ──
+// Público: lo consume el frontend para sobreescribir title/subtitle/intro.
+app.get("/api/service-texts", async (_req, res) => {
+  try {
+    res.json(await readServiceTexts());
+  } catch (err) {
+    console.error("GET /api/service-texts", err);
+    res.status(500).json({ error: "Error al leer los textos" });
+  }
+});
+
+// Admin: lista para editar.
+app.get("/api/admin/service-texts", requireAdmin, async (_req, res) => {
+  try {
+    res.json(await readServiceTexts());
+  } catch (err) {
+    console.error("GET /api/admin/service-texts", err);
+    res.status(500).json({ error: "Error al leer los textos" });
+  }
+});
+
+// Admin: actualizar los textos de un servicio (por slug).
+app.put("/api/admin/service-texts/:slug", requireAdmin, async (req, res) => {
+  const slug = String(req.params.slug);
+  const { title, subtitle, intro } = req.body || {};
+  if (!title || !String(title).trim()) {
+    return res.status(400).json({ error: "El título es obligatorio" });
+  }
+  try {
+    const items = await readServiceTexts();
+    const idx = items.findIndex((s) => s.slug === slug);
+    if (idx === -1) return res.status(404).json({ error: "Servicio no encontrado" });
+    items[idx] = {
+      ...items[idx],
+      title: String(title),
+      subtitle: String(subtitle ?? ""),
+      intro: String(intro ?? ""),
+    };
+    await writeServiceTexts(items);
+    res.json(items[idx]);
+  } catch (err) {
+    console.error("PUT /api/admin/service-texts/:slug", err);
+    res.status(500).json({ error: "No se pudo guardar" });
+  }
+});
 
 // Manejo de error de multer (tamaño/tipo)
 app.use((err, _req, res, _next) => {

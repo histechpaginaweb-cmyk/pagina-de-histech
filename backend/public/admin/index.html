@@ -79,6 +79,19 @@
       .toast.show { opacity: 1; }
       .hide { display: none !important; }
       .spinner { font-size: 12px; color: var(--muted); }
+
+      /* Pestañas */
+      .tabs { display: flex; gap: 6px; margin-bottom: 22px; border-bottom: 1px solid var(--border); }
+      .tab {
+        background: transparent; border: none; border-bottom: 2px solid transparent;
+        border-radius: 0; padding: 11px 16px; color: var(--muted); font-weight: 500;
+      }
+      .tab:hover { color: var(--text); border-color: transparent; }
+      .tab.active { color: var(--text); border-bottom-color: var(--purple2); }
+      .tabhead { margin-bottom: 14px; }
+      .text-slug { font-weight: 700; margin-bottom: 4px; }
+      .text-slug .muted { font-weight: 400; font-size: 12px; }
+      #textsGrid { grid-template-columns: 1fr; }
     </style>
   </head>
   <body>
@@ -100,14 +113,31 @@
     <!-- PANEL -->
     <div id="panelView" class="wrap hide">
       <header class="top">
-        <div class="brand">HI<span>STECH</span> · Productos</div>
+        <div class="brand">HI<span>STECH</span> · Admin</div>
         <div class="row" style="flex:0 0 auto">
-          <button class="ghost" id="addBtn">+ Nuevo producto</button>
           <button class="ghost" id="logoutBtn">Salir</button>
         </div>
       </header>
-      <p class="muted" id="status">Cargando…</p>
-      <div class="grid" id="grid"></div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="products" type="button">Productos del carrusel</button>
+        <button class="tab" data-tab="texts" type="button">Textos de las páginas</button>
+      </div>
+
+      <!-- TAB: Productos del carrusel -->
+      <div id="tab-products">
+        <div class="tabhead">
+          <button class="ghost" id="addBtn" type="button">+ Nuevo producto</button>
+        </div>
+        <p class="muted" id="status">Cargando…</p>
+        <div class="grid" id="grid"></div>
+      </div>
+
+      <!-- TAB: Textos de las páginas de servicio -->
+      <div id="tab-texts" class="hide">
+        <p class="muted" id="textsStatus">Cargando…</p>
+        <div class="grid" id="textsGrid"></div>
+      </div>
     </div>
 
     <div class="toast" id="toast"></div>

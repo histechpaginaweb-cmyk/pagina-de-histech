@@ -4,6 +4,7 @@ const ICONS = [
   "ShieldCheck", "Cloud", "Workflow", "Server", "BrainCircuit", "Activity",
   "Network", "Cpu", "Layers", "Lightbulb", "Sparkles", "Settings2", "Shield",
 ];
+let textsLoaded = false; // los textos de páginas se cargan al abrir su pestaña
 
 async function api(path, opts = {}) {
   const res = await fetch(path, { credentials: "include", ...opts });
@@ -26,6 +27,7 @@ function showToast(msg) {
 function showLogin() {
   $("loginView").classList.remove("hide");
   $("panelView").classList.add("hide");
+  textsLoaded = false; // forzar recarga de textos en la próxima sesión
 }
 function showPanel() {
   $("loginView").classList.add("hide");
@@ -228,6 +230,83 @@ ICONS.forEach((n) => {
   dl.appendChild(o);
 });
 document.body.appendChild(dl);
+
+// ── PESTAÑAS (Productos / Textos) ──
+document.querySelectorAll(".tab").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    const tab = btn.dataset.tab;
+    $("tab-products").classList.toggle("hide", tab !== "products");
+    $("tab-texts").classList.toggle("hide", tab !== "texts");
+    if (tab === "texts" && !textsLoaded) {
+      textsLoaded = true;
+      loadServiceTexts();
+    }
+  });
+});
+
+// ── TEXTOS DE PÁGINAS DE SERVICIO ──
+async function loadServiceTexts() {
+  $("textsStatus").textContent = "Cargando…";
+  try {
+    const items = await api("/api/admin/service-texts");
+    const grid = $("textsGrid");
+    grid.innerHTML = "";
+    items.forEach((s) => grid.appendChild(renderTextCard(s)));
+    $("textsStatus").textContent = `${items.length} página(s). Edita el texto y pulsa Guardar en cada una.`;
+  } catch (err) {
+    textsLoaded = false; // permitir reintento
+    $("textsStatus").textContent = err.message;
+  }
+}
+
+function renderTextCard(s) {
+  const el = document.createElement("div");
+  el.className = "card";
+  el.innerHTML = `
+    <div class="text-slug">${s.name || s.slug} <span class="muted">/${s.slug}</span></div>
+    <label>Título</label>
+    <textarea data-f="title" rows="2"></textarea>
+    <label>Subtítulo</label>
+    <textarea data-f="subtitle" rows="3"></textarea>
+    <label>Texto introductorio (párrafo de abajo)</label>
+    <textarea data-f="intro" rows="5"></textarea>
+    <div class="card-actions">
+      <button class="primary" data-act="save" type="button">Guardar</button>
+      <span class="spinner hide" data-spin>Guardando…</span>
+    </div>
+  `;
+  const f = (n) => el.querySelector(`[data-f="${n}"]`);
+  f("title").value = s.title || "";
+  f("subtitle").value = s.subtitle || "";
+  f("intro").value = s.intro || "";
+
+  el.querySelector('[data-act="save"]').addEventListener("click", async () => {
+    const spin = el.querySelector("[data-spin]");
+    const payload = {
+      title: f("title").value.trim(),
+      subtitle: f("subtitle").value.trim(),
+      intro: f("intro").value.trim(),
+    };
+    if (!payload.title) return showToast("El título es obligatorio");
+    spin.classList.remove("hide");
+    try {
+      await api(`/api/admin/service-texts/${s.slug}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      showToast("Guardado ✓");
+    } catch (err) {
+      showToast(err.message);
+    } finally {
+      spin.classList.add("hide");
+    }
+  });
+
+  return el;
+}
 
 // ── INICIO: ¿hay sesión? ──
 (async function init() {

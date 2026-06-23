@@ -175,4 +175,148 @@ async function uploadImage(buffer, mimetype) {
   return `${R2_PUBLIC_URL.replace(/\/$/, "")}/${key}`;
 }
 
-module.exports = { isConfigured, readProducts, writeProducts, uploadImage };
+// ─────────────────────────────────────────────────────────────
+// TEXTOS DE LAS PÁGINAS DE SERVICIO (editables desde el admin).
+// Solo texto: title / subtitle / intro por cada slug de servicio.
+// El frontend los mezcla con su contenido estático (fallback).
+// ─────────────────────────────────────────────────────────────
+const SERVICE_TEXTS_KEY = "service-texts.json";
+
+const SERVICE_TEXTS_SEED = [
+  {
+    slug: "inteligencia-artificial",
+    name: "Inteligencia Artificial Empresarial",
+    title: "Inteligencia Artificial que trabaja por tu empresa",
+    subtitle:
+      "Automatización, agentes inteligentes y analítica avanzada para que tu organización decida más rápido y opere con menos fricción.",
+    intro:
+      "La inteligencia artificial dejó de ser una promesa futura: hoy es una ventaja competitiva. En HISTECH implementamos soluciones de IA aplicadas a tus procesos reales —no demos genéricas— para automatizar tareas, eliminar errores y convertir tus datos en decisiones.",
+  },
+  {
+    slug: "transformacion-digital",
+    name: "Transformación Digital",
+    title: "Modernizamos tu empresa con estrategia y tecnología",
+    subtitle:
+      "Metodologías probadas para evolucionar tu operación con innovación, automatización y una hoja de ruta clara.",
+    intro:
+      "La transformación digital no se trata de comprar tecnología, sino de rediseñar cómo opera tu empresa. Te acompañamos con una estrategia clara, medible y alineada con tus objetivos de negocio.",
+  },
+  {
+    slug: "ecosistemas-digitales",
+    name: "Ecosistemas Digitales",
+    title: "Conectamos personas, procesos, datos y tecnología",
+    subtitle:
+      "Diseñamos ecosistemas donde toda tu organización trabaja en sincronía, con información en tiempo real y automatización inteligente.",
+    intro:
+      "Una empresa eficiente no tiene islas de información. Construimos ecosistemas digitales que integran tus sistemas, automatizan tus procesos y unifican tus datos para que todo fluya.",
+  },
+  {
+    slug: "ciberseguridad",
+    name: "Ciberseguridad",
+    title: "Protegemos lo más valioso: tu información",
+    subtitle:
+      "Soluciones de seguridad precisas, basadas en el análisis profundo de tu entorno, tus riesgos y tus controles existentes.",
+    intro:
+      "En ciberseguridad, lo único constante es la evolución de las amenazas. Por eso no aplicamos plantillas: diseñamos una estrategia de seguridad a la medida de tu infraestructura para fortalecer tu operación y la confianza de tus clientes.",
+  },
+  {
+    slug: "cloud-continuidad",
+    name: "Cloud y Continuidad",
+    title: "Tu negocio, siempre disponible",
+    subtitle:
+      "Nube híbrida, respaldo y recuperación ante desastres para que tu operación nunca se detenga.",
+    intro:
+      "La continuidad de tu negocio depende de una infraestructura resiliente. Diseñamos arquitecturas cloud seguras y confiables, con respaldo y recuperación, para que accedas a tus datos desde cualquier lugar, en cualquier momento.",
+  },
+  {
+    slug: "infraestructura-de-redes",
+    name: "Infraestructura de Redes",
+    title: "La base sólida que sostiene tu operación",
+    subtitle:
+      "Conectividad confiable y robusta que comienza con un entendimiento profundo de tu entorno.",
+    intro:
+      "Deja la infraestructura de tu empresa en manos expertas. Diseñamos soluciones de red personalizadas —zero-touch, de alta calidad y con networking inteligente— para maximizar tu inversión y garantizar una experiencia de usuario óptima.",
+  },
+  {
+    slug: "computo",
+    name: "Cómputo",
+    title: "La eficiencia comienza con el equipo adecuado",
+    subtitle:
+      "Soluciones de cómputo confiables y escalables, desde estaciones corporativas hasta servidores de centro de datos.",
+    intro:
+      "La productividad de tu equipo depende de las herramientas adecuadas. Ofrecemos una amplia gama de soluciones de cómputo corporativo y servidores, optimizadas para el rendimiento y la efectividad operativa en entornos híbridos y de alta demanda.",
+  },
+  {
+    slug: "consultoria-it",
+    name: "Consultoría en IT",
+    title: "Asesoría experta para cada decisión tecnológica",
+    subtitle:
+      "¿No sabes por dónde iniciar? Te asesoramos de forma directa, capacitamos a tu equipo y logramos que tu empresa adopte el cambio.",
+    intro:
+      "La tecnología solo genera valor cuando se adopta bien. Actuamos como tu CIO virtual: combinamos experiencia técnica y de negocio para diagnosticar, recomendar y acompañar cada paso de tu evolución tecnológica.",
+  },
+  {
+    slug: "managed-services",
+    name: "Servicios Gestionados",
+    title: "Un equipo de expertos cuidando tu tecnología",
+    subtitle:
+      "Monitoreo 24/7, soporte y administración de infraestructura con costos predecibles y tranquilidad total.",
+    intro:
+      "¿Por qué contratar a una sola persona de TI cuando puedes tener todo un equipo de expertos por una fracción del costo? Nos encargamos de tu tecnología para que tú te enfoques en hacer crecer tu negocio.",
+  },
+  {
+    slug: "soluciones-web",
+    name: "Soluciones Web",
+    title: "Plataformas web de alto rendimiento",
+    subtitle:
+      "Sitios y aplicaciones web modernas, seguras y escalables que impulsan tu presencia digital y tus conversiones.",
+    intro:
+      "Tu plataforma web es la cara digital de tu empresa. Diseñamos y desarrollamos experiencias web rápidas, seguras y optimizadas para conversión, con las mejores prácticas de rendimiento, SEO y accesibilidad.",
+  },
+];
+
+/** Lee los textos de servicio desde R2. Si no existe, los siembra. */
+async function readServiceTexts() {
+  if (!client) return SERVICE_TEXTS_SEED.map((s) => ({ ...s }));
+  try {
+    const res = await client.send(
+      new GetObjectCommand({ Bucket: R2_BUCKET, Key: SERVICE_TEXTS_KEY }),
+    );
+    const arr = JSON.parse(await streamToString(res.Body));
+    if (!Array.isArray(arr)) throw new Error("service-texts.json inválido");
+    return arr;
+  } catch (err) {
+    const notFound =
+      err?.name === "NoSuchKey" ||
+      err?.Code === "NoSuchKey" ||
+      err?.$metadata?.httpStatusCode === 404;
+    if (notFound) {
+      const seed = SERVICE_TEXTS_SEED.map((s) => ({ ...s }));
+      await writeServiceTexts(seed);
+      return seed;
+    }
+    throw err;
+  }
+}
+
+/** Sobrescribe service-texts.json en R2. */
+async function writeServiceTexts(items) {
+  if (!client) throw new Error("R2 no está configurado en el servidor");
+  await client.send(
+    new PutObjectCommand({
+      Bucket: R2_BUCKET,
+      Key: SERVICE_TEXTS_KEY,
+      Body: JSON.stringify(items, null, 2),
+      ContentType: "application/json",
+    }),
+  );
+}
+
+module.exports = {
+  isConfigured,
+  readProducts,
+  writeProducts,
+  uploadImage,
+  readServiceTexts,
+  writeServiceTexts,
+};

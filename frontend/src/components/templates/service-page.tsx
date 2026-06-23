@@ -10,11 +10,19 @@ import { Faq } from "@/components/sections/faq";
 import { CtaBanner } from "@/components/sections/cta";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { servicesContent, type ServiceContent } from "@/lib/services-content";
+import { getServiceTexts } from "@/lib/get-service-texts";
 
-export function ServicePage({ data }: { data: ServiceContent }) {
+export async function ServicePage({ data }: { data: ServiceContent }) {
   const related = data.related
     .map((slug) => servicesContent[slug])
     .filter(Boolean);
+
+  // Textos editables desde el admin (R2). Si no hay override, usa el estático.
+  const overrides = await getServiceTexts();
+  const o = overrides[data.slug] ?? {};
+  const title = o.title ?? data.title;
+  const subtitle = o.subtitle ?? data.subtitle;
+  const intro = o.intro ?? data.intro;
 
   return (
     <>
@@ -36,10 +44,10 @@ export function ServicePage({ data }: { data: ServiceContent }) {
                 {data.eyebrow}
               </Badge>
               <h1 className="mt-5 text-display-xl text-balance">
-                <span className="text-gradient">{data.title}</span>
+                <span className="text-gradient">{title}</span>
               </h1>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground text-pretty">
-                {data.subtitle}
+                {subtitle}
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button href="/agenda-consultoria" size="lg">
@@ -91,7 +99,7 @@ export function ServicePage({ data }: { data: ServiceContent }) {
         <Container className="max-w-3xl">
           <Reveal>
             <p className="text-xl leading-relaxed text-foreground/90 text-pretty">
-              {data.intro}
+              {intro}
             </p>
           </Reveal>
         </Container>

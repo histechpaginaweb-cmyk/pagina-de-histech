@@ -2,13 +2,11 @@ import { Hero } from "@/components/sections/hero";
 import { ProductCarousel } from "@/components/sections/product-carousel";
 import { getProducts } from "@/lib/get-products";
 import { TrustBar } from "@/components/sections/trust-bar";
-import { Solutions } from "@/components/sections/solutions";
 import { FeatureSpotlight } from "@/components/sections/feature-spotlight";
 import { Pillars } from "@/components/sections/pillars";
 import { Results } from "@/components/sections/results";
 import { Sectors } from "@/components/sections/sectors";
 import { Partners } from "@/components/sections/partners";
-import { Metrics } from "@/components/sections/metrics";
 import { Process } from "@/components/sections/process";
 import { CtaBanner } from "@/components/sections/cta";
 import { Faq } from "@/components/sections/faq";
@@ -28,9 +26,6 @@ export default async function HomePage() {
 
       {/* 3 — Empresas / tecnología que confían */}
       <TrustBar />
-
-      {/* 3 — Soluciones Estratégicas */}
-      <Solutions />
 
       {/* 4 — Ecosistemas Digitales Inteligentes */}
       <FeatureSpotlight
@@ -153,9 +148,6 @@ export default async function HomePage() {
 
       {/* 12 — Partners */}
       <Partners />
-
-      {/* 13 — Indicadores */}
-      <Metrics />
 
       {/* 14 — Proceso */}
       <Process />

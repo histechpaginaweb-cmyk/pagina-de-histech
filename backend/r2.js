@@ -312,6 +312,146 @@ async function writeServiceTexts(items) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────
+// BLOG (editable desde el admin). Entradas en blog.json (R2).
+// Cada post: slug, title, description, category, author, date, content (Markdown).
+// El frontend lo consume; si el backend no responde, usa los MDX estáticos.
+// ─────────────────────────────────────────────────────────────
+const BLOG_KEY = "blog.json";
+
+const BLOG_SEED = [
+  {
+    slug: "ia-empresarial-por-donde-empezar",
+    title:
+      "Inteligencia Artificial Empresarial: por dónde empezar sin morir en el intento",
+    description:
+      "Una guía práctica para que tu empresa adopte IA con casos de uso reales, resultados medibles y sin riesgos innecesarios.",
+    category: "Inteligencia Artificial",
+    author: "Equipo HISTECH",
+    date: "2026-05-20",
+    content: `La inteligencia artificial dejó de ser una tendencia para convertirse en una ventaja competitiva concreta. Pero entre el ruido de las demos virales y las promesas exageradas, muchas empresas no saben por dónde empezar. Aquí te lo explicamos.
+
+## El error más común: empezar por la tecnología
+
+La mayoría de proyectos de IA fracasan porque arrancan preguntando "¿qué herramienta usamos?" en lugar de "¿qué problema queremos resolver?". La IA no es un fin, es un medio.
+
+> La pregunta correcta no es "¿cómo uso IA?", sino "¿qué proceso de mi empresa pierde tiempo, genera errores o cuesta demasiado?".
+
+## Tres casos de uso que generan valor rápido
+
+1. **Automatización de procesos repetitivos.** Validaciones, flujos documentales y tareas administrativas que consumen horas de tu equipo.
+2. **Analítica para decisiones.** Convertir datos dispersos en información en tiempo real para decidir mejor.
+3. **Asistentes inteligentes.** Atención y soporte conversacional que opera 24/7 e integra tus sistemas.
+
+## Cómo lo abordamos en HISTECH
+
+Trabajamos por fases: empezamos con un caso de uso concreto, medimos resultados y escalamos con base en evidencia. Sin grandes inversiones iniciales y sin riesgos innecesarios.
+
+¿Quieres saber qué caso de uso tiene mayor impacto en tu empresa? [Agenda una consultoría sin costo](/agenda-consultoria).`,
+  },
+  {
+    slug: "ciberseguridad-pymes-mitos",
+    title:
+      "5 mitos de ciberseguridad que están poniendo en riesgo a tu empresa",
+    description:
+      "Desmontamos las creencias más peligrosas sobre seguridad informática en empresas medianas y pequeñas.",
+    category: "Ciberseguridad",
+    author: "Equipo HISTECH",
+    date: "2026-05-08",
+    content: `La ciberseguridad sigue rodeada de mitos que, lejos de proteger, dejan a las empresas expuestas. Estos son los cinco más peligrosos que escuchamos a diario.
+
+## Mito 1: "Mi empresa es muy pequeña para ser un objetivo"
+
+Falso. Las pymes son precisamente el blanco preferido de los atacantes, porque suelen tener menos defensas. La automatización del cibercrimen no discrimina por tamaño.
+
+## Mito 2: "Con un antivirus es suficiente"
+
+El antivirus es apenas una capa. La seguridad moderna requiere protección de perímetro, control de acceso, monitoreo continuo y respaldo. La defensa es por capas.
+
+## Mito 3: "Nunca nos ha pasado nada"
+
+La ausencia de incidentes visibles no significa ausencia de riesgo. Muchas brechas pasan meses sin ser detectadas.
+
+## Mito 4: "La seguridad es solo cosa de TI"
+
+La seguridad es cultura organizacional. El factor humano sigue siendo la principal puerta de entrada: phishing, contraseñas débiles y descuidos.
+
+## Mito 5: "Es demasiado caro"
+
+Mucho más caro es un incidente: pérdida de datos, multas, interrupción de la operación y daño reputacional. La prevención siempre cuesta menos que la recuperación.
+
+## El primer paso
+
+Todo empieza con un diagnóstico de tu postura de seguridad actual. [Hablemos](/ciberseguridad) sobre cómo proteger lo más valioso de tu empresa: su información.`,
+  },
+  {
+    slug: "transformacion-digital-mas-que-tecnologia",
+    title: "Transformación digital: por qué no se trata de comprar tecnología",
+    description:
+      "La verdadera transformación digital rediseña cómo opera tu empresa. Te explicamos qué la hace exitosa.",
+    category: "Transformación Digital",
+    author: "Equipo HISTECH",
+    date: "2026-04-22",
+    content: `"Vamos a transformarnos digitalmente" suele traducirse en comprar software nuevo. Pero la tecnología sin estrategia solo automatiza el caos. La transformación real es otra cosa.
+
+## Tecnología no es transformación
+
+Implementar una herramienta no transforma nada si los procesos, las personas y la cultura no cambian con ella. La transformación digital es, ante todo, un rediseño de cómo opera tu organización.
+
+## Los cuatro pilares de una transformación exitosa
+
+- **Estrategia:** una hoja de ruta clara, priorizada por impacto y retorno.
+- **Procesos:** rediseñar antes de automatizar; nunca automatizar el desorden.
+- **Personas:** capacitación y acompañamiento para una adopción real.
+- **Datos:** decisiones basadas en información, no en intuición.
+
+## Empieza por un diagnóstico
+
+No necesitas transformarlo todo de golpe. Identifica las oportunidades de mayor impacto, prioriza y avanza por fases con resultados tempranos.
+
+> La mejor transformación digital es la que tu equipo adopta de verdad.
+
+¿Listo para trazar tu hoja de ruta? [Conoce nuestro enfoque de transformación digital](/transformacion-digital).`,
+  },
+];
+
+/** Lee las entradas del blog desde R2. Si no existen, las siembra. */
+async function readPosts() {
+  if (!client) return BLOG_SEED.map((p) => ({ ...p }));
+  try {
+    const res = await client.send(
+      new GetObjectCommand({ Bucket: R2_BUCKET, Key: BLOG_KEY }),
+    );
+    const arr = JSON.parse(await streamToString(res.Body));
+    if (!Array.isArray(arr)) throw new Error("blog.json inválido");
+    return arr;
+  } catch (err) {
+    const notFound =
+      err?.name === "NoSuchKey" ||
+      err?.Code === "NoSuchKey" ||
+      err?.$metadata?.httpStatusCode === 404;
+    if (notFound) {
+      const seed = BLOG_SEED.map((p) => ({ ...p }));
+      await writePosts(seed);
+      return seed;
+    }
+    throw err;
+  }
+}
+
+/** Sobrescribe blog.json en R2. */
+async function writePosts(posts) {
+  if (!client) throw new Error("R2 no está configurado en el servidor");
+  await client.send(
+    new PutObjectCommand({
+      Bucket: R2_BUCKET,
+      Key: BLOG_KEY,
+      Body: JSON.stringify(posts, null, 2),
+      ContentType: "application/json",
+    }),
+  );
+}
+
 module.exports = {
   isConfigured,
   readProducts,
@@ -319,4 +459,6 @@ module.exports = {
   uploadImage,
   readServiceTexts,
   writeServiceTexts,
+  readPosts,
+  writePosts,
 };

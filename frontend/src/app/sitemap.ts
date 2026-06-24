@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 import { serviceSlugs } from "@/lib/services-content";
 import { industrySlugs } from "@/lib/industries-content";
-import { getAllPostSlugs } from "@/lib/blog";
+import { getSlugs } from "@/lib/get-blog";
 import { absoluteUrl } from "@/lib/utils";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticRoutes = [
@@ -41,7 +41,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const blogRoutes = getAllPostSlugs().map((slug) => ({
+  const blogSlugs = await getSlugs();
+  const blogRoutes = blogSlugs.map((slug) => ({
     url: absoluteUrl(`/blog/${slug}`),
     lastModified: now,
     changeFrequency: "weekly" as const,

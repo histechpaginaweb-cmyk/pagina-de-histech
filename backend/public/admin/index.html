@@ -4,35 +4,43 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>HISTECH · Administrador de productos</title>
+    <title>HISTECH · Panel de administración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
-        --bg: #050816;
-        --surface: #0b1020;
-        --surface2: #11182e;
-        --border: rgba(255, 255, 255, 0.1);
-        --text: #e8eaf2;
-        --muted: #97a0b8;
+        --bg: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f3f4f6;
+        --border: #e5e7eb;
+        --text: #111827;
+        --muted: #4b5563;
         --purple: #7c3aed;
         --purple2: #a855f7;
-        --danger: #ef4444;
+        --danger: #dc2626;
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-        background: var(--bg);
+        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: #ffffff;
+        background-image: radial-gradient(72% 46% at 50% 0%, rgba(124, 58, 237, 0.07), transparent 72%);
+        background-attachment: fixed;
         color: var(--text);
       }
-      a { color: var(--purple2); }
+      a { color: var(--purple); }
       .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 18px 80px; }
       header.top {
         display: flex; align-items: center; justify-content: space-between;
         gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border);
         margin-bottom: 26px;
       }
-      .brand { font-weight: 800; letter-spacing: 0.06em; font-size: 20px; }
-      .brand span { color: var(--purple2); }
+      .brand { font-weight: 800; letter-spacing: 0.06em; font-size: 20px; color: var(--text); }
+      .brand span { color: var(--purple); }
       .muted { color: var(--muted); }
       button {
         font: inherit; cursor: pointer; border-radius: 10px;
@@ -42,40 +50,44 @@
       button:hover { border-color: var(--purple); }
       button.primary {
         background: linear-gradient(135deg, var(--purple), var(--purple2));
-        border-color: transparent; font-weight: 600;
+        border-color: transparent; color: #fff; font-weight: 600;
+        box-shadow: 0 6px 16px rgba(124, 58, 237, 0.25);
       }
-      button.ghost { background: transparent; }
-      button.danger { background: transparent; border-color: rgba(239,68,68,0.4); color: #fda4a4; }
+      button.primary:hover { filter: brightness(1.05); }
+      button.ghost { background: transparent; color: var(--text); }
+      button.danger { background: transparent; border-color: rgba(220, 38, 38, 0.35); color: var(--danger); }
       button:disabled { opacity: 0.5; cursor: not-allowed; }
       input, textarea {
         width: 100%; font: inherit; color: var(--text);
-        background: var(--bg); border: 1px solid var(--border);
+        background: #fff; border: 1px solid var(--border);
         border-radius: 10px; padding: 10px 12px; outline: none;
       }
-      input:focus, textarea:focus { border-color: var(--purple); }
+      input:focus, textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12); }
       label { display: block; font-size: 12px; color: var(--muted); margin: 12px 0 6px; }
       textarea { min-height: 84px; resize: vertical; }
 
       /* Login */
       .login { max-width: 380px; margin: 8vh auto 0; background: var(--surface);
-        border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+        border: 1px solid var(--border); border-radius: 16px; padding: 28px;
+        box-shadow: 0 12px 34px rgba(17, 24, 39, 0.08); }
       .login h1 { margin: 0 0 4px; font-size: 22px; }
-      .err { color: #fda4a4; font-size: 13px; min-height: 18px; margin-top: 10px; }
+      .err { color: var(--danger); font-size: 13px; min-height: 18px; margin-top: 10px; }
 
       /* Grid de productos */
       .grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
       @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
       .card { background: var(--surface); border: 1px solid var(--border);
-        border-radius: 16px; padding: 18px; }
+        border-radius: 16px; padding: 18px; box-shadow: 0 4px 16px rgba(17, 24, 39, 0.05); }
       .thumb { width: 100%; aspect-ratio: 16/10; object-fit: cover;
         border-radius: 12px; background: var(--surface2); border: 1px solid var(--border); }
       .thumb.empty { display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; }
       .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
       .row > * { flex: 1; }
-      .card-actions { display: flex; gap: 10px; margin-top: 14px; }
+      .card-actions { display: flex; gap: 10px; margin-top: 14px; align-items: center; }
       .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-        background: var(--surface2); border: 1px solid var(--border); padding: 12px 20px;
-        border-radius: 12px; opacity: 0; transition: 0.2s; pointer-events: none; }
+        background: #fff; color: var(--text); border: 1px solid var(--border); padding: 12px 20px;
+        border-radius: 12px; box-shadow: 0 12px 30px rgba(17, 24, 39, 0.14);
+        opacity: 0; transition: 0.2s; pointer-events: none; }
       .toast.show { opacity: 1; }
       .hide { display: none !important; }
       .spinner { font-size: 12px; color: var(--muted); }
@@ -91,7 +103,7 @@
       .tabhead { margin-bottom: 14px; }
       .text-slug { font-weight: 700; margin-bottom: 4px; }
       .text-slug .muted { font-weight: 400; font-size: 12px; }
-      #textsGrid { grid-template-columns: 1fr; }
+      #textsGrid, #blogGrid { grid-template-columns: 1fr; }
     </style>
   </head>
   <body>
@@ -122,6 +134,7 @@
       <div class="tabs">
         <button class="tab active" data-tab="products" type="button">Productos del carrusel</button>
         <button class="tab" data-tab="texts" type="button">Textos de las páginas</button>
+        <button class="tab" data-tab="blog" type="button">Blog</button>
       </div>
 
       <!-- TAB: Productos del carrusel -->
@@ -137,6 +150,15 @@
       <div id="tab-texts" class="hide">
         <p class="muted" id="textsStatus">Cargando…</p>
         <div class="grid" id="textsGrid"></div>
+      </div>
+
+      <!-- TAB: Blog -->
+      <div id="tab-blog" class="hide">
+        <div class="tabhead">
+          <button class="ghost" id="addBlogBtn" type="button">+ Nueva entrada</button>
+        </div>
+        <p class="muted" id="blogStatus">Cargando…</p>
+        <div class="grid" id="blogGrid"></div>
       </div>
     </div>
 

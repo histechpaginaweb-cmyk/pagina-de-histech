@@ -5,6 +5,7 @@ const ICONS = [
   "Network", "Cpu", "Layers", "Lightbulb", "Sparkles", "Settings2", "Shield",
 ];
 let textsLoaded = false; // los textos de páginas se cargan al abrir su pestaña
+let blogLoaded = false; // las entradas del blog se cargan al abrir su pestaña
 
 async function api(path, opts = {}) {
   const res = await fetch(path, { credentials: "include", ...opts });
@@ -28,6 +29,7 @@ function showLogin() {
   $("loginView").classList.remove("hide");
   $("panelView").classList.add("hide");
   textsLoaded = false; // forzar recarga de textos en la próxima sesión
+  blogLoaded = false;
 }
 function showPanel() {
   $("loginView").classList.add("hide");
@@ -231,7 +233,7 @@ ICONS.forEach((n) => {
 });
 document.body.appendChild(dl);
 
-// ── PESTAÑAS (Productos / Textos) ──
+// ── PESTAÑAS (Productos / Textos / Blog) ──
 document.querySelectorAll(".tab").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
@@ -239,12 +241,132 @@ document.querySelectorAll(".tab").forEach((btn) => {
     const tab = btn.dataset.tab;
     $("tab-products").classList.toggle("hide", tab !== "products");
     $("tab-texts").classList.toggle("hide", tab !== "texts");
+    $("tab-blog").classList.toggle("hide", tab !== "blog");
     if (tab === "texts" && !textsLoaded) {
       textsLoaded = true;
       loadServiceTexts();
     }
+    if (tab === "blog" && !blogLoaded) {
+      blogLoaded = true;
+      loadBlog();
+    }
   });
 });
+
+// ── BLOG ──
+$("addBlogBtn").addEventListener("click", () => {
+  $("blogGrid").prepend(
+    renderBlogCard({ slug: "", title: "", description: "", category: "", author: "Equipo HISTECH", date: new Date().toISOString().slice(0, 10), content: "" }),
+  );
+});
+
+async function loadBlog() {
+  $("blogStatus").textContent = "Cargando…";
+  try {
+    const items = await api("/api/admin/blog");
+    const grid = $("blogGrid");
+    grid.innerHTML = "";
+    items.forEach((p) => grid.appendChild(renderBlogCard(p)));
+    $("blogStatus").textContent = `${items.length} entrada(s). Usa "+ Nueva entrada" para agregar, o edita y guarda.`;
+  } catch (err) {
+    blogLoaded = false;
+    $("blogStatus").textContent = err.message;
+  }
+}
+
+function renderBlogCard(p) {
+  const el = document.createElement("div");
+  el.className = "card";
+  el.dataset.slug = p.slug || "";
+  el.innerHTML = `
+    <div class="text-slug" data-url></div>
+    <label>Título</label>
+    <input data-f="title" />
+    <label>Descripción (resumen corto para la tarjeta del blog)</label>
+    <textarea data-f="description" rows="2"></textarea>
+    <div class="row">
+      <div>
+        <label>Categoría</label>
+        <input data-f="category" />
+      </div>
+      <div>
+        <label>Autor</label>
+        <input data-f="author" />
+      </div>
+      <div>
+        <label>Fecha</label>
+        <input data-f="date" type="date" />
+      </div>
+    </div>
+    <label>Contenido (Markdown: <code>## Subtítulo</code>, <code>**negrita**</code>, listas con <code>-</code> o <code>1.</code>, <code>&gt; cita</code>, <code>[enlace](/ruta)</code>)</label>
+    <textarea data-f="content" rows="14"></textarea>
+    <div class="card-actions">
+      <button class="primary" data-act="save" type="button">Guardar</button>
+      <button class="danger" data-act="delete" type="button">Eliminar</button>
+      <span class="spinner hide" data-spin>Guardando…</span>
+    </div>
+  `;
+
+  const f = (n) => el.querySelector(`[data-f="${n}"]`);
+  const urlEl = el.querySelector("[data-url]");
+  const setUrl = () => {
+    const slug = el.dataset.slug;
+    urlEl.innerHTML = slug
+      ? `<span class="muted">/blog/${slug}</span>`
+      : `<span class="muted">Nueva entrada — la URL se generará del título al guardar</span>`;
+  };
+  f("title").value = p.title || "";
+  f("description").value = p.description || "";
+  f("category").value = p.category || "";
+  f("author").value = p.author || "";
+  f("date").value = (p.date || "").slice(0, 10);
+  f("content").value = p.content || "";
+  setUrl();
+
+  // guardar (crear o actualizar)
+  el.querySelector('[data-act="save"]').addEventListener("click", async () => {
+    const spin = el.querySelector("[data-spin]");
+    const payload = {
+      title: f("title").value.trim(),
+      description: f("description").value.trim(),
+      category: f("category").value.trim(),
+      author: f("author").value.trim(),
+      date: f("date").value,
+      content: f("content").value,
+    };
+    if (!payload.title) return showToast("El título es obligatorio");
+    spin.classList.remove("hide");
+    try {
+      const slug = el.dataset.slug;
+      const saved = slug
+        ? await api(`/api/admin/blog/${slug}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+        : await api("/api/admin/blog", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      el.dataset.slug = saved.slug;
+      setUrl();
+      showToast("Guardado ✓");
+    } catch (err) {
+      showToast(err.message);
+    } finally {
+      spin.classList.add("hide");
+    }
+  });
+
+  // eliminar
+  el.querySelector('[data-act="delete"]').addEventListener("click", async () => {
+    const slug = el.dataset.slug;
+    if (!confirm("¿Eliminar esta entrada del blog?")) return;
+    if (!slug) return el.remove(); // nueva sin guardar
+    try {
+      await api(`/api/admin/blog/${slug}`, { method: "DELETE" });
+      el.remove();
+      showToast("Eliminada");
+    } catch (err) {
+      showToast(err.message);
+    }
+  });
+
+  return el;
+}
 
 // ── TEXTOS DE PÁGINAS DE SERVICIO ──
 async function loadServiceTexts() {

@@ -7,7 +7,8 @@ import { Aurora } from "@/components/visuals/aurora";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CtaBanner } from "@/components/sections/cta";
 import { buildMetadata } from "@/lib/seo";
-import { getAllPosts, formatDate } from "@/lib/blog";
+import { formatDate } from "@/lib/blog";
+import { getPosts } from "@/lib/get-blog";
 
 export const metadata = buildMetadata({
   title: "Blog · Centro de Innovación",
@@ -16,8 +17,8 @@ export const metadata = buildMetadata({
   path: "/blog",
 });
 
-export default function BlogPage() {
-  const posts = getAllPosts();
+export default async function BlogPage() {
+  const posts = await getPosts();
   const [featured, ...rest] = posts;
 
   return (

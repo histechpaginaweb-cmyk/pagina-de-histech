@@ -8,13 +8,15 @@ import { Aurora } from "@/components/visuals/aurora";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CtaBanner } from "@/components/sections/cta";
 import { buildMetadata, JsonLd } from "@/lib/seo";
-import { getAllPostSlugs, getPost, formatDate } from "@/lib/blog";
+import { formatDate } from "@/lib/blog";
+import { getSlugs, getPostBySlug } from "@/lib/get-blog";
 import { absoluteUrl } from "@/lib/utils";
 import { siteConfig } from "@/lib/site";
 import { mdxComponents } from "@/components/blog/mdx-components";
 
-export function generateStaticParams() {
-  return getAllPostSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -23,7 +25,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPostBySlug(slug);
   if (!post) return {};
   return buildMetadata({
     title: post.title,
@@ -38,7 +40,7 @@ export default async function PostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
   const articleLd = {

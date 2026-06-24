@@ -1,11 +1,11 @@
 import { Section, Container, SectionHeader } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
-import { LogoMarquee } from "./logo-marquee";
-import { partnersByCategory } from "@/lib/partners";
+import { PartnerLogo } from "./partner-logo";
+import { homePartners } from "@/lib/partners";
 
 export function Partners() {
   return (
-    <Section id="aliados" className="border-y border-white/10 bg-white/[0.015]">
+    <Section id="aliados" className="border-y border-[#E5E7EB] bg-[#FAFAFB]">
       <Container>
         <SectionHeader
           eyebrow="Aliados Tecnológicos"
@@ -18,13 +18,13 @@ export function Partners() {
         />
       </Container>
 
-      <div className="mt-12 space-y-4">
-        {partnersByCategory.map((row, i) => (
-          <Reveal key={row.category} delay={i * 0.05}>
-            <LogoMarquee partners={row.items} reverse={i % 2 === 1} />
-          </Reveal>
-        ))}
-      </div>
+      <Container>
+        <Reveal className="mt-12 flex flex-wrap items-center justify-center gap-5 sm:gap-8">
+          {homePartners.map((p) => (
+            <PartnerLogo key={p.name} partner={p} />
+          ))}
+        </Reveal>
+      </Container>
     </Section>
   );
 }

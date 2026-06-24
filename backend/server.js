@@ -19,6 +19,8 @@ const {
   isConfigured,
   readServiceTexts,
   writeServiceTexts,
+  readPosts,
+  writePosts,
 } = require("./r2");
 const {
   checkCredentials,
@@ -248,6 +250,119 @@ app.put("/api/admin/service-texts/:slug", requireAdmin, async (req, res) => {
   } catch (err) {
     console.error("PUT /api/admin/service-texts/:slug", err);
     res.status(500).json({ error: "No se pudo guardar" });
+  }
+});
+
+// ── BLOG (entradas editables desde el admin) ──
+function slugify(s) {
+  const from = "áàäâãéèëêíìïîóòöôõúùüûñç";
+  const to = "aaaaaeeeeiiiiooooouuuunc";
+  const str = String(s)
+    .toLowerCase()
+    .replace(/[áàäâãéèëêíìïîóòöôõúùüûñç]/g, (c) => to[from.indexOf(c)]);
+  return (
+    str
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 80) || "post"
+  );
+}
+
+function sortByDateDesc(list) {
+  return [...list].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+}
+
+// Público: lo consume el blog del frontend.
+app.get("/api/blog", async (_req, res) => {
+  try {
+    res.json(sortByDateDesc(await readPosts()));
+  } catch (err) {
+    console.error("GET /api/blog", err);
+    res.status(500).json({ error: "Error al leer el blog" });
+  }
+});
+
+// Admin: lista.
+app.get("/api/admin/blog", requireAdmin, async (_req, res) => {
+  try {
+    res.json(sortByDateDesc(await readPosts()));
+  } catch (err) {
+    console.error("GET /api/admin/blog", err);
+    res.status(500).json({ error: "Error al leer el blog" });
+  }
+});
+
+// Admin: crear entrada (genera slug único a partir del título).
+app.post("/api/admin/blog", requireAdmin, async (req, res) => {
+  const { title, description, category, author, date, content } = req.body || {};
+  if (!title || !String(title).trim()) {
+    return res.status(400).json({ error: "El título es obligatorio" });
+  }
+  try {
+    const posts = await readPosts();
+    const baseSlug = slugify(title);
+    let slug = baseSlug;
+    let n = 2;
+    while (posts.some((p) => p.slug === slug)) slug = `${baseSlug}-${n++}`;
+    const now = new Date().toISOString();
+    const post = {
+      slug,
+      title: String(title),
+      description: String(description ?? ""),
+      category: String(category || "Tecnología"),
+      author: String(author || "Equipo HISTECH"),
+      date: String(date || now.slice(0, 10)),
+      content: String(content ?? ""),
+      updated_at: now,
+    };
+    posts.push(post);
+    await writePosts(posts);
+    res.status(201).json(post);
+  } catch (err) {
+    console.error("POST /api/admin/blog", err);
+    res.status(500).json({ error: "No se pudo crear la entrada" });
+  }
+});
+
+// Admin: actualizar entrada (por slug).
+app.put("/api/admin/blog/:slug", requireAdmin, async (req, res) => {
+  const slug = String(req.params.slug);
+  const { title, description, category, author, date, content } = req.body || {};
+  if (!title || !String(title).trim()) {
+    return res.status(400).json({ error: "El título es obligatorio" });
+  }
+  try {
+    const posts = await readPosts();
+    const idx = posts.findIndex((p) => p.slug === slug);
+    if (idx === -1) return res.status(404).json({ error: "No encontrada" });
+    posts[idx] = {
+      ...posts[idx],
+      title: String(title),
+      description: String(description ?? ""),
+      category: String(category || "Tecnología"),
+      author: String(author || "Equipo HISTECH"),
+      date: String(date || posts[idx].date),
+      content: String(content ?? ""),
+      updated_at: new Date().toISOString(),
+    };
+    await writePosts(posts);
+    res.json(posts[idx]);
+  } catch (err) {
+    console.error("PUT /api/admin/blog/:slug", err);
+    res.status(500).json({ error: "No se pudo guardar" });
+  }
+});
+
+// Admin: eliminar entrada.
+app.delete("/api/admin/blog/:slug", requireAdmin, async (req, res) => {
+  const slug = String(req.params.slug);
+  try {
+    const posts = await readPosts();
+    await writePosts(posts.filter((p) => p.slug !== slug));
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("DELETE /api/admin/blog/:slug", err);
+    res.status(500).json({ error: "No se pudo eliminar" });
   }
 });
 

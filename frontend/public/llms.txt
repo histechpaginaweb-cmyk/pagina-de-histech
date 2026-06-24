@@ -1,0 +1,40 @@
+# HISTECH
+
+> HISTECH es una empresa de tecnología que impulsa el crecimiento de las organizaciones con Inteligencia Artificial, Ciberseguridad, Infraestructura Tecnológica y Transformación Digital. Sitio oficial: https://histech.com.co
+
+Integramos tecnología de punta en cada capa de la empresa —desde la infraestructura hasta la inteligencia artificial— para maximizar la eficiencia, la seguridad y la conectividad del negocio. Trabajamos con fabricantes líderes y diseñamos soluciones a la medida de cada cliente.
+
+## Soluciones
+
+- [Inteligencia Artificial Empresarial](https://histech.com.co/inteligencia-artificial): Agentes inteligentes, automatización de procesos y analítica avanzada para decidir más rápido y operar con menos fricción.
+- [Transformación Digital](https://histech.com.co/transformacion-digital): Estrategia, metodología y automatización para modernizar la operación de la empresa.
+- [Ecosistemas Digitales](https://histech.com.co/ecosistemas-digitales): Integración de sistemas, datos unificados y automatización para que toda la organización trabaje en sincronía.
+- [Ciberseguridad](https://histech.com.co/ciberseguridad): Seguridad de perímetro y endpoints, control de acceso, monitoreo de amenazas y cumplimiento normativo.
+- [Cloud y Continuidad](https://histech.com.co/cloud-continuidad): Nube híbrida, respaldo y recuperación ante desastres para que la operación nunca se detenga.
+- [Infraestructura de Redes](https://histech.com.co/infraestructura-de-redes): Conectividad robusta y zero-touch, networking inteligente y alta disponibilidad.
+- [Cómputo](https://histech.com.co/computo): Estaciones corporativas y servidores de centro de datos, confiables y escalables.
+- [Consultoría en IT](https://histech.com.co/consultoria-it): Diagnóstico tecnológico, hoja de ruta y acompañamiento estratégico (CIO virtual).
+- [Servicios Gestionados](https://histech.com.co/managed-services): Monitoreo 24/7, soporte y administración de infraestructura con costos predecibles.
+- [Soluciones Web](https://histech.com.co/soluciones-web): Sitios y aplicaciones web modernas, seguras y optimizadas para conversión.
+
+## Industrias
+
+- [Industrias](https://histech.com.co/industrias): Soluciones por sector (manufactura, salud, banca y seguros, entre otros).
+
+## Recursos
+
+- [Blog](https://histech.com.co/blog): Tendencias, guías y análisis sobre IA, ciberseguridad, cloud y transformación digital.
+- [Resultados](https://histech.com.co/resultados): Casos de impacto y resultados para las empresas.
+- [Aliados](https://histech.com.co/aliados): Fabricantes y partners tecnológicos con los que trabajamos.
+- [Laboratorio IA](https://histech.com.co/laboratorio-ia): Exploración y experimentación con inteligencia artificial aplicada.
+
+## Empresa
+
+- [Nosotros](https://histech.com.co/nosotros): Quiénes somos y cómo trabajamos.
+- [Contacto](https://histech.com.co/contacto): Canal de contacto y formulario.
+- [Agenda una consultoría](https://histech.com.co/agenda-consultoria): Solicita una asesoría sin costo.
+
+## Legal
+
+- [Términos y condiciones](https://histech.com.co/terminos)
+- [Política de privacidad](https://histech.com.co/privacidad)

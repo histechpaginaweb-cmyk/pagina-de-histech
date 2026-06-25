@@ -5,6 +5,12 @@
 
 export type Capability = { title: string; description: string; icon: string };
 
+/** Caso de uso: ¿cuándo se utiliza este servicio? (bloque AEO). */
+export type UseCase = { title: string; description: string; icon: string };
+
+/** Paso del proceso de trabajo de HISTECH para este servicio (bloque AEO). */
+export type ProcessStep = { step: string; title: string; description: string };
+
 export type ServiceContent = {
   slug: string;
   name: string;
@@ -17,6 +23,10 @@ export type ServiceContent = {
   image?: string;
   visual: "orbit" | "shield" | "grid" | "stream";
   capabilities: Capability[];
+  /** Casos de uso — cuándo se utiliza (AEO/GEO). */
+  useCases: UseCase[];
+  /** Proceso de trabajo de HISTECH para este servicio (AEO/GEO). */
+  process: ProcessStep[];
   benefits: string[];
   faqs: { q: string; a: string }[];
   related: string[]; // slugs
@@ -40,6 +50,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "Automatización de procesos", description: "RPA + IA para flujos documentales, validaciones y procesos críticos.", icon: "Workflow" },
       { title: "Analítica avanzada", description: "Modelos predictivos y analítica para anticipar y decidir mejor.", icon: "Activity" },
       { title: "Asistentes y chatbots", description: "Atención y soporte conversacional integrado a tus canales.", icon: "BrainCircuit" },
+    ],
+    useCases: [
+      { title: "Atención al cliente 24/7", description: "Asistentes que responden consultas frecuentes, califican prospectos y escalan a un humano cuando hace falta.", icon: "BrainCircuit" },
+      { title: "Procesamiento de documentos", description: "Extracción y validación automática de facturas, contratos y formularios sin digitación manual.", icon: "Workflow" },
+      { title: "Pronóstico y analítica", description: "Modelos que anticipan demanda, rotación o riesgo para decidir con anticipación.", icon: "Activity" },
+    ],
+    process: [
+      { step: "01", title: "Identificamos el caso de uso", description: "Detectamos el proceso que pierde tiempo, genera errores o cuesta de más." },
+      { step: "02", title: "Prueba de concepto", description: "Implementamos un piloto medible sobre tus datos reales en semanas, no meses." },
+      { step: "03", title: "Integración y despliegue", description: "Conectamos la IA a tus sistemas con controles de seguridad y privacidad desde el diseño." },
+      { step: "04", title: "Mejora continua", description: "Medimos resultados, ajustamos y escalamos la solución a nuevos procesos." },
     ],
     benefits: [
       "Reducción drástica de errores operativos",
@@ -75,6 +96,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "Adopción y cambio", description: "Capacitación y acompañamiento para que la tecnología se adopte de verdad.", icon: "GraduationCap" },
       { title: "Automatización de procesos", description: "Eliminamos tareas manuales y conectamos tu operación.", icon: "Workflow" },
     ],
+    useCases: [
+      { title: "Empresas con procesos manuales", description: "Organizaciones que dependen de hojas de cálculo y tareas repetitivas que frenan su operación.", icon: "Workflow" },
+      { title: "Operaciones desconectadas", description: "Áreas y sistemas que no comparten información y generan reprocesos.", icon: "Network" },
+      { title: "Crecimiento sin escalabilidad", description: "Negocios que crecen pero cuya tecnología no acompaña el ritmo.", icon: "TrendingUp" },
+    ],
+    process: [
+      { step: "01", title: "Diagnóstico de madurez digital", description: "Evaluamos dónde estás hoy y dónde quieres llegar." },
+      { step: "02", title: "Hoja de ruta priorizada", description: "Plan por fases ordenado por impacto y retorno de inversión." },
+      { step: "03", title: "Implementación por fases", description: "Ejecutamos con entregables tempranos para ver valor desde el inicio." },
+      { step: "04", title: "Adopción y acompañamiento", description: "Capacitamos a tu equipo para que la tecnología se adopte de verdad." },
+    ],
     benefits: [
       "Procesos más ágiles y eficientes",
       "Reducción de costos operativos",
@@ -107,6 +139,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "Automatización con IA y RPA", description: "Orquestamos procesos de extremo a extremo.", icon: "Workflow" },
       { title: "Datos unificados", description: "Una única fuente de verdad para toda la organización.", icon: "Layers" },
       { title: "Experiencias conectadas", description: "Canales de venta, atención y operación integrados.", icon: "Sparkles" },
+    ],
+    useCases: [
+      { title: "Sistemas que no se hablan", description: "ERP, CRM y herramientas aisladas que obligan a recapturar datos y generan errores.", icon: "Network" },
+      { title: "Datos dispersos", description: "Información duplicada o inconsistente entre áreas que impide decidir con confianza.", icon: "Layers" },
+      { title: "Experiencia omnicanal", description: "Unificar venta, atención y operación en un solo flujo para el cliente.", icon: "Sparkles" },
+    ],
+    process: [
+      { step: "01", title: "Mapeo de sistemas y procesos", description: "Entendemos cómo fluye hoy la información en tu organización." },
+      { step: "02", title: "Diseño de la integración", description: "Definimos la arquitectura, las APIs y los puntos de automatización." },
+      { step: "03", title: "Integración y automatización", description: "Conectamos tus aplicaciones con APIs y RPA de extremo a extremo." },
+      { step: "04", title: "Monitoreo y optimización", description: "Medimos el flujo de datos y afinamos para mayor velocidad y menos errores." },
     ],
     benefits: [
       "Procesos conectados de extremo a extremo",
@@ -143,6 +186,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "Cumplimiento normativo", description: "Alineación con estándares y regulaciones de tu sector.", icon: "ShieldCheck" },
       { title: "Evaluación y diagnóstico", description: "Análisis de vulnerabilidades y postura de seguridad.", icon: "Target" },
     ],
+    useCases: [
+      { title: "Protección frente a ransomware", description: "Empresas que necesitan blindar endpoints, correo y respaldos ante secuestro de datos.", icon: "ShieldCheck" },
+      { title: "Cumplimiento normativo", description: "Sectores regulados que deben demostrar controles de seguridad y trazabilidad.", icon: "Shield" },
+      { title: "Trabajo híbrido seguro", description: "Accesos remotos protegidos con identidad y mínimo privilegio.", icon: "Eye" },
+    ],
+    process: [
+      { step: "01", title: "Evaluación de tu postura", description: "Analizamos vulnerabilidades, riesgos y controles existentes." },
+      { step: "02", title: "Estrategia priorizada", description: "Diseñamos los controles de mayor impacto según tu riesgo real." },
+      { step: "03", title: "Implementación de controles", description: "Desplegamos protección de perímetro, endpoints, accesos y datos." },
+      { step: "04", title: "Monitoreo y respuesta", description: "Detectamos y contenemos incidentes de forma continua." },
+    ],
     benefits: [
       "Reducción de vulnerabilidades",
       "Continuidad operativa protegida",
@@ -177,6 +231,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "Recuperación ante desastres", description: "Planes de DR para restaurar la operación rápidamente.", icon: "Layers" },
       { title: "Alta disponibilidad", description: "Arquitecturas redundantes sin puntos únicos de falla.", icon: "Activity" },
     ],
+    useCases: [
+      { title: "Migración a la nube", description: "Empresas que quieren dejar servidores locales costosos y ganar flexibilidad.", icon: "Cloud" },
+      { title: "Respaldo y recuperación", description: "Negocios que no pueden permitirse perder datos críticos.", icon: "Server" },
+      { title: "Operación sin interrupciones", description: "Organizaciones cuya operación no tolera tiempos de caída.", icon: "Activity" },
+    ],
+    process: [
+      { step: "01", title: "Evaluación y objetivos", description: "Definimos tus objetivos de recuperación (RTO/RPO) y revisamos tu infraestructura." },
+      { step: "02", title: "Diseño de la arquitectura", description: "Proponemos la nube (o mezcla) que mejor se ajusta a tu operación y presupuesto." },
+      { step: "03", title: "Migración y respaldo", description: "Migramos cargas y configuramos respaldos automatizados y redundancia." },
+      { step: "04", title: "Pruebas y monitoreo", description: "Validamos la recuperación y monitoreamos disponibilidad y rendimiento." },
+    ],
     benefits: [
       "Acceso seguro desde cualquier lugar",
       "Reducción de costos de infraestructura",
@@ -209,6 +274,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "AI networking", description: "Redes inteligentes que se optimizan y anticipan fallas.", icon: "BrainCircuit" },
       { title: "Conectividad de alto rendimiento", description: "Diseños hub, estrella y malla según tu operación.", icon: "Server" },
       { title: "Seguridad por diseño", description: "Segmentación y protección integradas a la red.", icon: "Shield" },
+    ],
+    useCases: [
+      { title: "Nuevas sedes u oficinas", description: "Despliegue de una red confiable y segura desde cero.", icon: "Network" },
+      { title: "Redes saturadas o inestables", description: "Rediseño de la infraestructura para recuperar rendimiento y disponibilidad.", icon: "Server" },
+      { title: "Conectividad multi-sede", description: "Empresas que necesitan unir varias ubicaciones de forma segura y estable.", icon: "Workflow" },
+    ],
+    process: [
+      { step: "01", title: "Levantamiento del entorno", description: "Entendemos tu operación, tus equipos y tus necesidades de conectividad." },
+      { step: "02", title: "Diseño de la topología", description: "Definimos la arquitectura (hub, estrella o malla) según tu caso." },
+      { step: "03", title: "Implementación zero-touch", description: "Aprovisionamos y desplegamos la red de forma ágil y automatizada." },
+      { step: "04", title: "Soporte y optimización", description: "Monitoreamos, ajustamos y anticipamos fallas con networking inteligente." },
     ],
     benefits: [
       "Operación continua y confiable",
@@ -243,6 +319,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "Gestión inteligente", description: "Administración y mantenimiento remoto eficiente.", icon: "Settings2" },
       { title: "Optimización de rendimiento", description: "Refrigeración y configuración para operación constante.", icon: "Activity" },
     ],
+    useCases: [
+      { title: "Renovación de parque tecnológico", description: "Equipos obsoletos que frenan la productividad y elevan los fallos.", icon: "Cpu" },
+      { title: "Software especializado", description: "Estaciones para diseño, ingeniería o análisis de datos de alta exigencia.", icon: "Settings2" },
+      { title: "Servidores de alta demanda", description: "Infraestructura escalable para cargas críticas y entornos híbridos.", icon: "Server" },
+    ],
+    process: [
+      { step: "01", title: "Análisis de necesidades", description: "Identificamos las cargas de trabajo y el equipo adecuado para cada rol." },
+      { step: "02", title: "Selección y configuración", description: "Elegimos y preparamos el hardware optimizado para tu operación." },
+      { step: "03", title: "Despliegue y puesta a punto", description: "Instalamos, configuramos y dejamos todo listo para producir." },
+      { step: "04", title: "Gestión y mantenimiento", description: "Administración remota y mantenimiento preventivo para evitar tiempos muertos." },
+    ],
     benefits: [
       "Productividad operativa",
       "Compatibilidad con software especializado",
@@ -275,6 +362,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "Estrategia y roadmap", description: "Plan tecnológico alineado a tus objetivos.", icon: "Layers" },
       { title: "Capacitación", description: "Formamos a tu equipo para una adopción real.", icon: "GraduationCap" },
       { title: "CIO virtual", description: "Acompañamiento estratégico continuo.", icon: "HeartHandshake" },
+    ],
+    useCases: [
+      { title: "Empresas sin área de TI", description: "Necesitan dirección tecnológica experta sin el costo de un cargo de tiempo completo.", icon: "HeartHandshake" },
+      { title: "Decisiones de inversión", description: "Antes de comprar, migrar o cambiar de proveedor tecnológico.", icon: "Target" },
+      { title: "Proyectos estancados", description: "Iniciativas que no avanzan o no entregan los resultados esperados.", icon: "Activity" },
+    ],
+    process: [
+      { step: "01", title: "Diagnóstico tecnológico", description: "Identificamos brechas, riesgos y oportunidades de mejora." },
+      { step: "02", title: "Estrategia y roadmap", description: "Trazamos un plan tecnológico alineado a tus objetivos de negocio." },
+      { step: "03", title: "Acompañamiento en la ejecución", description: "Te guiamos en cada decisión como tu CIO virtual." },
+      { step: "04", title: "Capacitación y adopción", description: "Formamos a tu equipo para una adopción real y sostenible." },
     ],
     benefits: [
       "Decisiones tecnológicas acertadas",
@@ -309,6 +407,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "Administración de infraestructura", description: "Gestión proactiva y mantenimiento preventivo.", icon: "Server" },
       { title: "Soporte en sitio", description: "Atención técnica presencial cuando se requiere.", icon: "Settings2" },
     ],
+    useCases: [
+      { title: "Equipo de TI sobrecargado", description: "Liberar a tu área interna de las tareas operativas para que se enfoque en lo estratégico.", icon: "HeartHandshake" },
+      { title: "Sin personal de TI dedicado", description: "Cobertura completa de tu tecnología por una tarifa fija predecible.", icon: "Settings2" },
+      { title: "Disponibilidad 24/7", description: "Operaciones que requieren monitoreo y respuesta permanentes.", icon: "Activity" },
+    ],
+    process: [
+      { step: "01", title: "Diagnóstico y onboarding", description: "Conocemos tu infraestructura y documentamos tu entorno." },
+      { step: "02", title: "Cobertura y acuerdos", description: "Definimos el alcance, los tiempos de respuesta y los niveles de servicio." },
+      { step: "03", title: "Monitoreo 24/7 y soporte", description: "Vigilamos, prevenimos y resolvemos antes de que afecte tu operación." },
+      { step: "04", title: "Mejora continua", description: "Reportería periódica y optimización proactiva de tu tecnología." },
+    ],
     benefits: [
       "Costos predecibles con tarifa fija",
       "Disponibilidad permanente",
@@ -342,6 +451,17 @@ export const servicesContent: Record<string, ServiceContent> = {
       { title: "SEO técnico", description: "Arquitectura optimizada para buscadores.", icon: "Target" },
       { title: "Rendimiento y accesibilidad", description: "Core Web Vitals y estándares WCAG.", icon: "Activity" },
     ],
+    useCases: [
+      { title: "Presencia digital obsoleta", description: "Sitios lentos o desactualizados que no transmiten confianza ni convierten.", icon: "Sparkles" },
+      { title: "Aplicaciones a la medida", description: "Plataformas internas o de cara al cliente que tu negocio necesita.", icon: "Workflow" },
+      { title: "Posicionamiento en buscadores", description: "Empresas que quieren ser encontradas por sus clientes en Google.", icon: "Target" },
+    ],
+    process: [
+      { step: "01", title: "Descubrimiento y objetivos", description: "Entendemos tu negocio, tu público y las metas de la plataforma." },
+      { step: "02", title: "Diseño UX/UI", description: "Diseñamos una experiencia premium alineada a tu marca." },
+      { step: "03", title: "Desarrollo y optimización", description: "Construimos con stacks modernos optimizados para SEO y rendimiento." },
+      { step: "04", title: "Lanzamiento y evolución", description: "Publicamos, medimos y mejoramos de forma continua." },
+    ],
     benefits: [
       "Mayor velocidad y rendimiento",
       "Mejor posicionamiento en buscadores",
@@ -355,6 +475,94 @@ export const servicesContent: Record<string, ServiceContent> = {
       { q: "¿Incluye mantenimiento?", a: "Sí. Ofrecemos planes de mantenimiento y evolución continua de tu plataforma." },
     ],
     related: ["transformacion-digital", "inteligencia-artificial", "ecosistemas-digitales"],
+  },
+
+  "automatizacion-empresarial": {
+    slug: "automatizacion-empresarial",
+    name: "Automatización Empresarial",
+    eyebrow: "Automatización",
+    title: "Automatización empresarial que libera el tiempo de tu equipo",
+    subtitle:
+      "RPA e inteligencia artificial para ejecutar tus procesos repetitivos sin errores, sin intervención manual y con disponibilidad permanente.",
+    intro:
+      "Cada hora que tu equipo dedica a tareas repetitivas es una hora que no dedica a hacer crecer el negocio. Automatizamos tus procesos de alto volumen combinando RPA e inteligencia artificial para reducir errores, acelerar la operación y escalar sin aumentar personal.",
+    icon: "Workflow",
+    visual: "stream",
+    capabilities: [
+      { title: "RPA (automatización robótica)", description: "Bots que ejecutan tareas repetitivas en tus aplicaciones, tal como lo haría una persona.", icon: "Workflow" },
+      { title: "Automatización inteligente", description: "IA que interpreta, decide y aprende para automatizar procesos que requieren criterio.", icon: "BrainCircuit" },
+      { title: "Integración entre sistemas", description: "Conectamos tus plataformas con APIs para que la información fluya sin recaptura.", icon: "Network" },
+      { title: "Flujos documentales", description: "Extracción y validación automática de facturas, contratos y formularios.", icon: "Layers" },
+    ],
+    useCases: [
+      { title: "Finanzas y administración", description: "Conciliaciones, registro de facturas y generación de reportes sin digitación manual.", icon: "Calculator" },
+      { title: "Atención y ventas", description: "Respuesta a consultas frecuentes y calificación automática de prospectos.", icon: "HeartHandshake" },
+      { title: "Operaciones", description: "Actualización de inventarios, órdenes y seguimiento de pedidos entre sistemas.", icon: "Settings2" },
+    ],
+    process: [
+      { step: "01", title: "Identificamos el proceso", description: "Detectamos las tareas de alto volumen con mayor retorno al automatizarse." },
+      { step: "02", title: "Diseñamos el flujo", description: "Rediseñamos el proceso para eliminar pasos innecesarios antes de automatizar." },
+      { step: "03", title: "Piloto medible", description: "Validamos con un piloto y una métrica clara de éxito en semanas." },
+      { step: "04", title: "Escalado y soporte", description: "Ampliamos a más procesos con monitoreo y mejora continua." },
+    ],
+    benefits: [
+      "Reducción drástica de errores operativos",
+      "Ahorro de horas-persona en tareas repetitivas",
+      "Procesos disponibles 24/7",
+      "Escalabilidad sin aumentar personal",
+      "Trazabilidad total para auditoría",
+      "ROI medible desde el primer proceso",
+    ],
+    faqs: [
+      { q: "¿Qué procesos conviene automatizar primero?", a: "Los de alto volumen, repetitivos y con reglas claras: facturación, conciliaciones, carga de datos entre sistemas o respuestas a consultas frecuentes. Ahí el retorno es más rápido." },
+      { q: "¿La automatización funciona con los sistemas que ya tengo?", a: "Sí. La RPA opera sobre tus aplicaciones actuales y, cuando es posible, integramos vía API para mayor robustez. No necesitas cambiar tus sistemas para empezar." },
+      { q: "¿Cuánto tarda en verse el retorno?", a: "Un proceso acotado puede automatizarse en semanas mediante un piloto, y el retorno se mide con las horas liberadas y los errores evitados desde el inicio." },
+    ],
+    related: ["inteligencia-artificial", "ecosistemas-digitales", "transformacion-digital"],
+  },
+
+  "desarrollo-software-colombia": {
+    slug: "desarrollo-software-colombia",
+    name: "Desarrollo de Software a la Medida",
+    eyebrow: "Desarrollo de Software",
+    title: "Desarrollo de software a la medida para tu empresa",
+    subtitle:
+      "Aplicaciones y plataformas hechas a medida, seguras y escalables, construidas en torno a tus procesos reales y no al revés.",
+    intro:
+      "Cuando el software de catálogo te obliga a adaptar tu operación, pierdes lo que te hace competitivo. Desarrollamos soluciones a la medida —aplicaciones web, plataformas internas e integraciones— diseñadas alrededor de tus procesos, con las mejores prácticas de seguridad, rendimiento y escalabilidad.",
+    icon: "Layers",
+    visual: "grid",
+    capabilities: [
+      { title: "Software a la medida", description: "Plataformas y sistemas internos diseñados para tus procesos específicos.", icon: "Layers" },
+      { title: "Aplicaciones web", description: "Aplicaciones modernas, rápidas y seguras para clientes y equipos.", icon: "Workflow" },
+      { title: "Integraciones y APIs", description: "Conectamos tu software con los sistemas que ya usas.", icon: "Network" },
+      { title: "Mantenimiento y evolución", description: "Soporte y mejora continua para que la plataforma crezca contigo.", icon: "Settings2" },
+    ],
+    useCases: [
+      { title: "Procesos sin software adecuado", description: "Operaciones que hoy dependen de hojas de cálculo o herramientas que no encajan.", icon: "Layers" },
+      { title: "Portales y plataformas", description: "Portales de clientes, proveedores o equipos internos a la medida.", icon: "Workflow" },
+      { title: "Integración de sistemas", description: "Unir aplicaciones aisladas en una sola experiencia coherente.", icon: "Network" },
+    ],
+    process: [
+      { step: "01", title: "Descubrimiento", description: "Entendemos tu negocio, tus procesos y los objetivos de la solución." },
+      { step: "02", title: "Diseño UX/UI", description: "Diseñamos una experiencia clara y alineada a tu marca." },
+      { step: "03", title: "Desarrollo seguro", description: "Construimos con stacks modernos, pruebas y seguridad por diseño." },
+      { step: "04", title: "Lanzamiento y evolución", description: "Desplegamos, medimos y mejoramos de forma continua." },
+    ],
+    benefits: [
+      "Software que se adapta a tu operación, no al revés",
+      "Mayor eficiencia y menos trabajo manual",
+      "Seguridad por diseño",
+      "Escalabilidad a medida que creces",
+      "Integración con tus sistemas actuales",
+      "Propiedad total de tu solución",
+    ],
+    faqs: [
+      { q: "¿Cuándo conviene software a la medida en vez de uno de catálogo?", a: "Cuando tus procesos son un diferencial competitivo, cuando ninguna herramienta del mercado encaja, o cuando integrar varias soluciones resulta más costoso y frágil que una plataforma propia." },
+      { q: "¿Con qué tecnologías desarrollan?", a: "Usamos stacks modernos y probados (como Next.js, React y Node.js), elegidos según el rendimiento, la seguridad y la escalabilidad que tu proyecto necesita." },
+      { q: "¿Incluye mantenimiento después del lanzamiento?", a: "Sí. Ofrecemos planes de soporte y evolución continua para que tu plataforma se mantenga segura y siga creciendo con tu negocio." },
+    ],
+    related: ["soluciones-web", "inteligencia-artificial", "ecosistemas-digitales"],
   },
 };
 

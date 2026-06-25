@@ -11,6 +11,7 @@ import { CtaBanner } from "@/components/sections/cta";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { servicesContent, type ServiceContent } from "@/lib/services-content";
 import { getServiceTexts } from "@/lib/get-service-texts";
+import { JsonLd, serviceJsonLd, webPageJsonLd } from "@/lib/seo";
 
 export async function ServicePage({ data }: { data: ServiceContent }) {
   const related = data.related
@@ -129,6 +130,62 @@ export async function ServicePage({ data }: { data: ServiceContent }) {
         </Container>
       </Section>
 
+      {/* Casos de uso (AEO: ¿cuándo se utiliza?) */}
+      <Section className="py-12">
+        <Container>
+          <SectionHeader
+            eyebrow="Casos de uso"
+            title="¿Cuándo se utiliza este servicio?"
+            align="left"
+          />
+          <RevealStagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {data.useCases.map((u) => (
+              <div key={u.title} className="card-surface h-full p-7">
+                <div className="inline-flex size-12 items-center justify-center rounded-xl border border-[#7C3AED]/15 bg-[#7C3AED]/10">
+                  <Icon name={u.icon} className="size-6 text-brand-cyan" />
+                </div>
+                <h3 className="mt-5 text-lg font-semibold">{u.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {u.description}
+                </p>
+              </div>
+            ))}
+          </RevealStagger>
+        </Container>
+      </Section>
+
+      {/* Proceso (AEO: ¿cómo trabaja HISTECH?) */}
+      <Section className="py-12">
+        <Container>
+          <SectionHeader
+            eyebrow="Proceso"
+            title="Cómo trabajamos en HISTECH"
+            align="left"
+          />
+          <RevealStagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {data.process.map((p, i) => (
+              <div key={p.step} className="relative card-surface p-7">
+                <div className="font-display text-5xl font-bold text-[#7C3AED]/15">
+                  {p.step}
+                </div>
+                <h3 className="mt-3 text-lg font-semibold">{p.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {p.description}
+                </p>
+                {i < data.process.length - 1 && (
+                  <span
+                    aria-hidden
+                    className="absolute right-6 top-9 hidden text-2xl text-brand-cyan/40 lg:block"
+                  >
+                    →
+                  </span>
+                )}
+              </div>
+            ))}
+          </RevealStagger>
+        </Container>
+      </Section>
+
       {/* Benefits */}
       <Section className="py-12">
         <Container>
@@ -171,6 +228,21 @@ export async function ServicePage({ data }: { data: ServiceContent }) {
 
       <Faq items={data.faqs} title="Preguntas frecuentes" />
       <CtaBanner />
+
+      <JsonLd
+        data={serviceJsonLd({
+          name: data.name,
+          description: subtitle,
+          path: `/${data.slug}`,
+        })}
+      />
+      <JsonLd
+        data={webPageJsonLd({
+          title: data.name,
+          description: subtitle,
+          path: `/${data.slug}`,
+        })}
+      />
     </>
   );
 }

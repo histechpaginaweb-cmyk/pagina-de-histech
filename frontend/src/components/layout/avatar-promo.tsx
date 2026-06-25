@@ -1,18 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { Play, RotateCcw, Volume2, VolumeX, X } from "lucide-react";
+import { Play, Volume2, VolumeX, X } from "lucide-react";
 
 const MP4_SRC = "/videos/avatar-corporativo.mp4";
 const POSTER_SRC = "/videos/avatar-corporativo-poster.jpg";
-const DISMISS_KEY = "histech-avatar-dismissed";
 
 /**
  * Avatar corporativo flotante (solo home).
  * - Inicia PAUSADO mostrando el poster (sin descargar el video → no afecta carga).
  * - Al primer clic/toque en CUALQUIER parte de la página, se reproduce UNA vez
  *   CON sonido (permitido porque arranca con un gesto del usuario).
- * - Al terminar queda el botón "Repetir".
+ * - Al TERMINAR, el video se cierra automáticamente y solo queda el FAB de WhatsApp.
+ * - No persiste el cierre: si el usuario vuelve a la home, el video reaparece a la
+ *   espera (el componente se vuelve a montar al regresar a "/").
  */
 export function AvatarPromo() {
   const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -20,25 +21,24 @@ export function AvatarPromo() {
   const [visible, setVisible] = React.useState(true);
   const [started, setStarted] = React.useState(false);
   const [muted, setMuted] = React.useState(false);
-  const [ended, setEnded] = React.useState(false);
-
-  // No mostrar si el usuario ya lo cerró en esta sesión.
-  React.useEffect(() => {
-    try {
-      if (sessionStorage.getItem(DISMISS_KEY)) setVisible(false);
-    } catch {
-      /* sessionStorage no disponible */
-    }
-  }, []);
 
   const playWithSound = React.useCallback(() => {
     const el = videoRef.current;
     if (!el) return;
     setStarted(true);
-    setEnded(false);
     el.muted = false;
     setMuted(false);
     el.play().catch(() => {});
+  }, []);
+
+  // Cierre automático al terminar el video. Se registra el listener "ended"
+  // directamente sobre el elemento (más fiable que el onEnded de React).
+  React.useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const onEnded = () => setVisible(false);
+    el.addEventListener("ended", onEnded);
+    return () => el.removeEventListener("ended", onEnded);
   }, []);
 
   // Reproducir al primer gesto del usuario en cualquier parte de la página.
@@ -59,14 +59,9 @@ export function AvatarPromo() {
 
   if (!visible) return null;
 
-  const close = () => {
-    setVisible(false);
-    try {
-      sessionStorage.setItem(DISMISS_KEY, "1");
-    } catch {
-      /* noop */
-    }
-  };
+  // Cierre (manual con la X o automático al terminar el video). No persiste:
+  // al volver a la home el componente se remonta y el video vuelve a estar listo.
+  const close = () => setVisible(false);
 
   const toggleMute = () => {
     const el = videoRef.current;
@@ -74,17 +69,6 @@ export function AvatarPromo() {
     const next = !el.muted;
     el.muted = next;
     setMuted(next);
-  };
-
-  const replay = () => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.currentTime = 0;
-    el.muted = false;
-    setMuted(false);
-    setEnded(false);
-    setStarted(true);
-    el.play().catch(() => {});
   };
 
   return (
@@ -110,7 +94,15 @@ export function AvatarPromo() {
           playsInline
           preload="none"
           onClick={playWithSound}
-          onEnded={() => setEnded(true)}
+          onEnded={close}
+          onTimeUpdate={(e) => {
+            // Red de seguridad: si el evento "ended" no dispara, cerramos al
+            // llegar prácticamente al final del video.
+            const el = e.currentTarget;
+            if (started && el.duration && el.currentTime >= el.duration - 0.2) {
+              close();
+            }
+          }}
         />
 
         {/* Estado inicial: pausado con llamada a reproducir */}
@@ -132,26 +124,13 @@ export function AvatarPromo() {
         )}
 
         {/* Reproduciendo: control de silencio */}
-        {started && !ended && (
+        {started && (
           <button
             onClick={toggleMute}
             aria-label={muted ? "Activar sonido" : "Silenciar"}
             className="absolute bottom-1.5 left-1.5 z-[5] inline-flex size-7 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur transition hover:bg-black/65"
           >
             {muted ? <VolumeX className="size-3.5" /> : <Volume2 className="size-3.5" />}
-          </button>
-        )}
-
-        {/* Terminó: repetir */}
-        {ended && (
-          <button
-            onClick={replay}
-            aria-label="Repetir video"
-            className="absolute inset-0 z-[5] grid place-items-center bg-black/30 transition hover:bg-black/40"
-          >
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#111827]">
-              <RotateCcw className="size-3.5" /> Repetir
-            </span>
           </button>
         )}
       </div>

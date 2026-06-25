@@ -145,9 +145,10 @@ export const mainNav: { label: string; href?: string; groups?: NavGroup[] }[] = 
     label: "Industrias",
     groups: [{ label: "Sectores", items: industries }],
   },
+  { label: "Casos de Éxito", href: "/casos-de-exito" },
   { label: "Resultados", href: "/resultados" },
-  { label: "Aliados", href: "/aliados" },
   { label: "Laboratorio IA", href: "/laboratorio-ia" },
+  { label: "Recursos", href: "/recursos" },
   { label: "Blog", href: "/blog" },
   { label: "Nosotros", href: "/nosotros" },
 ];
@@ -156,11 +157,17 @@ export const footerNav = {
   soluciones: services.slice(0, 6),
   compania: [
     { label: "Nosotros", href: "/nosotros" },
+    { label: "Casos de Éxito", href: "/casos-de-exito" },
     { label: "Resultados", href: "/resultados" },
-    { label: "Aliados", href: "/aliados" },
     { label: "Laboratorio IA", href: "/laboratorio-ia" },
+    { label: "Recursos", href: "/recursos" },
     { label: "Blog", href: "/blog" },
     { label: "Contacto", href: "/contacto" },
+  ],
+  cobertura: [
+    { label: "Colombia", href: "/colombia" },
+    { label: "Bogotá", href: "/bogota" },
+    { label: "Cundinamarca", href: "/cundinamarca" },
   ],
   legal: [
     { label: "Términos y Condiciones", href: "/terminos" },

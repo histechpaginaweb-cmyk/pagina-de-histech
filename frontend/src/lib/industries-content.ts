@@ -10,6 +10,8 @@ export type IndustryContent = {
   challenges: string[];
   solutions: { service: string; slug: string }[];
   outcomes: { metric: string; label: string }[];
+  /** Preguntas frecuentes del sector (AEO + FAQ JSON-LD). */
+  faqs: { q: string; a: string }[];
 };
 
 export const industriesContent: Record<string, IndustryContent> = {
@@ -39,6 +41,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "24/7", label: "monitoreo de planta" },
       { metric: "+ OEE", label: "eficiencia de equipos" },
     ],
+    faqs: [
+      { q: "¿Cómo ayuda la tecnología a una empresa de manufactura?", a: "Permite conectar planta, procesos y datos para monitorear la operación en tiempo real, automatizar tareas, anticipar fallas y proteger la infraestructura industrial (OT), mejorando la eficiencia y reduciendo tiempos muertos." },
+      { q: "¿Qué es la industria 4.0?", a: "Es la integración de tecnologías como IoT, automatización, analítica de datos e inteligencia artificial en la operación industrial para tomar decisiones basadas en datos y producir de forma más eficiente y flexible." },
+      { q: "¿Se puede digitalizar sin reemplazar la maquinaria actual?", a: "Sí. Evaluamos tu entorno y, en muchos casos, conectamos y aprovechamos los equipos existentes mediante sensores e integraciones, sin necesidad de reemplazar toda la planta." },
+    ],
   },
   salud: {
     slug: "salud",
@@ -65,6 +72,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "100%", label: "datos protegidos" },
       { metric: "Alta", label: "disponibilidad" },
       { metric: "+ acceso", label: "atención digital" },
+    ],
+    faqs: [
+      { q: "¿Cómo se protegen los datos clínicos sensibles?", a: "Con una estrategia de ciberseguridad por capas: control de accesos, cifrado, protección de endpoints, respaldo y monitoreo continuo, alineada con la normativa de protección de datos del sector salud." },
+      { q: "¿Qué se necesita para habilitar telemedicina?", a: "Infraestructura confiable, conectividad robusta, plataformas seguras y alta disponibilidad para que la atención digital funcione sin interrupciones y protegiendo la información del paciente." },
+      { q: "¿Cómo se garantiza la disponibilidad de los sistemas?", a: "Con arquitecturas de alta disponibilidad, respaldo automatizado y planes de recuperación ante desastres, de modo que los sistemas críticos sigan operando incluso ante incidentes." },
     ],
   },
   "banca-seguros": {
@@ -93,6 +105,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "100%", label: "cumplimiento" },
       { metric: "Tiempo real", label: "para decidir" },
     ],
+    faqs: [
+      { q: "¿Por qué el sector financiero necesita ciberseguridad especializada?", a: "Porque maneja datos altamente sensibles y es uno de los blancos preferidos de los ciberataques. Requiere protección por capas, cumplimiento regulatorio y monitoreo continuo para proteger la operación y la confianza de los clientes." },
+      { q: "¿Cómo se automatizan procesos financieros sin perder el control?", a: "Combinando RPA e inteligencia artificial con trazabilidad y controles: cada paso queda registrado para auditoría, manteniendo el cumplimiento normativo mientras se reducen errores y tiempos." },
+      { q: "¿La tecnología ayuda al cumplimiento regulatorio?", a: "Sí. Muchos controles de seguridad (gestión de accesos, registro de actividad, protección de datos) son a la vez requisitos normativos, por lo que la tecnología facilita demostrar cumplimiento." },
+    ],
   },
   "transporte-logistica": {
     slug: "transporte-logistica",
@@ -119,6 +136,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "− tiempos", label: "de gestión" },
       { metric: "+ visibilidad", label: "de operación" },
       { metric: "Conectividad", label: "multi-sede" },
+    ],
+    faqs: [
+      { q: "¿Cómo mejora la tecnología la trazabilidad logística?", a: "Integrando sistemas y canales para tener información en tiempo real de cada etapa de la cadena, lo que permite anticipar problemas, optimizar rutas y dar visibilidad a clientes y operación." },
+      { q: "¿Cómo se conectan varias sedes de forma segura?", a: "Con infraestructura de redes robusta y segmentada, conectividad multi-sede y seguridad por diseño, de modo que todas las ubicaciones operen como una sola red confiable." },
+      { q: "¿Se pueden automatizar los procesos administrativos logísticos?", a: "Sí. Tareas como documentación, seguimiento de pedidos y conciliaciones se automatizan con RPA e integraciones, acelerando la operación y reduciendo errores." },
     ],
   },
   educacion: {
@@ -147,6 +169,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "Colaboración", label: "híbrida" },
       { metric: "Datos", label: "protegidos" },
     ],
+    faqs: [
+      { q: "¿Qué tecnología necesita una institución educativa moderna?", a: "Conectividad robusta en campus, plataformas de aprendizaje confiables, herramientas de colaboración y ciberseguridad para proteger los datos de estudiantes y habilitar entornos híbridos." },
+      { q: "¿Cómo se protege la información de los estudiantes?", a: "Con control de accesos, protección de datos, copias de seguridad y políticas de privacidad, garantizando el cumplimiento normativo y la confidencialidad de la información." },
+      { q: "¿Cómo se habilita el aprendizaje híbrido?", a: "Combinando conectividad confiable, plataformas en la nube y herramientas de colaboración seguras para que docentes y estudiantes trabajen presencial y remotamente sin fricción." },
+    ],
   },
   retail: {
     slug: "retail",
@@ -173,6 +200,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "+ ventas", label: "y conversión" },
       { metric: "Omnicanal", label: "conectado" },
       { metric: "Mejor", label: "experiencia" },
+    ],
+    faqs: [
+      { q: "¿Qué es la omnicanalidad en retail?", a: "Es conectar todos los canales de venta y atención (tienda física, e-commerce, redes, soporte) en una experiencia coherente, de modo que el cliente transite entre ellos sin perder continuidad." },
+      { q: "¿Cómo aumenta la tecnología las conversiones?", a: "Con ecosistemas digitales que integran canales, plataformas web rápidas y optimizadas, y analítica que permite personalizar la experiencia y reducir la fricción en la compra." },
+      { q: "¿Se puede integrar el e-commerce con el inventario y la operación?", a: "Sí. Integramos tus plataformas de venta con inventario, logística y atención mediante APIs y automatización, evitando la gestión manual y los errores." },
     ],
   },
   "sector-publico": {
@@ -201,6 +233,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "Seguridad", label: "garantizada" },
       { metric: "Mejor", label: "atención ciudadana" },
     ],
+    faqs: [
+      { q: "¿Cómo se moderniza una entidad pública sin comprometer la seguridad?", a: "Con una transformación digital por fases que prioriza la ciberseguridad y la transparencia: se modernizan los procesos manteniendo el control, el cumplimiento y la protección de la información." },
+      { q: "¿Qué beneficios trae la digitalización al sector público?", a: "Mayor eficiencia operativa, reducción de trámites manuales, mejor atención ciudadana digital y mayor transparencia y trazabilidad en los procesos." },
+      { q: "¿Se puede mejorar la atención ciudadana con tecnología?", a: "Sí. Con portales y plataformas digitales, automatización de trámites y ecosistemas integrados que agilizan la interacción del ciudadano con la entidad." },
+    ],
   },
   consultoria: {
     slug: "consultoria",
@@ -228,6 +265,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "24/7", label: "soporte" },
       { metric: "+ productividad", label: "del equipo" },
     ],
+    faqs: [
+      { q: "¿Por qué una firma de consultoría necesita infraestructura confiable?", a: "Porque su facturación depende de la disponibilidad y la productividad del equipo. El downtime se traduce en pérdidas directas, por lo que la estabilidad y el soporte continuo son críticos." },
+      { q: "¿Cómo se protege la información confidencial de los clientes?", a: "Con ciberseguridad por capas, control de accesos, cifrado y políticas de protección de datos que garantizan la confidencialidad de la información sensible que maneja la firma." },
+      { q: "¿Qué incluye el soporte tecnológico para servicios profesionales?", a: "Monitoreo 24/7, soporte y administración de infraestructura como servicio, para que el equipo trabaje sin interrupciones y con costos predecibles." },
+    ],
   },
   ong: {
     slug: "ong",
@@ -254,6 +296,11 @@ export const industriesContent: Record<string, IndustryContent> = {
       { metric: "+ impacto", label: "social" },
       { metric: "Costos", label: "optimizados" },
       { metric: "Escalable", label: "y seguro" },
+    ],
+    faqs: [
+      { q: "¿Cómo puede una ONG aprovechar la tecnología con presupuesto limitado?", a: "Con soluciones escalables y económicas, principalmente en la nube, que permiten pagar por lo que se usa y crecer gradualmente, maximizando cada recurso para amplificar el impacto." },
+      { q: "¿Cómo se protegen los datos de los beneficiarios?", a: "Con controles de ciberseguridad y protección de datos adecuados al tamaño de la organización: accesos, respaldo y buenas prácticas que cuidan la información sensible." },
+      { q: "¿Qué herramientas ayudan a escalar el impacto social?", a: "Plataformas web, herramientas de colaboración accesibles y automatización que permiten llegar a más personas sin aumentar proporcionalmente los costos operativos." },
     ],
   },
 };

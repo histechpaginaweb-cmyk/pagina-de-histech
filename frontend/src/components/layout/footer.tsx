@@ -63,6 +63,14 @@ export function Footer() {
                 </a>
               </li>
             </ul>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+              <span className="font-medium text-foreground/80">Cobertura:</span>
+              {footerNav.cobertura.map((l) => (
+                <Link key={l.href} href={l.href} className="transition hover:text-foreground">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
           </div>
 
           {/* Soluciones */}
@@ -96,8 +104,9 @@ export function Footer() {
               </button>
             </form>
             <div className="flex items-center gap-3 pt-2">
-              {socials.map((s) =>
-                s.href ? (
+              {socials
+                .filter((s) => s.href)
+                .map((s) => (
                   <a
                     key={s.label}
                     href={s.href}
@@ -108,17 +117,7 @@ export function Footer() {
                   >
                     <s.icon className="size-4" />
                   </a>
-                ) : (
-                  <span
-                    key={s.label}
-                    aria-label={`${s.label} (próximamente)`}
-                    aria-disabled="true"
-                    className="inline-flex size-9 cursor-default items-center justify-center rounded-full border border-[#E5E7EB] text-muted-foreground"
-                  >
-                    <s.icon className="size-4" />
-                  </span>
-                ),
-              )}
+                ))}
             </div>
           </div>
         </div>

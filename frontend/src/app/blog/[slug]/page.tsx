@@ -7,11 +7,9 @@ import { Reveal } from "@/components/ui/reveal";
 import { Aurora } from "@/components/visuals/aurora";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CtaBanner } from "@/components/sections/cta";
-import { buildMetadata, JsonLd } from "@/lib/seo";
+import { buildMetadata, JsonLd, articleJsonLd, webPageJsonLd } from "@/lib/seo";
 import { formatDate } from "@/lib/blog";
 import { getSlugs, getPostBySlug } from "@/lib/get-blog";
-import { absoluteUrl } from "@/lib/utils";
-import { siteConfig } from "@/lib/site";
 import { mdxComponents } from "@/components/blog/mdx-components";
 
 export async function generateStaticParams() {
@@ -43,20 +41,7 @@ export default async function PostPage({
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const articleLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.description,
-    datePublished: post.date,
-    author: { "@type": "Organization", name: post.author },
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.legalName,
-      logo: { "@type": "ImageObject", url: absoluteUrl("/icon.svg") },
-    },
-    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
-  };
+  const path = `/blog/${post.slug}`;
 
   return (
     <>
@@ -104,7 +89,18 @@ export default async function PostPage({
         </Container>
       </Section>
 
-      <JsonLd data={articleLd} />
+      <JsonLd
+        data={articleJsonLd({
+          title: post.title,
+          description: post.description,
+          path,
+          date: post.date,
+          author: post.author,
+        })}
+      />
+      <JsonLd
+        data={webPageJsonLd({ title: post.title, description: post.description, path })}
+      />
       <CtaBanner />
     </>
   );

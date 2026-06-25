@@ -7,6 +7,13 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
+  async redirects() {
+    return [
+      // La página /aliados se eliminó; su contenido ("Avalado por los mejores")
+      // vive ahora en la home. 301 para no dejar un 404 ni perder valor SEO.
+      { source: "/aliados", destination: "/", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

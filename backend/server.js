@@ -21,6 +21,8 @@ const {
   writeServiceTexts,
   readPosts,
   writePosts,
+  readCases,
+  writeCases,
 } = require("./r2");
 const {
   checkCredentials,
@@ -362,6 +364,109 @@ app.delete("/api/admin/blog/:slug", requireAdmin, async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.error("DELETE /api/admin/blog/:slug", err);
+    res.status(500).json({ error: "No se pudo eliminar" });
+  }
+});
+
+// ── CASOS DE ÉXITO (editables desde el admin) ──
+// Normaliza un campo a array de strings (acepta array o texto separado por comas/saltos).
+function toList(v) {
+  if (Array.isArray(v)) return v.map((s) => String(s).trim()).filter(Boolean);
+  if (v == null) return [];
+  return String(v)
+    .split(/[,\n]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function buildCase(body, prev) {
+  return {
+    slug: prev ? prev.slug : undefined,
+    title: String(body.title),
+    category: String(body.category || "Caso de éxito"),
+    icon: String(body.icon || "Target"),
+    challenge: String(body.challenge ?? ""),
+    solution: String(body.solution ?? ""),
+    result: String(body.result ?? ""),
+    metric: String(body.metric ?? ""),
+    metricLabel: String(body.metricLabel ?? ""),
+    tech: toList(body.tech),
+    relatedServices: toList(body.relatedServices),
+    updated_at: new Date().toISOString(),
+  };
+}
+
+// Público: lo consume la página /casos-de-exito del frontend.
+app.get("/api/cases", async (_req, res) => {
+  try {
+    res.json(await readCases());
+  } catch (err) {
+    console.error("GET /api/cases", err);
+    res.status(500).json({ error: "Error al leer los casos" });
+  }
+});
+
+// Admin: lista.
+app.get("/api/admin/cases", requireAdmin, async (_req, res) => {
+  try {
+    res.json(await readCases());
+  } catch (err) {
+    console.error("GET /api/admin/cases", err);
+    res.status(500).json({ error: "Error al leer los casos" });
+  }
+});
+
+// Admin: crear caso (genera slug único a partir del título).
+app.post("/api/admin/cases", requireAdmin, async (req, res) => {
+  const { title } = req.body || {};
+  if (!title || !String(title).trim()) {
+    return res.status(400).json({ error: "El título es obligatorio" });
+  }
+  try {
+    const items = await readCases();
+    const baseSlug = slugify(title);
+    let slug = baseSlug;
+    let n = 2;
+    while (items.some((c) => c.slug === slug)) slug = `${baseSlug}-${n++}`;
+    const item = { ...buildCase(req.body), slug };
+    items.push(item);
+    await writeCases(items);
+    res.status(201).json(item);
+  } catch (err) {
+    console.error("POST /api/admin/cases", err);
+    res.status(500).json({ error: "No se pudo crear el caso" });
+  }
+});
+
+// Admin: actualizar caso (por slug).
+app.put("/api/admin/cases/:slug", requireAdmin, async (req, res) => {
+  const slug = String(req.params.slug);
+  const { title } = req.body || {};
+  if (!title || !String(title).trim()) {
+    return res.status(400).json({ error: "El título es obligatorio" });
+  }
+  try {
+    const items = await readCases();
+    const idx = items.findIndex((c) => c.slug === slug);
+    if (idx === -1) return res.status(404).json({ error: "Caso no encontrado" });
+    items[idx] = { ...buildCase(req.body, items[idx]), slug };
+    await writeCases(items);
+    res.json(items[idx]);
+  } catch (err) {
+    console.error("PUT /api/admin/cases/:slug", err);
+    res.status(500).json({ error: "No se pudo guardar" });
+  }
+});
+
+// Admin: eliminar caso.
+app.delete("/api/admin/cases/:slug", requireAdmin, async (req, res) => {
+  const slug = String(req.params.slug);
+  try {
+    const items = await readCases();
+    await writeCases(items.filter((c) => c.slug !== slug));
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("DELETE /api/admin/cases/:slug", err);
     res.status(500).json({ error: "No se pudo eliminar" });
   }
 });

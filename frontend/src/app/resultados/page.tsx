@@ -1,12 +1,13 @@
 import { Section, Container, SectionHeader } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Reveal, RevealStagger } from "@/components/ui/reveal";
 import { Icon } from "@/components/ui/icon";
 import { Aurora } from "@/components/visuals/aurora";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CtaBanner } from "@/components/sections/cta";
 import { buildMetadata } from "@/lib/seo";
-import { results, metrics } from "@/lib/content";
+import { results } from "@/lib/content";
 
 export const metadata = buildMetadata({
   title: "Resultados Reales",
@@ -42,29 +43,18 @@ export default function ResultsPage() {
         </Container>
       </section>
 
-      {/* Metrics band */}
-      <Section className="py-10">
+      <Section className="pt-10">
         <Container>
-          <RevealStagger className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-            {metrics.map((m) => (
-              <div key={m.label} className="card-surface p-7 text-center">
-                <div className="font-display text-4xl font-bold text-gradient">
-                  {m.value}
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{m.label}</p>
-              </div>
-            ))}
-          </RevealStagger>
-        </Container>
-      </Section>
-
-      <Section className="pt-6">
-        <Container>
-          <SectionHeader
-            eyebrow="Casos por tipo de impacto"
-            title="Lo que logramos para nuestros clientes"
-            align="left"
-          />
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeader
+              eyebrow="Casos por tipo de impacto"
+              title="Lo que logramos para nuestros clientes"
+              align="left"
+            />
+            <Button href="/casos-de-exito" variant="secondary">
+              Ver casos de éxito detallados
+            </Button>
+          </div>
           <RevealStagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {results.map((r) => (
               <article key={r.title} className="card-surface h-full p-7">

@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
-import { JsonLd, organizationJsonLd } from "@/lib/seo";
+import { JsonLd, siteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -69,7 +69,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-dvh bg-background">
-        <JsonLd data={organizationJsonLd()} />
+        <JsonLd data={siteJsonLd()} />
         <Header />
         <main id="main" className="relative overflow-x-clip">
           {children}

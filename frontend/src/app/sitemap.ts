@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { serviceSlugs } from "@/lib/services-content";
 import { industrySlugs } from "@/lib/industries-content";
+import { guideSlugs } from "@/lib/resources-content";
 import { getSlugs } from "@/lib/get-blog";
 import { absoluteUrl } from "@/lib/utils";
 
@@ -12,9 +13,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/nosotros",
     "/servicios",
     "/industrias",
+    "/casos-de-exito",
     "/resultados",
-    "/aliados",
+    "/colombia",
+    "/bogota",
+    "/cundinamarca",
     "/laboratorio-ia",
+    "/recursos",
     "/blog",
     "/contacto",
     "/agenda-consultoria",
@@ -41,6 +46,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  const guideRoutes = guideSlugs.map((slug) => ({
+    url: absoluteUrl(`/recursos/${slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
   const blogSlugs = await getSlugs();
   const blogRoutes = blogSlugs.map((slug) => ({
     url: absoluteUrl(`/blog/${slug}`),
@@ -49,5 +61,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...serviceRoutes, ...industryRoutes, ...blogRoutes];
+  return [
+    ...staticRoutes,
+    ...serviceRoutes,
+    ...industryRoutes,
+    ...guideRoutes,
+    ...blogRoutes,
+  ];
 }

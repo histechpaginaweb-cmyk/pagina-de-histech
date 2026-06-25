@@ -40,7 +40,7 @@ export const partnersByCategory: { category: string; items: Partner[] }[] = [
 
 /**
  * Aliados mostrados en la sección "Avalado por los mejores" de la HOME.
- * Son solo 4, en una sola línea. (La página /aliados usa la lista completa.)
+ * Son solo 4, en una sola línea.
  * Si falta el archivo del logo, PartnerLogo muestra el nombre como texto.
  */
 export const homePartners: Partner[] = [

@@ -9,6 +9,7 @@ import { Icon } from "@/components/ui/icon";
 import { Aurora } from "@/components/visuals/aurora";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CtaBanner } from "@/components/sections/cta";
+import { Faq } from "@/components/sections/faq";
 import { buildMetadata } from "@/lib/seo";
 import { industriesContent, industrySlugs } from "@/lib/industries-content";
 
@@ -24,10 +25,18 @@ export async function generateMetadata({
   const { slug } = await params;
   const data = industriesContent[slug];
   if (!data) return {};
+  const sector = data.name.toLowerCase();
   return buildMetadata({
-    title: `${data.name} — Soluciones por Industria`,
-    description: data.subtitle,
+    title: `Tecnología para ${data.name}`,
+    description: `${data.subtitle} HISTECH impulsa al sector ${sector} con inteligencia artificial, ciberseguridad, cloud e infraestructura.`,
     path: `/industrias/${data.slug}`,
+    keywords: [
+      `tecnología para ${sector}`,
+      `transformación digital ${sector}`,
+      `ciberseguridad ${sector}`,
+      `soluciones tecnológicas ${sector}`,
+      `digitalización ${sector}`,
+    ],
   });
 }
 
@@ -139,6 +148,8 @@ export default async function IndustryPage({
           </div>
         </Container>
       </Section>
+
+      <Faq items={data.faqs} title={`Preguntas frecuentes · ${data.name}`} />
 
       <CtaBanner />
     </>

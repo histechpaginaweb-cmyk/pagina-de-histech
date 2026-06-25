@@ -107,12 +107,6 @@ export function Header() {
           )}
         </ul>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          <Button href="/agenda-consultoria" size="sm">
-            Agenda una consultoría
-          </Button>
-        </div>
-
         {/* Mobile toggle */}
         <button
           className={cn(

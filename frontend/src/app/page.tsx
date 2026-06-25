@@ -12,6 +12,24 @@ import { CtaBanner } from "@/components/sections/cta";
 import { Faq } from "@/components/sections/faq";
 import { AvatarPromo } from "@/components/layout/avatar-promo";
 import { homeFaqs } from "@/lib/content";
+import { buildMetadata, JsonLd, webPageJsonLd } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Transformación Digital, IA y Ciberseguridad para empresas",
+  description:
+    "HISTECH impulsa la transformación digital de empresas en Colombia con Inteligencia Artificial, Automatización, Ciberseguridad, Cloud, Infraestructura de Redes y Desarrollo de Software. Tu aliado estratégico en tecnología.",
+  path: "/",
+  keywords: [
+    "transformación digital empresas Colombia",
+    "inteligencia artificial empresarial",
+    "automatización de procesos",
+    "ciberseguridad empresarial",
+    "desarrollo de software a la medida",
+    "cloud computing",
+    "infraestructura de redes",
+    "HISTECH",
+  ],
+});
 
 export default async function HomePage() {
   const featuredProducts = await getProducts();
@@ -160,6 +178,15 @@ export default async function HomePage() {
 
       {/* Avatar corporativo flotante (carga diferida, solo home) */}
       <AvatarPromo />
+
+      <JsonLd
+        data={webPageJsonLd({
+          title: "HISTECH — Tecnología Inteligente para Empresas",
+          description:
+            "Transformación digital, Inteligencia Artificial, Ciberseguridad, Cloud e Infraestructura para empresas en Colombia y Latinoamérica.",
+          path: "/",
+        })}
+      />
     </>
   );
 }

@@ -222,7 +222,10 @@ function MobileMenu({ onClose, light }: { onClose: () => void; light: boolean })
         // móvil). Usamos `inset-x-0 top-16` + alto explícito para llenar la
         // pantalla bajo el header.
         "fixed inset-x-0 top-16 z-40 h-[calc(100dvh-4rem)] overflow-y-auto backdrop-blur-xl lg:hidden",
-        light ? "bg-white/98" : "bg-brand-space/98",
+        // OJO: usar SOLO opacidades de la escala de Tailwind (…/90, /95, /100).
+        // `/98` NO existe en la escala → no genera regla CSS → el fondo quedaba
+        // transparente y el texto ilegible sobre el contenido de la página.
+        light ? "bg-white/95" : "bg-brand-space/95",
       )}
     >
       <div className="container space-y-2 py-6">

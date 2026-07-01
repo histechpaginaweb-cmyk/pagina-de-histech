@@ -215,7 +215,13 @@ function MobileMenu({ onClose, light }: { onClose: () => void; light: boolean })
   return (
     <div
       className={cn(
-        "fixed inset-0 top-16 z-40 overflow-y-auto backdrop-blur-xl lg:hidden",
+        // OJO: el <header> usa backdrop-blur, lo que lo convierte en el bloque
+        // contenedor de sus descendientes `fixed`. Por eso NO se puede usar
+        // `inset-0` aquí: `bottom-0` se mediría contra la caja del header (64px)
+        // y el panel colapsaría a 0px de alto (el menú "no se desplegaba" en
+        // móvil). Usamos `inset-x-0 top-16` + alto explícito para llenar la
+        // pantalla bajo el header.
+        "fixed inset-x-0 top-16 z-40 h-[calc(100dvh-4rem)] overflow-y-auto backdrop-blur-xl lg:hidden",
         light ? "bg-white/98" : "bg-brand-space/98",
       )}
     >

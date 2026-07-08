@@ -103,7 +103,7 @@
       .tabhead { margin-bottom: 14px; }
       .text-slug { font-weight: 700; margin-bottom: 4px; }
       .text-slug .muted { font-weight: 400; font-size: 12px; }
-      #textsGrid, #blogGrid, #casesGrid { grid-template-columns: 1fr; }
+      #textsGrid, #blogGrid, #casesGrid, #homeGrid { grid-template-columns: 1fr; }
 
       /* ── Vista tipo "preview" (el admin se parece a la web) ── */
       .pv-url { font-size: 12px; color: var(--muted); margin-bottom: 12px; word-break: break-all; }
@@ -179,6 +179,7 @@
 
       <div class="tabs">
         <button class="tab active" data-tab="products" type="button">Productos del carrusel</button>
+        <button class="tab" data-tab="home" type="button">Inicio (Hero)</button>
         <button class="tab" data-tab="texts" type="button">Textos de las páginas</button>
         <button class="tab" data-tab="cases" type="button">Casos de éxito</button>
         <button class="tab" data-tab="blog" type="button">Blog</button>
@@ -191,6 +192,12 @@
         </div>
         <p class="muted" id="status">Cargando…</p>
         <div class="grid" id="grid"></div>
+      </div>
+
+      <!-- TAB: Inicio (sección hero del home) -->
+      <div id="tab-home" class="hide">
+        <p class="muted" id="homeStatus">Cargando…</p>
+        <div class="grid" id="homeGrid"></div>
       </div>
 
       <!-- TAB: Textos de las páginas de servicio -->

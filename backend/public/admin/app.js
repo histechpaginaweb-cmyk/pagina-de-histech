@@ -6,6 +6,7 @@ const ICONS = [
   "Calculator", "TrendingUp", "Target", "Banknote", "Briefcase", "ShoppingBag",
   "HeartHandshake", "Award",
 ];
+let homeLoaded = false; // los textos del inicio se cargan al abrir su pestaña
 let textsLoaded = false; // los textos de páginas se cargan al abrir su pestaña
 let blogLoaded = false; // las entradas del blog se cargan al abrir su pestaña
 let casesLoaded = false; // los casos de éxito se cargan al abrir su pestaña
@@ -31,6 +32,7 @@ function showToast(msg) {
 function showLogin() {
   $("loginView").classList.remove("hide");
   $("panelView").classList.add("hide");
+  homeLoaded = false; // forzar recarga en la próxima sesión
   textsLoaded = false; // forzar recarga de textos en la próxima sesión
   blogLoaded = false;
   casesLoaded = false;
@@ -239,9 +241,14 @@ document.querySelectorAll(".tab").forEach((btn) => {
     btn.classList.add("active");
     const tab = btn.dataset.tab;
     $("tab-products").classList.toggle("hide", tab !== "products");
+    $("tab-home").classList.toggle("hide", tab !== "home");
     $("tab-texts").classList.toggle("hide", tab !== "texts");
     $("tab-cases").classList.toggle("hide", tab !== "cases");
     $("tab-blog").classList.toggle("hide", tab !== "blog");
+    if (tab === "home" && !homeLoaded) {
+      homeLoaded = true;
+      loadHomeTexts();
+    }
     if (tab === "texts" && !textsLoaded) {
       textsLoaded = true;
       loadServiceTexts();
@@ -521,6 +528,67 @@ function renderBlogCard(p) {
       showToast("Eliminada");
     } catch (err) {
       showToast(err.message);
+    }
+  });
+
+  return el;
+}
+
+// ── TEXTOS DEL INICIO (sección hero del home) ──
+async function loadHomeTexts() {
+  $("homeStatus").textContent = "Cargando…";
+  try {
+    const data = await api("/api/admin/home-texts");
+    const grid = $("homeGrid");
+    grid.innerHTML = "";
+    grid.appendChild(renderHomeCard(data));
+    $("homeStatus").textContent =
+      "Texto principal del inicio (sección hero). Edita y pulsa Guardar.";
+  } catch (err) {
+    homeLoaded = false; // permitir reintento
+    $("homeStatus").textContent = err.message;
+  }
+}
+
+function renderHomeCard(d) {
+  const el = document.createElement("div");
+  el.className = "card";
+  el.innerHTML = `
+    <div class="pv-url">Página: <b>/</b> (Inicio)</div>
+    <div class="pv-eyebrow">Sección principal (hero)</div>
+    <div class="pv-fieldlabel">Título principal (encabezado grande del inicio)</div>
+    <textarea data-f="heroTitle" rows="3"></textarea>
+    <div class="pv-fieldlabel">Subtítulo (frase de apoyo bajo el título)</div>
+    <textarea data-f="heroSubtitle" rows="3"></textarea>
+    <hr class="pv-divider" />
+    <div class="card-actions">
+      <button class="primary" data-act="save" type="button">Guardar</button>
+      <span class="spinner hide" data-spin>Guardando…</span>
+    </div>
+  `;
+  const f = (n) => el.querySelector(`[data-f="${n}"]`);
+  f("heroTitle").value = d.heroTitle || "";
+  f("heroSubtitle").value = d.heroSubtitle || "";
+
+  el.querySelector('[data-act="save"]').addEventListener("click", async () => {
+    const spin = el.querySelector("[data-spin]");
+    const payload = {
+      heroTitle: f("heroTitle").value.trim(),
+      heroSubtitle: f("heroSubtitle").value.trim(),
+    };
+    if (!payload.heroTitle) return showToast("El título es obligatorio");
+    spin.classList.remove("hide");
+    try {
+      await api("/api/admin/home-texts", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      showToast("Guardado ✓");
+    } catch (err) {
+      showToast(err.message);
+    } finally {
+      spin.classList.add("hide");
     }
   });
 

@@ -76,6 +76,19 @@ export function Header() {
         {/* Logo del header retirado (a pedido). Sin espaciador: el menú se
             desplaza a la izquierda y aprovecha ese ancho (evita apeñuscar items). */}
 
+        {/* Botón del menú móvil — a la IZQUIERDA en celular */}
+        <button
+          className={cn(
+            "inline-flex size-10 items-center justify-center rounded-lg lg:hidden",
+            light ? "text-[#111827]" : "text-foreground",
+          )}
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={open}
+        >
+          {open ? <X className="size-6" /> : <Menu className="size-6" />}
+        </button>
+
         {/* Desktop nav */}
         <ul className="hidden items-center gap-1 lg:flex">
           {mainNav.map((item) =>
@@ -107,18 +120,12 @@ export function Header() {
           )}
         </ul>
 
-        {/* Mobile toggle */}
-        <button
-          className={cn(
-            "inline-flex size-10 items-center justify-center rounded-lg lg:hidden",
-            light ? "text-[#111827]" : "text-foreground",
-          )}
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-          aria-expanded={open}
-        >
-          {open ? <X className="size-6" /> : <Menu className="size-6" />}
-        </button>
+        {/* Portal Cliente — SIEMPRE visible (escritorio y móvil), a la derecha */}
+        <div className="flex items-center">
+          <Button href="/portal/login" variant="primary" size="sm">
+            Portal Cliente
+          </Button>
+        </div>
       </nav>
 
       {open && <MobileMenu onClose={() => setOpen(false)} light={light} />}

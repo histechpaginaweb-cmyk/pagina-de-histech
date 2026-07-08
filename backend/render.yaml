@@ -7,7 +7,9 @@ services:
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: npm install
+    # `npm install` genera el cliente Prisma (postinstall). `portal:push` sincroniza
+    # el esquema del Portal con la BD (Neon) en cada despliegue (aditivo y seguro).
+    buildCommand: npm install && npm run portal:push
     startCommand: npm start
     healthCheckPath: /
     envVars:
@@ -15,6 +17,7 @@ services:
         value: production
       - key: FRONTEND_ORIGIN
         sync: false # pon aquí tu dominio de Vercel
+      # ── Productos/blog (Cloudflare R2) ──
       - key: R2_ACCOUNT_ID
         sync: false # ID de cuenta de Cloudflare
       - key: R2_ACCESS_KEY_ID
@@ -31,3 +34,26 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true # Render genera un secreto aleatorio
+      # ── Portal de Soporte Empresarial ──
+      - key: PORTAL_DATABASE_URL
+        sync: false # cadena de conexión de Neon (Postgres)
+      - key: PORTAL_JWT_SECRET
+        generateValue: true # secreto de sesión del portal (independiente)
+      - key: PORTAL_PUBLIC_URL
+        sync: false # dominio del sitio (para los enlaces de los correos)
+      # Notificaciones por email (Resend). Sin RESEND_API_KEY no se envían correos.
+      - key: RESEND_API_KEY
+        sync: false
+      - key: PORTAL_MAIL_FROM
+        sync: false # ej. "Soporte HISTECH <soporte@histech.com.co>"
+      - key: PORTAL_NOTIFY_EMAIL
+        sync: false # correo donde HISTECH recibe los avisos de tickets nuevos
+      # Solo se usan una vez para `npm run portal:seed` (crear el primer admin):
+      - key: PORTAL_ADMIN_EMAIL
+        sync: false
+      - key: PORTAL_ADMIN_USERNAME
+        sync: false
+      - key: PORTAL_ADMIN_PASSWORD
+        sync: false
+      - key: PORTAL_ADMIN_NAME
+        sync: false

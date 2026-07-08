@@ -3,8 +3,22 @@ import { siteConfig } from "@/lib/site";
 
 const HIGHLIGHT = "eficiencia y conectividad";
 
-export function Hero() {
-  const [titlePre, titlePost] = siteConfig.hero.title.split(HIGHLIGHT);
+export function Hero({
+  title,
+  subtitle,
+}: {
+  title?: string;
+  subtitle?: string;
+}) {
+  // Texto editable desde el Admin; si no llega, usa el estático de `site.ts`.
+  const heroTitle = title?.trim() || siteConfig.hero.title;
+  const heroSubtitle = subtitle?.trim() || siteConfig.hero.subtitle;
+  // Resaltamos la frase clave solo si aparece en el título (si el admin la
+  // cambia y ya no está, mostramos el título tal cual, sin span vacío).
+  const parts = heroTitle.split(HIGHLIGHT);
+  const hasHighlight = parts.length > 1;
+  const titlePre = parts[0];
+  const titlePost = parts.slice(1).join(HIGHLIGHT);
 
   return (
     <section className="relative isolate overflow-hidden bg-white pb-4 pt-20 sm:pt-24 lg:pb-3 lg:pt-20">
@@ -38,14 +52,20 @@ export function Hero() {
 
             {/* Headline */}
             <h1 className="mt-2 max-w-full text-[1.365rem] font-extrabold leading-[1.08] tracking-tight text-[#111827] animate-fade-up [animation-delay:80ms] sm:text-[1.91rem] lg:max-w-[580px] lg:text-[2.31rem] lg:leading-[1.05]">
-              {titlePre}
-              <span>{HIGHLIGHT}</span>
-              {titlePost}
+              {hasHighlight ? (
+                <>
+                  {titlePre}
+                  <span>{HIGHLIGHT}</span>
+                  {titlePost}
+                </>
+              ) : (
+                heroTitle
+              )}
             </h1>
 
             {/* Descripción */}
             <p className="mt-6 max-w-full text-base leading-relaxed text-[#4B5563] text-pretty animate-fade-up [animation-delay:160ms] sm:text-lg lg:max-w-[650px]">
-              {siteConfig.hero.subtitle}
+              {heroSubtitle}
             </p>
           </div>
 

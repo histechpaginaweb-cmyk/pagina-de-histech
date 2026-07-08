@@ -14,6 +14,21 @@ const nextConfig = {
       { source: "/aliados", destination: "/", permanent: true },
     ];
   },
+  async rewrites() {
+    // Portal de Soporte: proxy mismo-origen hacia el backend (Render/Express).
+    // Mantiene las cookies de sesión en el dominio del sitio (sin CORS frágil).
+    // La lógica de negocio sigue 100% en el backend; el sitio solo presenta.
+    // Reutiliza BACKEND_URL (el mismo backend de productos/blog) si no se define
+    // PORTAL_API_URL, para no duplicar configuración en Vercel.
+    const portalApi = process.env.PORTAL_API_URL || process.env.BACKEND_URL;
+    if (!portalApi) return [];
+    return [
+      {
+        source: "/api/portal/:path*",
+        destination: `${portalApi.replace(/\/$/, "")}/api/portal/:path*`,
+      },
+    ];
+  },
   async headers() {
     return [
       {

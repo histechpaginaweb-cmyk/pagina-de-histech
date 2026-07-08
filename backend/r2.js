@@ -580,6 +580,60 @@ async function writeCases(items) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────
+// TEXTOS DEL INICIO (editables desde el admin). Datos en home-texts.json (R2).
+// Es un único objeto: heroTitle / heroSubtitle (la sección principal del home).
+// El frontend lo mezcla con su contenido estático de `site.ts` (fallback).
+// ─────────────────────────────────────────────────────────────
+const HOME_TEXTS_KEY = "home-texts.json";
+
+const HOME_TEXTS_SEED = {
+  heroTitle:
+    "Tecnología inteligente para maximizar la eficiencia y conectividad de tu empresa.",
+  heroSubtitle:
+    "Infraestructura, Ciberseguridad, Cloud e Inteligencia Artificial para acelerar la transformación digital de tu organización.",
+};
+
+/** Lee los textos del inicio desde R2. Si no existen, los siembra. */
+async function readHomeTexts() {
+  if (!client) return { ...HOME_TEXTS_SEED };
+  try {
+    const res = await client.send(
+      new GetObjectCommand({ Bucket: R2_BUCKET, Key: HOME_TEXTS_KEY }),
+    );
+    const obj = JSON.parse(await streamToString(res.Body));
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
+      throw new Error("home-texts.json inválido");
+    }
+    // Mezcla con el seed para que nunca falte una clave nueva.
+    return { ...HOME_TEXTS_SEED, ...obj };
+  } catch (err) {
+    const notFound =
+      err?.name === "NoSuchKey" ||
+      err?.Code === "NoSuchKey" ||
+      err?.$metadata?.httpStatusCode === 404;
+    if (notFound) {
+      const seed = { ...HOME_TEXTS_SEED };
+      await writeHomeTexts(seed);
+      return seed;
+    }
+    throw err;
+  }
+}
+
+/** Sobrescribe home-texts.json en R2. */
+async function writeHomeTexts(data) {
+  if (!client) throw new Error("R2 no está configurado en el servidor");
+  await client.send(
+    new PutObjectCommand({
+      Bucket: R2_BUCKET,
+      Key: HOME_TEXTS_KEY,
+      Body: JSON.stringify(data, null, 2),
+      ContentType: "application/json",
+    }),
+  );
+}
+
 module.exports = {
   isConfigured,
   readProducts,
@@ -591,4 +645,6 @@ module.exports = {
   writePosts,
   readCases,
   writeCases,
+  readHomeTexts,
+  writeHomeTexts,
 };

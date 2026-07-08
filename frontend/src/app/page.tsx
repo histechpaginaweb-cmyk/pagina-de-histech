@@ -1,6 +1,7 @@
 import { Hero } from "@/components/sections/hero";
 import { ProductCarousel } from "@/components/sections/product-carousel";
 import { getProducts } from "@/lib/get-products";
+import { getHomeTexts } from "@/lib/get-home-texts";
 import { TrustBar } from "@/components/sections/trust-bar";
 import { FeatureSpotlight } from "@/components/sections/feature-spotlight";
 import { Pillars } from "@/components/sections/pillars";
@@ -32,12 +33,15 @@ export const metadata = buildMetadata({
 });
 
 export default async function HomePage() {
-  const featuredProducts = await getProducts();
+  const [featuredProducts, homeTexts] = await Promise.all([
+    getProducts(),
+    getHomeTexts(),
+  ]);
 
   return (
     <>
       {/* 1 — Hero */}
-      <Hero />
+      <Hero title={homeTexts.heroTitle} subtitle={homeTexts.heroSubtitle} />
 
       {/* 2 — Carrusel de productos (gestionable desde el backend) */}
       <ProductCarousel items={featuredProducts} />

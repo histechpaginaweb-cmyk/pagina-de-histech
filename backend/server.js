@@ -23,6 +23,8 @@ const {
   writePosts,
   readCases,
   writeCases,
+  readHomeTexts,
+  writeHomeTexts,
 } = require("./r2");
 const {
   checkCredentials,
@@ -30,6 +32,9 @@ const {
   clearCookie,
   requireAdmin,
 } = require("./auth");
+
+// Portal de Soporte Empresarial — módulo aislado (BD dedicada, auth propia).
+const portalRouter = require("./portal");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -74,6 +79,10 @@ function sortByPosition(list) {
 app.get("/", (_req, res) =>
   res.json({ ok: true, service: "histech-backend", admin: "/admin" }),
 );
+
+// ── Portal de Soporte Empresarial (módulo independiente, /api/portal/*) ──
+// No interfiere con las rutas de productos/blog: prefijo y errores propios.
+app.use("/api/portal", portalRouter);
 
 // ── API PÚBLICA: lista de productos (la consume el frontend) ──
 app.get("/api/products", async (_req, res) => {
@@ -251,6 +260,48 @@ app.put("/api/admin/service-texts/:slug", requireAdmin, async (req, res) => {
     res.json(items[idx]);
   } catch (err) {
     console.error("PUT /api/admin/service-texts/:slug", err);
+    res.status(500).json({ error: "No se pudo guardar" });
+  }
+});
+
+// ── TEXTOS DEL INICIO (sección hero del home, editable desde el admin) ──
+// Público: lo consume el frontend para sobreescribir el título/subtítulo del hero.
+app.get("/api/home-texts", async (_req, res) => {
+  try {
+    res.json(await readHomeTexts());
+  } catch (err) {
+    console.error("GET /api/home-texts", err);
+    res.status(500).json({ error: "Error al leer los textos del inicio" });
+  }
+});
+
+// Admin: lee para editar.
+app.get("/api/admin/home-texts", requireAdmin, async (_req, res) => {
+  try {
+    res.json(await readHomeTexts());
+  } catch (err) {
+    console.error("GET /api/admin/home-texts", err);
+    res.status(500).json({ error: "Error al leer los textos del inicio" });
+  }
+});
+
+// Admin: actualiza el título/subtítulo del hero.
+app.put("/api/admin/home-texts", requireAdmin, async (req, res) => {
+  const { heroTitle, heroSubtitle } = req.body || {};
+  if (!heroTitle || !String(heroTitle).trim()) {
+    return res.status(400).json({ error: "El título es obligatorio" });
+  }
+  try {
+    const current = await readHomeTexts();
+    const updated = {
+      ...current,
+      heroTitle: String(heroTitle),
+      heroSubtitle: String(heroSubtitle ?? ""),
+    };
+    await writeHomeTexts(updated);
+    res.json(updated);
+  } catch (err) {
+    console.error("PUT /api/admin/home-texts", err);
     res.status(500).json({ error: "No se pudo guardar" });
   }
 });

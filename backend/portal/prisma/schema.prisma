@@ -1,0 +1,237 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Portal de Soporte Empresarial HISTECH — Esquema de datos (BD DEDICADA)
+//
+// Base de datos independiente de la web corporativa. Multi-tenant: cada Empresa
+// es un inquilino aislado. Pensado para escalar a múltiples empresas y miles de
+// tickets (índices en companyId / status / número de ticket).
+//
+// Conexión: variable de entorno PORTAL_DATABASE_URL (Neon Postgres, proyecto
+// nuevo y exclusivo del portal — NO comparte datos con el resto del backend).
+// ─────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/portal-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PORTAL_DATABASE_URL")
+}
+
+// ── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN_HISTECH // Acceso global a todas las empresas
+  CLIENT        // Usuario de una empresa; solo ve lo suyo
+}
+
+enum EntityStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum TicketStatus {
+  NUEVO
+  ASIGNADO
+  EN_PROCESO
+  PENDIENTE_CLIENTE
+  RESUELTO
+  CERRADO
+}
+
+enum TicketPriority {
+  BAJA
+  MEDIA
+  ALTA
+  CRITICA
+}
+
+enum TicketCategory {
+  HARDWARE
+  SOFTWARE
+  RED
+  INTERNET
+  IMPRESORAS
+  OFFICE
+  CORREO
+  ACCESOS
+  OTRO
+}
+
+enum AttachmentKind {
+  CLIENT        // Adjuntada por el cliente al crear el ticket
+  TECH_EVIDENCE // Evidencia técnica del cierre (adjunta el admin)
+}
+
+// Contadores atómicos (p. ej. numeración anual de tickets: "ticket:2026").
+model Counter {
+  key   String @id
+  value Int    @default(0)
+
+  @@map("counters")
+}
+
+// ── Empresa (inquilino) ──────────────────────────────────────────────────────
+
+model Company {
+  id            String       @id @default(cuid())
+  name          String
+  status        EntityStatus @default(ACTIVE)
+  internalNotes String?      @db.Text // Observaciones internas de HISTECH
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  users   User[]
+  assets  Asset[]
+  tickets Ticket[]
+
+  @@index([status])
+  @@map("companies")
+}
+
+// ── Usuario ──────────────────────────────────────────────────────────────────
+// Sin registro público: solo el Administrador HISTECH crea usuarios.
+
+model User {
+  id           String       @id @default(cuid())
+  companyId    String
+  company      Company      @relation(fields: [companyId], references: [id])
+  fullName     String
+  username     String       @unique
+  email        String       @unique
+  passwordHash String
+  area         String?
+  position     String? // Cargo
+  phone        String?
+  whatsapp     String?
+  role         Role         @default(CLIENT)
+  status       EntityStatus @default(ACTIVE)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  assignedAssets Asset[]  @relation("AssetAssignedTo")
+  createdTickets Ticket[] @relation("TicketCreatedBy")
+  assignedTickets Ticket[] @relation("TicketAssignedTo")
+  closedTickets  Ticket[] @relation("TicketClosedBy")
+  ticketEvents   TicketEvent[]
+  attachments    TicketAttachment[]
+
+  @@index([companyId])
+  @@index([role])
+  @@map("users")
+}
+
+// ── Activo / Equipo ──────────────────────────────────────────────────────────
+
+model Asset {
+  id             String       @id @default(cuid())
+  companyId      String
+  company        Company      @relation(fields: [companyId], references: [id])
+  internalCode   String // Código interno del equipo
+  name           String
+  assignedUserId String?
+  assignedUser   User?        @relation("AssetAssignedTo", fields: [assignedUserId], references: [id])
+  location       String?
+  brand          String?
+  model          String?
+  serialNumber   String?
+  observations   String?      @db.Text
+  status         EntityStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  tickets Ticket[] // Historial de incidencias del equipo
+
+  @@unique([companyId, internalCode])
+  @@index([companyId])
+  @@map("assets")
+}
+
+// ── Ticket ───────────────────────────────────────────────────────────────────
+
+model Ticket {
+  id          String         @id @default(cuid())
+  number      String         @unique // Ej. HT-2026-000123
+  companyId   String
+  company     Company        @relation(fields: [companyId], references: [id])
+  createdById String
+  createdBy   User           @relation("TicketCreatedBy", fields: [createdById], references: [id])
+  assetId     String?
+  asset       Asset?         @relation(fields: [assetId], references: [id])
+
+  area        String?
+  category    TicketCategory
+  priority    TicketPriority @default(MEDIA)
+  subject     String
+  description String         @db.Text
+  status      TicketStatus   @default(NUEVO)
+
+  assignedToId String?
+  assignedTo   User?    @relation("TicketAssignedTo", fields: [assignedToId], references: [id])
+
+  // Atención técnica
+  diagnosis             String?   @db.Text
+  actions               String?   @db.Text
+  solution              String?   @db.Text
+  recommendations       String?   @db.Text
+  technicalObservations String?   @db.Text
+  startedAt             DateTime?
+  finishedAt            DateTime?
+  timeSpentMin          Int? // Tiempo invertido (minutos)
+
+  // Cierre
+  finalSolution     String?   @db.Text
+  finalObservations String?   @db.Text
+  closedById        String?
+  closedBy          User?     @relation("TicketClosedBy", fields: [closedById], references: [id])
+  closedAt          DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  attachments TicketAttachment[]
+  events      TicketEvent[]
+
+  @@index([companyId])
+  @@index([status])
+  @@index([assetId])
+  @@index([assignedToId])
+  @@index([category])
+  @@index([priority])
+  @@map("tickets")
+}
+
+// ── Adjuntos (solo imágenes, máx. 2 por tipo) ────────────────────────────────
+
+model TicketAttachment {
+  id           String         @id @default(cuid())
+  ticketId     String
+  ticket       Ticket         @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  url          String
+  kind         AttachmentKind @default(CLIENT)
+  uploadedById String
+  uploadedBy   User           @relation(fields: [uploadedById], references: [id])
+  createdAt    DateTime       @default(now())
+
+  @@index([ticketId])
+  @@map("ticket_attachments")
+}
+
+// ── Línea de tiempo / Historial de eventos ───────────────────────────────────
+
+model TicketEvent {
+  id         String        @id @default(cuid())
+  ticketId   String
+  ticket     Ticket        @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
+  action     String // Ej. "Ticket creado", "Asignado al técnico"
+  note       String?       @db.Text
+  fromStatus TicketStatus?
+  toStatus   TicketStatus?
+  createdAt  DateTime      @default(now())
+
+  @@index([ticketId])
+  @@map("ticket_events")
+}

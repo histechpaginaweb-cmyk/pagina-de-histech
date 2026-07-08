@@ -145,10 +145,38 @@ export const mainNav: { label: string; href?: string; groups?: NavGroup[] }[] = 
     label: "Industrias",
     groups: [{ label: "Sectores", items: industries }],
   },
-  { label: "Casos de Éxito", href: "/casos-de-exito" },
-  { label: "Resultados", href: "/resultados" },
-  { label: "Laboratorio IA", href: "/laboratorio-ia" },
-  { label: "Recursos", href: "/recursos" },
+  {
+    // Agrupador para liberar espacio en la barra: Casos de Éxito, Resultados,
+    // Laboratorio IA y Recursos en un solo desplegable. Renombrar aquí si se desea.
+    label: "Descubre",
+    groups: [
+      {
+        label: "Casos & Recursos",
+        items: [
+          {
+            label: "Casos de Éxito",
+            href: "/casos-de-exito",
+            description: "Proyectos reales con resultados medibles.",
+          },
+          {
+            label: "Resultados",
+            href: "/resultados",
+            description: "Métricas e impacto de nuestro trabajo.",
+          },
+          {
+            label: "Laboratorio IA",
+            href: "/laboratorio-ia",
+            description: "Demos y experimentos de inteligencia artificial.",
+          },
+          {
+            label: "Recursos",
+            href: "/recursos",
+            description: "Guías y contenidos para tu transformación digital.",
+          },
+        ],
+      },
+    ],
+  },
   { label: "Blog", href: "/blog" },
   { label: "Nosotros", href: "/nosotros" },
 ];

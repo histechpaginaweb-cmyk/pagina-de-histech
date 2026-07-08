@@ -1,0 +1,197 @@
+Mi evaluación es que la IA hizo un buen trabajo técnico inicial, pero apenas completó aproximadamente un 25%–35% del plan estratégico que le planteaste.
+
+Lo que hizo está bien para GEO/AEO básico, pero todavía está lejos de convertir HISTECH en una referencia para Google AI Overviews, ChatGPT, Gemini o Perplexity.
+
+Lo que sí hizo correctamente ✅
+1. Mejoró la estructura AEO
+
+Agregar:
+
+Casos de uso
+Procesos
+FAQ
+Beneficios
+
+es exactamente lo que buscan los motores de respuesta.
+
+Esto ayuda mucho porque responde:
+
+¿Qué es?
+¿Para qué sirve?
+¿Cómo funciona?
+¿Cuándo se usa?
+2. Agregó Schema Service
+
+Excelente decisión.
+
+Pasaste de:
+
+Organization
+FAQ
+Breadcrumb
+
+a incluir también:
+
+Service
+
+Esto mejora la comprensión semántica.
+
+3. No dañó el diseño
+
+Esto era una de tus principales preocupaciones.
+
+Por lo que describe:
+
+No tocó branding.
+No tocó colores.
+No tocó tipografía.
+No tocó componentes.
+
+Correcto.
+
+4. Mantuvo la consistencia
+
+Reutilizó los mismos componentes visuales.
+
+Eso evita que el sitio se vea "parchado".
+
+Lo que todavía falta (y es lo más importante)
+FASE 2: GEO REAL
+
+Actualmente mejoró páginas de servicios.
+
+Pero GEO moderno requiere algo más.
+
+Las IA no suelen citar páginas comerciales.
+
+Prefieren citar:
+
+Guías
+Comparativas
+Artículos
+Estudios
+Casos reales
+
+Por eso todavía te falta:
+
+Centro de conocimiento
+
+Crear:
+
+/blog
+/recursos
+/centro-de-conocimiento
+
+Y publicar contenido.
+
+Sin esto el GEO queda incompleto.
+
+FASE 3: ENTITY SEO
+
+Pregúntale:
+
+¿Has implementado una estrategia de Entity SEO?
+
+Porque seguramente la respuesta será no.
+
+Necesitas relacionar constantemente:
+
+HISTECH ↔
+
+Inteligencia Artificial
+Automatización
+Desarrollo Web
+Desarrollo de Software
+Ciberseguridad
+Cloud
+Transformación Digital
+
+Esto debe aparecer en:
+
+Interlinking
+Schema
+Metadata
+Contenido
+FASE 4: Metadata avanzada
+
+No veo que haya tocado:
+
+Meta Titles
+Meta Descriptions
+Open Graph
+Twitter Cards
+Canonicals
+
+Eso es fundamental.
+
+FASE 5: Schema avanzado
+
+Actualmente implementó Service.
+
+Faltan:
+
+LocalBusiness
+WebSite
+WebPage
+Article
+Person (si existe autor)
+Review
+OfferCatalog
+FASE 6: Páginas pilar
+
+Actualmente tienes servicios.
+
+Pero faltan páginas que ataquen búsquedas de alto volumen.
+
+Ejemplos:
+
+Inteligencia Artificial para Empresas
+/inteligencia-artificial-empresas
+Automatización de Procesos
+/automatizacion-empresarial
+Desarrollo de Software a Medida
+/desarrollo-software-colombia
+Ciberseguridad Empresarial
+/ciberseguridad-empresas
+
+Estas páginas suelen posicionar mejor que las páginas de venta.
+
+FASE 7: Casos de éxito
+
+Esto es crítico.
+
+Las IA valoran muchísimo:
+
+"Lo hemos hecho"
+
+más que
+
+"Podemos hacerlo"
+
+Crear:
+
+/casos-de-exito
+
+Con:
+
+Problema
+Solución
+Resultado
+FASE 8: SEO Local
+
+Si HISTECH trabaja en Colombia debes tener:
+
+Schema LocalBusiness
+NAP consistente
+Nombre
+Dirección
+Teléfono
+Página de ubicación
+
+Ejemplo:
+
+/bogota
+/cajica
+/colombia
+
+Dependiendo de tu estrategia.

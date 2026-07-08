@@ -2,9 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { WhatsAppFab } from "@/components/layout/whatsapp-fab";
+import { SiteFrame } from "@/components/layout/site-frame";
 import { JsonLd, siteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
@@ -70,12 +68,7 @@ export default function RootLayout({
     >
       <body className="min-h-dvh bg-background">
         <JsonLd data={siteJsonLd()} />
-        <Header />
-        <main id="main" className="relative overflow-x-clip">
-          {children}
-        </main>
-        <Footer />
-        <WhatsAppFab />
+        <SiteFrame>{children}</SiteFrame>
         <Analytics />
         <SpeedInsights />
       </body>

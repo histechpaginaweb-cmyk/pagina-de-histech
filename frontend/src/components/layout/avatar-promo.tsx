@@ -9,15 +9,15 @@ const POSTER_SRC = "/videos/avatar-corporativo-poster.jpg";
 /**
  * Avatar corporativo flotante (solo home).
  * - Inicia PAUSADO mostrando el poster (sin descargar el video → no afecta carga).
- * - Al primer clic/toque en CUALQUIER parte de la página, se reproduce UNA vez
- *   CON sonido (permitido porque arranca con un gesto del usuario).
+ * - Se reproduce CON sonido SOLO cuando el usuario hace clic sobre el propio
+ *   video (o el botón "Toca para reproducir"). NO se reproduce con clics en otras
+ *   partes de la página, para no resultar molesto.
  * - Al TERMINAR, el video se cierra automáticamente y solo queda el FAB de WhatsApp.
  * - No persiste el cierre: si el usuario vuelve a la home, el video reaparece a la
  *   espera (el componente se vuelve a montar al regresar a "/").
  */
 export function AvatarPromo() {
   const videoRef = React.useRef<HTMLVideoElement>(null);
-  const cardRef = React.useRef<HTMLDivElement>(null);
   const [visible, setVisible] = React.useState(true);
   const [started, setStarted] = React.useState(false);
   const [muted, setMuted] = React.useState(false);
@@ -41,22 +41,6 @@ export function AvatarPromo() {
     return () => el.removeEventListener("ended", onEnded);
   }, []);
 
-  // Reproducir al primer gesto del usuario en cualquier parte de la página.
-  React.useEffect(() => {
-    if (!visible || started) return;
-    const onFirstGesture = (e: Event) => {
-      // Clics dentro de la tarjeta (cerrar/controles) los maneja la tarjeta.
-      if (cardRef.current && e.target instanceof Node && cardRef.current.contains(e.target)) {
-        return;
-      }
-      playWithSound();
-    };
-    const opts: AddEventListenerOptions = { passive: true };
-    const events = ["pointerdown", "keydown", "touchstart"] as const;
-    events.forEach((ev) => window.addEventListener(ev, onFirstGesture, opts));
-    return () => events.forEach((ev) => window.removeEventListener(ev, onFirstGesture));
-  }, [visible, started, playWithSound]);
-
   if (!visible) return null;
 
   // Cierre (manual con la X o automático al terminar el video). No persiste:
@@ -73,8 +57,8 @@ export function AvatarPromo() {
 
   return (
     <div
-      ref={cardRef}
-      className="animate-fade-up fixed bottom-24 right-5 z-40 w-[150px] sm:w-[180px]"
+      // Oculto en móvil (ocupa mucho espacio); solo visible en escritorio/web.
+      className="animate-fade-up fixed bottom-24 right-5 z-40 hidden w-[150px] sm:w-[180px] md:block"
       aria-label="Mensaje en video de HISTECH"
     >
       <div className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-gradient-to-br from-[#7C3AED]/20 to-[#A855F7]/10 shadow-[0_18px_40px_-12px_rgba(124,58,237,0.45)]">

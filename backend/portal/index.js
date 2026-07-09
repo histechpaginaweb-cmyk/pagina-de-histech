@@ -6,6 +6,7 @@
 // tickets/reportes/PDF vive aquí. BD dedicada vía PORTAL_DATABASE_URL.
 // ─────────────────────────────────────────────────────────────────────────────
 const { Router } = require("express");
+const helmet = require("helmet");
 const { errorHandler } = require("./lib/http");
 
 const authRoutes = require("./routes/auth.routes");
@@ -17,6 +18,10 @@ const dashboardRoutes = require("./routes/dashboard.routes");
 const reportsRoutes = require("./routes/reports.routes");
 
 const portal = Router();
+
+// Cabeceras de seguridad (helmet) — solo para /api/portal, sin afectar las rutas
+// existentes de productos/blog ni el panel /admin.
+portal.use(helmet());
 
 // Salud del módulo (útil para monitoreo independiente).
 portal.get("/health", (_req, res) =>

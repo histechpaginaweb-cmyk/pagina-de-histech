@@ -9,6 +9,7 @@ import type { PortalUser } from "@/lib/portal/types";
 const ROLE_LABEL: Record<PortalUser["role"], string> = {
   ADMIN_HISTECH: "Admin HISTECH",
   CLIENT: "Cliente",
+  LIDER: "Líder",
 };
 
 export function UsersTable({

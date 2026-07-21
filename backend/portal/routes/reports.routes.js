@@ -1,10 +1,11 @@
 // Módulo de reportes: exportación de tickets a Excel (.xlsx) con filtros.
-// Solo Administrador HISTECH. No se usa Power BI.
+// Administrador HISTECH (todas las empresas) y LIDER (solo su propia empresa,
+// forzado del lado servidor — no del query param). No se usa Power BI.
 const { Router } = require("express");
 const ExcelJS = require("exceljs");
 const { prisma } = require("../lib/prisma");
 const { asyncHandler } = require("../lib/http");
-const { requireAuth, requireAdmin } = require("../middleware/auth");
+const { requireAuth, requireRole } = require("../middleware/auth");
 const { ticketListInclude } = require("../lib/tickets");
 
 const router = Router();
@@ -22,11 +23,18 @@ const CATEGORY_LABEL = {
 router.get(
   "/reports/tickets.xlsx",
   requireAuth,
-  requireAdmin,
+  requireRole("ADMIN_HISTECH", "LIDER"),
   asyncHandler(async (req, res) => {
+    const isAdmin = req.auth.role === "ADMIN_HISTECH";
     const { companyId, status, category, priority, assignedToId, assetId, from, to } = req.query;
     const where = {};
-    if (companyId) where.companyId = String(companyId);
+    // LIDER: forzado del lado servidor a su propia empresa (nunca confiar en el
+    // companyId del query — evitaría el aislamiento multi-tenant).
+    if (isAdmin) {
+      if (companyId) where.companyId = String(companyId);
+    } else {
+      where.companyId = req.auth.companyId;
+    }
     if (status) where.status = String(status);
     if (category) where.category = String(category);
     if (priority) where.priority = String(priority);

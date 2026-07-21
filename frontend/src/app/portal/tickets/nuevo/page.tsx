@@ -76,7 +76,7 @@ export default function NewTicketPage() {
   }
 
   return (
-    <PortalShell requiredRole="CLIENT">
+    <PortalShell requiredRole={["CLIENT", "LIDER"]}>
       <Link
         href="/portal/tickets"
         className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-brand-purple"

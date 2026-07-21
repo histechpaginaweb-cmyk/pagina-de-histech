@@ -21,7 +21,7 @@ export default function ClientTicketDetailPage() {
   React.useEffect(() => { load(); }, [load]);
 
   return (
-    <PortalShell requiredRole="CLIENT">
+    <PortalShell requiredRole={["CLIENT", "LIDER"]}>
       {error && <Alert variant="error">{error}</Alert>}
       {!ticket && !error ? (
         <div className="flex justify-center py-16">

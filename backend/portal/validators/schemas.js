@@ -38,7 +38,7 @@ const userCreateSchema = z.object({
     .regex(/^[a-zA-Z0-9._-]+$/, "El usuario solo admite letras, números, . _ -"),
   email: z.string().trim().toLowerCase().email("Correo inválido"),
   password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
-  role: z.enum(["ADMIN_HISTECH", "CLIENT"]).optional().default("CLIENT"),
+  role: z.enum(["ADMIN_HISTECH", "CLIENT", "LIDER"]).optional().default("CLIENT"),
   area: optionalString(120),
   position: optionalString(120),
   phone: optionalString(40),

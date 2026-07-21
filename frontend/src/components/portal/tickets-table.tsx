@@ -10,10 +10,12 @@ export function TicketsTable({
   tickets,
   basePath,
   showCompany = false,
+  showCreatedBy = false,
 }: {
   tickets: TicketSummary[];
   basePath: string; // ej. "/portal/tickets" o "/portal/admin/tickets"
   showCompany?: boolean;
+  showCreatedBy?: boolean; // ej. LIDER, que ve tickets de varios usuarios de su empresa
 }) {
   return (
     <div className="overflow-x-auto">
@@ -23,6 +25,7 @@ export function TicketsTable({
             <th className="px-5 py-3 font-medium">N.º</th>
             <th className="px-5 py-3 font-medium">Asunto</th>
             {showCompany && <th className="px-5 py-3 font-medium">Empresa</th>}
+            {showCreatedBy && <th className="px-5 py-3 font-medium">Solicitante</th>}
             <th className="px-5 py-3 font-medium">Categoría</th>
             <th className="px-5 py-3 font-medium">Prioridad</th>
             <th className="px-5 py-3 font-medium">Estado</th>
@@ -50,6 +53,9 @@ export function TicketsTable({
               </td>
               {showCompany && (
                 <td className="px-5 py-3 text-muted-foreground">{t.company?.name ?? "—"}</td>
+              )}
+              {showCreatedBy && (
+                <td className="px-5 py-3 text-muted-foreground">{t.createdBy?.fullName ?? "—"}</td>
               )}
               <td className="px-5 py-3 text-muted-foreground">
                 {t.category ? CATEGORY_LABEL[t.category] : "—"}

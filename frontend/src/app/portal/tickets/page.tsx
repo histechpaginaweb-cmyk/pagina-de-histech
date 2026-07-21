@@ -7,11 +7,14 @@ import { Plus } from "lucide-react";
 import { PortalShell } from "@/components/portal/shell";
 import { PortalCard, Spinner, Alert } from "@/components/portal/ui";
 import { TicketsTable } from "@/components/portal/tickets-table";
+import { usePortalAuth } from "@/components/portal/auth-context";
 import { STATUS_OPTIONS } from "@/lib/portal/constants";
 import { portalApi } from "@/lib/portal/api";
 import type { TicketSummary } from "@/lib/portal/types";
 
 export default function ClientTicketsPage() {
+  const { user } = usePortalAuth();
+  const isLeader = user?.role === "LIDER";
   const [tickets, setTickets] = React.useState<TicketSummary[] | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState("");
@@ -27,9 +30,9 @@ export default function ClientTicketsPage() {
 
   return (
     <PortalShell
-      requiredRole="CLIENT"
-      title="Mis tickets"
-      description="Todas tus solicitudes de soporte."
+      requiredRole={["CLIENT", "LIDER"]}
+      title={isLeader ? "Tickets de la empresa" : "Mis tickets"}
+      description={isLeader ? "Todas las solicitudes de soporte de tu empresa." : "Todas tus solicitudes de soporte."}
       actions={
         <Link
           href="/portal/tickets/nuevo"
@@ -64,7 +67,7 @@ export default function ClientTicketsPage() {
         </PortalCard>
       ) : (
         <PortalCard className="overflow-hidden p-0">
-          <TicketsTable tickets={tickets ?? []} basePath="/portal/tickets" />
+          <TicketsTable tickets={tickets ?? []} basePath="/portal/tickets" showCreatedBy={isLeader} />
         </PortalCard>
       )}
     </PortalShell>

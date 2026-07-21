@@ -36,6 +36,13 @@ const CLIENT_NAV: NavItem[] = [
   { href: "/portal/dashboard", label: "Mis tickets", icon: Ticket },
 ];
 
+// LIDER: mismas páginas que el Cliente (con alcance de toda la empresa) +
+// acceso a Reportes (Excel) de su propia empresa.
+const LIDER_NAV: NavItem[] = [
+  { href: "/portal/dashboard", label: "Tickets", icon: Ticket },
+  { href: "/portal/reportes", label: "Reportes", icon: BarChart3 },
+];
+
 export function PortalShell({
   children,
   requiredRole,
@@ -44,7 +51,7 @@ export function PortalShell({
   actions,
 }: {
   children: React.ReactNode;
-  requiredRole?: Role;
+  requiredRole?: Role | Role[];
   title?: string;
   description?: string;
   actions?: React.ReactNode;
@@ -65,7 +72,13 @@ export function PortalShell({
     );
   }
 
-  if (requiredRole && user.role !== requiredRole) {
+  const allowedRoles = requiredRole
+    ? Array.isArray(requiredRole)
+      ? requiredRole
+      : [requiredRole]
+    : null;
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
     return (
       <div className="container flex min-h-[60vh] flex-col items-center justify-center gap-3 text-center">
         <h1 className="text-2xl font-semibold">Acceso restringido</h1>
@@ -77,10 +90,15 @@ export function PortalShell({
     );
   }
 
-  const nav = user.role === "ADMIN_HISTECH" ? ADMIN_NAV : CLIENT_NAV;
+  const nav =
+    user.role === "ADMIN_HISTECH" ? ADMIN_NAV : user.role === "LIDER" ? LIDER_NAV : CLIENT_NAV;
 
   const roleLabel =
-    user.role === "ADMIN_HISTECH" ? "Administrador HISTECH" : user.company?.name;
+    user.role === "ADMIN_HISTECH"
+      ? "Administrador HISTECH"
+      : user.role === "LIDER"
+        ? `${user.company?.name ?? ""} · Líder`
+        : user.company?.name;
 
   return (
     <div className="container py-6 lg:grid lg:grid-cols-[240px_1fr] lg:gap-8 lg:py-10">

@@ -24,6 +24,7 @@ datasource db {
 enum Role {
   ADMIN_HISTECH // Acceso global a todas las empresas
   CLIENT        // Usuario de una empresa; solo ve lo suyo
+  LIDER         // Usuario de una empresa; ve y reporta TODOS los tickets de su empresa
 }
 
 enum EntityStatus {

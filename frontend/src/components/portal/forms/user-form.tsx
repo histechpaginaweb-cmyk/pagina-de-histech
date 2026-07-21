@@ -100,6 +100,7 @@ export function UserForm({ companyId, user, onSaved, onCancel }: Props) {
         <Field label="Rol" htmlFor="u-role">
           <Select id="u-role" value={form.role} onChange={set("role")}>
             <option value="CLIENT">Usuario Cliente</option>
+            <option value="LIDER">Líder de Empresa (ve todos los tickets)</option>
             <option value="ADMIN_HISTECH">Administrador HISTECH</option>
           </Select>
         </Field>

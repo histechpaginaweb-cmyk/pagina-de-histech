@@ -7,10 +7,13 @@ import { Plus, Ticket as TicketIcon } from "lucide-react";
 import { PortalShell } from "@/components/portal/shell";
 import { PortalCard, Spinner, Alert } from "@/components/portal/ui";
 import { TicketsTable } from "@/components/portal/tickets-table";
+import { usePortalAuth } from "@/components/portal/auth-context";
 import { portalApi } from "@/lib/portal/api";
 import type { ClientDashboard } from "@/lib/portal/types";
 
 export default function ClientDashboardPage() {
+  const { user } = usePortalAuth();
+  const isLeader = user?.role === "LIDER";
   const [data, setData] = React.useState<ClientDashboard | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -23,9 +26,13 @@ export default function ClientDashboardPage() {
 
   return (
     <PortalShell
-      requiredRole="CLIENT"
-      title="Mis tickets"
-      description="Consulta y da seguimiento a tus solicitudes de soporte."
+      requiredRole={["CLIENT", "LIDER"]}
+      title={isLeader ? "Tickets de la empresa" : "Mis tickets"}
+      description={
+        isLeader
+          ? "Consulta y da seguimiento a todos los tickets de tu empresa."
+          : "Consulta y da seguimiento a tus solicitudes de soporte."
+      }
       actions={
         <Link
           href="/portal/tickets/nuevo"
@@ -63,7 +70,9 @@ export default function ClientDashboardPage() {
                   <TicketIcon className="size-6" />
                 </span>
                 <p className="text-sm text-muted-foreground">
-                  Aún no tienes tickets. Crea el primero cuando necesites soporte.
+                  {isLeader
+                    ? "Aún no hay tickets en tu empresa. Crea el primero cuando necesites soporte."
+                    : "Aún no tienes tickets. Crea el primero cuando necesites soporte."}
                 </p>
                 <Link
                   href="/portal/tickets/nuevo"
@@ -74,7 +83,7 @@ export default function ClientDashboardPage() {
               </PortalCard>
             ) : (
               <PortalCard className="overflow-hidden p-0">
-                <TicketsTable tickets={data.latest} basePath="/portal/tickets" />
+                <TicketsTable tickets={data.latest} basePath="/portal/tickets" showCreatedBy={isLeader} />
               </PortalCard>
             )}
           </div>

@@ -27,10 +27,17 @@ const router = Router();
 router.use(requireAuth);
 
 const isAdmin = (req) => req.auth.role === "ADMIN_HISTECH";
+// LIDER: rol de seguimiento a nivel de empresa (ve TODOS los tickets de su
+// empresa, no solo los que creó). Lo asigna el Admin desde Usuarios.
+const isLeader = (req) => req.auth.role === "LIDER";
 
-// Construye el filtro de acceso base: el cliente solo ve SUS tickets; el admin ve todo.
+// Construye el filtro de acceso base:
+//  - Admin HISTECH → ve todo.
+//  - LIDER         → ve TODOS los tickets de su empresa.
+//  - Cliente       → solo ve SUS tickets.
 function baseScope(req) {
   if (isAdmin(req)) return {};
+  if (isLeader(req)) return { companyId: req.auth.companyId };
   return { companyId: req.auth.companyId, createdById: req.auth.userId };
 }
 
@@ -39,7 +46,10 @@ async function loadTicket(req, id, include = ticketInclude) {
   const ticket = await prisma.ticket.findUnique({ where: { id }, include });
   if (!ticket) throw new HttpError(404, "Ticket no encontrado");
   if (!isAdmin(req)) {
-    if (ticket.companyId !== req.auth.companyId || ticket.createdById !== req.auth.userId) {
+    if (ticket.companyId !== req.auth.companyId) {
+      throw new HttpError(403, "No tienes acceso a este ticket");
+    }
+    if (!isLeader(req) && ticket.createdById !== req.auth.userId) {
       throw new HttpError(403, "No tienes acceso a este ticket");
     }
   }

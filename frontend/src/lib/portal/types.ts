@@ -2,7 +2,7 @@
 // backend (Prisma) en su forma serializada por JSON.
 
 export type EntityStatus = "ACTIVE" | "INACTIVE";
-export type Role = "ADMIN_HISTECH" | "CLIENT";
+export type Role = "ADMIN_HISTECH" | "CLIENT" | "LIDER";
 
 export type TicketStatus =
   | "NUEVO"

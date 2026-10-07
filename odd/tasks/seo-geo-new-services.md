@@ -49,6 +49,11 @@ review started. Parent re-runs the checks and reads the diff before closing each
   following the `servicesContent` pattern; add to `services[]`, nav, footer, OfferCatalog,
   `BRAND_ENTITIES`, `llms.txt`; Brand markup for Teltonika.
   Route: delegated writer (2+ non-trivial files).
+- [x] T4 Expand `/seguridad-vial-pesv` copy from the owner's sales deck
+  (`Envio-masivo-Clientes/campaña-preoperativo/Preoperativo-vial-_histech.pdf`): supervisor
+  approval, auditable PDF and history, indicators, roles, private-security use case,
+  implementation steps, five new FAQs. Requested by the owner on 2026-10-07.
+  Route: inline (one file, copy within the existing `ServiceContent` shape).
 
 ## Acceptance criteria
 
@@ -71,6 +76,10 @@ Strategy: `ask-on-risk`. Forecast: about 500-600 authored lines, mostly page cop
   `servicesContent`, `services[]`, `llms.txt`; optional `brand` on `ServiceContent`.
 - Parent re-run on 2026-10-07: typecheck passed, build compiled, built `<title>` of the three
   new pages and `/managed-services` carries `| HISTECH` once; no "escort" / "autorizado" in copy.
+- T4: `services-content.ts` only. Capabilities 5 -> 9, use cases 4 -> 6, benefits 6 -> 8,
+  FAQs 6 -> 11, product name "HISTECH Control Vial" in the intro. typecheck passed; dev server
+  returns 200 for the page with the new copy and no "escort" / "ESS" string. Production build
+  not re-run for T4. The deck's screenshots carry a client's branding and were not used.
 - `npm run lint`: NOT run. `next lint` has no ESLint config and stops at an interactive prompt.
 - Build logs `ECONNREFUSED` fetches (backend not running locally); build still succeeds.
 - Review tier: unassessed (`gentle-ai` unavailable). No native review run.

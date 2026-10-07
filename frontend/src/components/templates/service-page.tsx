@@ -106,30 +106,6 @@ export async function ServicePage({ data }: { data: ServiceContent }) {
         </Container>
       </Section>
 
-      {/* Capabilities */}
-      <Section className="py-12">
-        <Container>
-          <SectionHeader
-            eyebrow="Capacidades"
-            title="Qué incluye este servicio"
-            align="left"
-          />
-          <RevealStagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {data.capabilities.map((c) => (
-              <div key={c.title} className="card-surface h-full p-7">
-                <div className="inline-flex size-12 items-center justify-center rounded-xl border border-[#7C3AED]/15 bg-[#7C3AED]/10">
-                  <Icon name={c.icon} className="size-6 text-brand-cyan" />
-                </div>
-                <h3 className="mt-5 text-lg font-semibold">{c.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {c.description}
-                </p>
-              </div>
-            ))}
-          </RevealStagger>
-        </Container>
-      </Section>
-
       {/* Registro fotográfico del producto (opcional) */}
       {data.screenshots && data.screenshots.length > 0 && (
         <Section className="py-12">
@@ -181,6 +157,30 @@ export async function ServicePage({ data }: { data: ServiceContent }) {
           </Container>
         </Section>
       )}
+
+      {/* Capabilities */}
+      <Section className="py-12">
+        <Container>
+          <SectionHeader
+            eyebrow="Capacidades"
+            title="Qué incluye este servicio"
+            align="left"
+          />
+          <RevealStagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {data.capabilities.map((c) => (
+              <div key={c.title} className="card-surface h-full p-7">
+                <div className="inline-flex size-12 items-center justify-center rounded-xl border border-[#7C3AED]/15 bg-[#7C3AED]/10">
+                  <Icon name={c.icon} className="size-6 text-brand-cyan" />
+                </div>
+                <h3 className="mt-5 text-lg font-semibold">{c.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {c.description}
+                </p>
+              </div>
+            ))}
+          </RevealStagger>
+        </Container>
+      </Section>
 
       {/* Casos de uso (AEO: ¿cuándo se utiliza?) */}
       <Section className="py-12">

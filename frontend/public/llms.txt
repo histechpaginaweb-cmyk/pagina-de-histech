@@ -16,16 +16,23 @@ Integramos tecnología de punta en cada capa de la empresa —desde la infraestr
 - [Consultoría en IT](https://histech.com.co/consultoria-it): Diagnóstico tecnológico, hoja de ruta y acompañamiento estratégico (CIO virtual).
 - [Servicios Gestionados](https://histech.com.co/managed-services): Monitoreo 24/7, soporte y administración de infraestructura con costos predecibles.
 - [Soluciones Web](https://histech.com.co/soluciones-web): Sitios y aplicaciones web modernas, seguras y optimizadas para conversión.
+- [Automatización Empresarial](https://histech.com.co/automatizacion-empresarial): RPA e inteligencia artificial para ejecutar procesos repetitivos sin errores y con disponibilidad permanente.
+- [Desarrollo de Software a la Medida](https://histech.com.co/desarrollo-software-colombia): Aplicaciones, plataformas e integraciones a la medida, seguras y escalables.
 
 ## Industrias
 
 - [Industrias](https://histech.com.co/industrias): Soluciones por sector (manufactura, salud, banca y seguros, entre otros).
 
+## Cobertura
+
+- [Colombia](https://histech.com.co/colombia): Transformación digital, inteligencia artificial, ciberseguridad y desarrollo de software para empresas colombianas, con cobertura en todo el país.
+- [Bogotá](https://histech.com.co/bogota): Empresa de tecnología con sede en Bogotá, con soporte remoto y en sitio.
+- [Cundinamarca](https://histech.com.co/cundinamarca): Tecnología, automatización y ciberseguridad para empresas e industrias de Cundinamarca.
+
 ## Recursos
 
 - [Blog](https://histech.com.co/blog): Tendencias, guías y análisis sobre IA, ciberseguridad, cloud y transformación digital.
 - [Resultados](https://histech.com.co/resultados): Casos de impacto y resultados para las empresas.
-- [Aliados](https://histech.com.co/aliados): Fabricantes y partners tecnológicos con los que trabajamos.
 - [Laboratorio IA](https://histech.com.co/laboratorio-ia): Exploración y experimentación con inteligencia artificial aplicada.
 
 ## Empresa

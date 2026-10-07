@@ -5,8 +5,8 @@ import { servicesContent } from "@/lib/services-content";
 const data = servicesContent["managed-services"];
 
 export const metadata = buildMetadata({
-  title: data.name,
-  description: data.subtitle,
+  title: data.metaTitle ?? data.name,
+  description: data.metaDescription ?? data.subtitle,
   path: `/${data.slug}`,
   keywords: ["servicios gestionados", "managed services", "monitoreo 24/7", "soporte IT", "helpdesk"],
 });

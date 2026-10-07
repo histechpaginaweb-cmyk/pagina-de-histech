@@ -17,6 +17,10 @@ export type ServiceContent = {
   eyebrow: string;
   title: string;
   subtitle: string;
+  /** Título SEO (sin marca; buildMetadata añade "| HISTECH"). Si falta, se usa `name`. */
+  metaTitle?: string;
+  /** Meta description (140-160 caracteres). Si falta, se usa `subtitle`. */
+  metaDescription?: string;
   intro: string;
   icon: string;
   /** Imagen alusiva (en /public/servicios/<slug>.png). Si falta, se usa el visual de ícono. */
@@ -45,6 +49,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "BrainCircuit",
     image: "/servicios/inteligencia-artificial.png",
     visual: "stream",
+    metaTitle: "Inteligencia Artificial para Empresas en Colombia",
+    metaDescription:
+      "Agentes inteligentes, automatización y analítica avanzada con IA para empresas en Colombia. HISTECH te ayuda a decidir más rápido y operar con menos fricción.",
     capabilities: [
       { title: "Agentes inteligentes", description: "Asistentes que ejecutan tareas, responden y operan dentro de tus sistemas.", icon: "Sparkles" },
       { title: "Automatización de procesos", description: "RPA + IA para flujos documentales, validaciones y procesos críticos.", icon: "Workflow" },
@@ -90,6 +97,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "Workflow",
     image: "/servicios/transformacion-digital.png",
     visual: "orbit",
+    metaTitle: "Transformación Digital Empresarial en Colombia",
+    metaDescription:
+      "Estrategia, automatización e innovación para modernizar tu empresa. HISTECH acompaña tu transformación digital en Colombia con una hoja de ruta clara.",
     capabilities: [
       { title: "Diagnóstico de madurez digital", description: "Evaluamos dónde estás y trazamos el camino hacia dónde quieres llegar.", icon: "Activity" },
       { title: "Hoja de ruta estratégica", description: "Plan por fases, priorizado por impacto y retorno de inversión.", icon: "Layers" },
@@ -134,6 +144,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "Network",
     image: "/servicios/ecosistemas-digitales.png",
     visual: "orbit",
+    metaTitle: "Ecosistemas Digitales e Integración de Sistemas",
+    metaDescription:
+      "Integramos sistemas, datos y procesos en un ecosistema digital único, con información en tiempo real y automatización para empresas en Colombia.",
     capabilities: [
       { title: "Integración de sistemas", description: "Conectamos tus aplicaciones y plataformas mediante APIs.", icon: "Network" },
       { title: "Automatización con IA y RPA", description: "Orquestamos procesos de extremo a extremo.", icon: "Workflow" },
@@ -178,6 +191,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "ShieldCheck",
     image: "/servicios/ciberseguridad.png",
     visual: "shield",
+    metaTitle: "Ciberseguridad Empresarial en Colombia",
+    metaDescription:
+      "Protección de perímetro, endpoints y accesos, con monitoreo de amenazas y cumplimiento normativo para empresas en Colombia. Asesoría de HISTECH.",
     capabilities: [
       { title: "Seguridad de perímetro", description: "Firewalls de próxima generación y protección de red.", icon: "Shield" },
       { title: "Endpoints y servidores", description: "Protección avanzada de estaciones de trabajo y servidores.", icon: "Server" },
@@ -225,6 +241,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "Cloud",
     image: "/servicios/cloud-continuidad.png",
     visual: "orbit",
+    metaTitle: "Cloud, Respaldo y Continuidad del Negocio",
+    metaDescription:
+      "Nube híbrida, respaldo y recuperación ante desastres para que tu operación no se detenga. HISTECH diseña tu estrategia de cloud y continuidad en Colombia.",
     capabilities: [
       { title: "Nube híbrida y multi-cloud", description: "Arquitecturas en AWS, Azure, Google Cloud y más.", icon: "Cloud" },
       { title: "Respaldo automatizado", description: "Backups confiables con Veeam, Acronis y Zerto.", icon: "Server" },
@@ -269,6 +288,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "Server",
     image: "/servicios/infraestructura-de-redes.png",
     visual: "grid",
+    metaTitle: "Infraestructura de Redes Empresariales en Colombia",
+    metaDescription:
+      "Diseño e implementación de redes empresariales zero-touch, seguras y de alta disponibilidad en Bogotá y Colombia, con soporte y optimización continua.",
     capabilities: [
       { title: "Redes zero-touch", description: "Aprovisionamiento automatizado y despliegue ágil.", icon: "Network" },
       { title: "AI networking", description: "Redes inteligentes que se optimizan y anticipan fallas.", icon: "BrainCircuit" },
@@ -313,6 +335,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "Cpu",
     image: "/servicios/computo.png",
     visual: "grid",
+    metaTitle: "Servidores y Equipos de Cómputo Corporativo",
+    metaDescription:
+      "Estaciones de trabajo y servidores de centro de datos, confiables y escalables, para empresas en Colombia. HISTECH te asesora en la selección y el despliegue.",
     capabilities: [
       { title: "Cómputo corporativo", description: "Equipos con procesadores de última generación y NVMe.", icon: "Cpu" },
       { title: "Servidores de centro de datos", description: "Infraestructura escalable para alta demanda.", icon: "Server" },
@@ -357,6 +382,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "GraduationCap",
     image: "/servicios/consultoria-it.png",
     visual: "orbit",
+    metaTitle: "Consultoría en TI y CIO Virtual en Colombia",
+    metaDescription:
+      "Diagnóstico tecnológico, hoja de ruta y acompañamiento experto en cada paso. Consultoría en TI y CIO virtual para empresas en Bogotá y toda Colombia.",
     capabilities: [
       { title: "Diagnóstico tecnológico", description: "Identificamos brechas y oportunidades de mejora.", icon: "Target" },
       { title: "Estrategia y roadmap", description: "Plan tecnológico alineado a tus objetivos.", icon: "Layers" },
@@ -401,6 +429,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "Settings2",
     image: "/servicios/managed-services.png",
     visual: "stream",
+    metaTitle: "Servicios Gestionados de TI en Colombia",
+    metaDescription:
+      "Monitoreo 24/7, soporte y administración de infraestructura con costos predecibles. Servicios gestionados de TI para empresas en Bogotá y Colombia.",
     capabilities: [
       { title: "Monitoreo 24/7", description: "Vigilancia continua de infraestructura, equipos y servidores.", icon: "Activity" },
       { title: "Soporte y Helpdesk", description: "Asistencia técnica permanente para tu equipo.", icon: "HeartHandshake" },
@@ -445,6 +476,9 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "Workflow",
     image: "/servicios/soluciones-web.png",
     visual: "grid",
+    metaTitle: "Desarrollo de Sitios y Aplicaciones Web en Colombia",
+    metaDescription:
+      "Sitios corporativos y aplicaciones web rápidas, seguras y optimizadas para SEO y conversión. HISTECH desarrolla tu plataforma digital en Colombia.",
     capabilities: [
       { title: "Sitios corporativos", description: "Presencia digital premium, rápida y optimizada.", icon: "Sparkles" },
       { title: "Aplicaciones web", description: "Plataformas a la medida, seguras y escalables.", icon: "Workflow" },
@@ -488,6 +522,9 @@ export const servicesContent: Record<string, ServiceContent> = {
       "Cada hora que tu equipo dedica a tareas repetitivas es una hora que no dedica a hacer crecer el negocio. Automatizamos tus procesos de alto volumen combinando RPA e inteligencia artificial para reducir errores, acelerar la operación y escalar sin aumentar personal.",
     icon: "Workflow",
     visual: "stream",
+    metaTitle: "Automatización Empresarial: RPA e IA para tus procesos",
+    metaDescription:
+      "Automatiza procesos repetitivos con RPA e inteligencia artificial: menos errores, más velocidad y trazabilidad para tu empresa en Colombia. Pide tu asesoría.",
     capabilities: [
       { title: "RPA (automatización robótica)", description: "Bots que ejecutan tareas repetitivas en tus aplicaciones, tal como lo haría una persona.", icon: "Workflow" },
       { title: "Automatización inteligente", description: "IA que interpreta, decide y aprende para automatizar procesos que requieren criterio.", icon: "BrainCircuit" },
@@ -532,6 +569,9 @@ export const servicesContent: Record<string, ServiceContent> = {
       "Cuando el software de catálogo te obliga a adaptar tu operación, pierdes lo que te hace competitivo. Desarrollamos soluciones a la medida —aplicaciones web, plataformas internas e integraciones— diseñadas alrededor de tus procesos, con las mejores prácticas de seguridad, rendimiento y escalabilidad.",
     icon: "Layers",
     visual: "grid",
+    metaTitle: "Desarrollo de Software a la Medida en Colombia",
+    metaDescription:
+      "Aplicaciones, plataformas e integraciones a la medida de tus procesos, con seguridad y escalabilidad. Desarrollo de software para empresas en Colombia.",
     capabilities: [
       { title: "Software a la medida", description: "Plataformas y sistemas internos diseñados para tus procesos específicos.", icon: "Layers" },
       { title: "Aplicaciones web", description: "Aplicaciones modernas, rápidas y seguras para clientes y equipos.", icon: "Workflow" },

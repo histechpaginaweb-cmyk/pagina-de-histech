@@ -5,8 +5,8 @@ import { servicesContent } from "@/lib/services-content";
 const data = servicesContent["automatizacion-empresarial"];
 
 export const metadata = buildMetadata({
-  title: "Automatización Empresarial: RPA e IA para tus procesos",
-  description: data.subtitle,
+  title: data.metaTitle ?? data.name,
+  description: data.metaDescription ?? data.subtitle,
   path: `/${data.slug}`,
   keywords: [
     "automatización empresarial",

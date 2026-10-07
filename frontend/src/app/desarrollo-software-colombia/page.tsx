@@ -5,8 +5,8 @@ import { servicesContent } from "@/lib/services-content";
 const data = servicesContent["desarrollo-software-colombia"];
 
 export const metadata = buildMetadata({
-  title: "Desarrollo de Software a la Medida en Colombia",
-  description: data.subtitle,
+  title: data.metaTitle ?? data.name,
+  description: data.metaDescription ?? data.subtitle,
   path: `/${data.slug}`,
   keywords: [
     "desarrollo de software a la medida",

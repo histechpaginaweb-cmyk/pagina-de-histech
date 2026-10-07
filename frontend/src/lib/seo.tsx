@@ -41,7 +41,8 @@ export function buildMetadata({
   const metaDescription = description ?? siteConfig.description;
 
   return {
-    title: metaTitle,
+    // `absolute` evita que la plantilla del layout (`%s | HISTECH`) duplique la marca.
+    title: { absolute: metaTitle },
     description: metaDescription,
     keywords,
     alternates: { canonical: url },

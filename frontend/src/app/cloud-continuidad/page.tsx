@@ -5,8 +5,8 @@ import { servicesContent } from "@/lib/services-content";
 const data = servicesContent["cloud-continuidad"];
 
 export const metadata = buildMetadata({
-  title: data.name,
-  description: data.subtitle,
+  title: data.metaTitle ?? data.name,
+  description: data.metaDescription ?? data.subtitle,
   path: `/${data.slug}`,
   keywords: ["cloud computing", "nube híbrida", "respaldo", "recuperación ante desastres", "alta disponibilidad"],
 });

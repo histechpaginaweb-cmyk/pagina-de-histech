@@ -96,7 +96,7 @@ export async function ServicePage({ data }: { data: ServiceContent }) {
       </section>
 
       {/* Intro */}
-      <Section className="py-12">
+      <Section className="pb-12 pt-0 sm:pt-0">
         <Container className="max-w-3xl">
           <Reveal>
             <p className="text-xl leading-relaxed text-foreground/90 text-pretty">

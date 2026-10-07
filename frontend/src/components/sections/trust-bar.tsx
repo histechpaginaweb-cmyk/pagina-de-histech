@@ -1,7 +1,6 @@
 import { LogoMarquee } from "./logo-marquee";
 
 const clientLogos = [
-  { name: "ESCORT", logo: "/clientes/ESCORT.png" },
   { name: "MADIGAS", logo: "/clientes/MADIGAS.png" },
   { name: "ONECT", logo: "/clientes/ONECT.png" },
   { name: "SIGMA", logo: "/clientes/SIGMA.png" },

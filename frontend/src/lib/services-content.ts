@@ -631,7 +631,7 @@ export const servicesContent: Record<string, ServiceContent> = {
     icon: "Network",
     image: "/servicios/infraestructura-de-redes.png",
     visual: "grid",
-    metaTitle: "Distribuidor Teltonika Colombia: Routers 4G Industriales",
+    metaTitle: "Distribuidor Teltonika Colombia: Routers 4G/LTE",
     metaDescription:
       "Venta de equipos Teltonika en Colombia: routers 4G/LTE industriales, gateways y gestión remota RMS, con asesoría, instalación y soporte de HISTECH en Bogotá.",
     capabilities: [

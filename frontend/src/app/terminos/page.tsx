@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata = buildMetadata({
   title: "Términos y Condiciones",
   description:
-    "Términos y condiciones de uso del sitio web de HISTECH Tecnología.",
+    "Términos y condiciones de uso del sitio web de HISTECH Tecnología, empresa colombiana de transformación digital, inteligencia artificial y ciberseguridad.",
   path: "/terminos",
 });
 

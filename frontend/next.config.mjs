@@ -3,6 +3,10 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  // next-mdx-remote (RSC) debe pasar por el bundler de Next: si se externaliza,
+  // carga `react/jsx-dev-runtime` de node_modules (otra copia de React) y en
+  // `next dev` el render del MDX falla con "without development properties".
+  transpilePackages: ["next-mdx-remote"],
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "**" }],

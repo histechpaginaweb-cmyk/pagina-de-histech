@@ -28,7 +28,9 @@ export async function generateMetadata({
   const sector = data.name.toLowerCase();
   return buildMetadata({
     title: `Tecnología para ${data.name}`,
-    description: `${data.subtitle} HISTECH impulsa al sector ${sector} con inteligencia artificial, ciberseguridad, cloud e infraestructura.`,
+    description:
+      data.metaDescription ??
+      `${data.subtitle} HISTECH impulsa al sector ${sector} con inteligencia artificial, ciberseguridad, cloud e infraestructura.`,
     path: `/industrias/${data.slug}`,
     keywords: [
       `tecnología para ${sector}`,

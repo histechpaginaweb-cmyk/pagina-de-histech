@@ -53,9 +53,9 @@ export const guides: Record<string, Guide> = {
   "como-implementar-inteligencia-artificial-empresa": {
     slug: "como-implementar-inteligencia-artificial-empresa",
     title: "¿Cómo implementar Inteligencia Artificial en una empresa?",
-    metaTitle: "Cómo implementar Inteligencia Artificial en una empresa (guía paso a paso)",
+    metaTitle: "Cómo implementar Inteligencia Artificial en una empresa",
     description:
-      "Guía práctica para implementar IA en tu empresa: cómo elegir casos de uso, evaluar datos, hacer una prueba de concepto, integrar con seguridad y medir el retorno.",
+      "Guía práctica para implementar IA en tu empresa: elegir casos de uso, evaluar datos, hacer una prueba de concepto, integrar con seguridad y medir el retorno.",
     category: "Inteligencia Artificial",
     eyebrow: "Guía",
     date: "2026-06-24",
@@ -166,7 +166,7 @@ export const guides: Record<string, Guide> = {
   "automatizacion-empresarial-beneficios-costos-casos-de-uso": {
     slug: "automatizacion-empresarial-beneficios-costos-casos-de-uso",
     title: "Automatización empresarial: beneficios, costos y casos de uso",
-    metaTitle: "Automatización empresarial: beneficios, costos y casos de uso",
+    metaTitle: "Automatización empresarial: beneficios, costos y casos",
     description:
       "Qué es la automatización empresarial, qué beneficios aporta, cuánto cuesta, cómo calcular el ROI y los casos de uso más rentables por área de la empresa.",
     category: "Automatización",
@@ -271,9 +271,9 @@ export const guides: Record<string, Guide> = {
   "ciberseguridad-empresarial-guia-completa": {
     slug: "ciberseguridad-empresarial-guia-completa",
     title: "Ciberseguridad empresarial: guía completa para proteger una organización",
-    metaTitle: "Ciberseguridad empresarial: guía completa para proteger tu empresa",
+    metaTitle: "Ciberseguridad empresarial: guía completa",
     description:
-      "Guía completa de ciberseguridad empresarial: principales amenazas, capas de protección, marco de trabajo, cumplimiento en Colombia y cómo evaluar tu postura de seguridad.",
+      "Guía completa de ciberseguridad empresarial: amenazas principales, capas de protección, marco de trabajo, cumplimiento en Colombia y evaluación de postura.",
     category: "Ciberseguridad",
     eyebrow: "Guía",
     date: "2026-06-24",

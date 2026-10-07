@@ -63,6 +63,11 @@ review started. Parent re-runs the checks and reads the diff before closing each
   composed image (`public/inicio/control-vial.webp`); whole card clickable. Also closed the
   hero/intro and intro/screenshots gaps in the service template. Requested by the owner on
   2026-10-07. Route: inline.
+- [x] T7 Home carousel polish: real service images plus HISTECH mark on every card, Control
+  Vial card second, subtler side fade, 40 % slower. Route: inline.
+- [x] T8 Metadata lengths (home, casos de éxito, términos, privacidad, nine industries, three
+  guides, Teltonika title) and the blog-post 500 in `next dev`. Approved by the owner on
+  2026-10-07 after a re-audit. Route: delegated writer (9 files, bug needed diagnosis).
 
 ## Acceptance criteria
 
@@ -98,6 +103,13 @@ Strategy: `ask-on-risk`. Forecast: about 500-600 authored lines, mostly page cop
   The card lives only in the seed (`src/lib/products.ts`). Production reads the carousel from
   the backend (`GET /api/products`, stored via the admin panel), so the card must also be
   created there or it will not show in production.
+- T8: blog 500 root cause was `next-mdx-remote` v6 being externalized and loading a second
+  React copy's `jsx-dev-runtime` in `next dev` (dev-only; production served the posts fine and
+  it was unrelated to the backend being down). Fix: `transpilePackages` in `next.config.mjs`.
+  Parent re-crawl of all 46 sitemap URLs on the dev server: 46 x 200, no duplicate titles or
+  descriptions, all listed pages within 65 / 120-160 chars. `npm run build` exit 0 (65 static
+  pages). Still out of range: the three static fallback blog posts (titles 75-88 chars,
+  descriptions 101-120); in production those come from the backend, left untouched.
 - `npm run lint`: NOT run. `next lint` has no ESLint config and stops at an interactive prompt.
 - Build logs `ECONNREFUSED` fetches (backend not running locally); build still succeeds.
 - Review tier: unassessed (`gentle-ai` unavailable). No native review run.

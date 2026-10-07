@@ -6,6 +6,8 @@ export type IndustryContent = {
   icon: string;
   title: string;
   subtitle: string;
+  /** Meta description (120-160 car.) para SEO; si falta se compone con `subtitle`. */
+  metaDescription?: string;
   intro: string;
   challenges: string[];
   solutions: { service: string; slug: string }[];
@@ -22,6 +24,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Tecnología para una manufactura inteligente",
     subtitle:
       "Conectamos planta, procesos y datos para una operación más eficiente, segura y competitiva.",
+    metaDescription:
+      "Tecnología para manufactura: conectamos planta, procesos y datos con IoT, automatización, ciberseguridad industrial e infraestructura de red confiable.",
     intro:
       "La industria 4.0 exige integrar IoT, automatización y analítica en tiempo real. Ayudamos a las empresas manufactureras a digitalizar su operación, proteger su infraestructura y tomar decisiones basadas en datos.",
     challenges: [
@@ -54,6 +58,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Tecnología que cuida a quienes cuidan",
     subtitle:
       "Infraestructura segura, continuidad y telemedicina para instituciones de salud modernas.",
+    metaDescription:
+      "Tecnología para el sector salud: infraestructura segura, continuidad operativa, telemedicina y ciberseguridad para proteger la información de sus pacientes.",
     intro:
       "El sector salud maneja datos sensibles y no puede permitirse interrupciones. Implementamos soluciones seguras, disponibles y conformes con la normativa para proteger la información clínica y habilitar la atención digital.",
     challenges: [
@@ -86,6 +92,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Seguridad y automatización para el sector financiero",
     subtitle:
       "Ciberseguridad, cumplimiento y automatización inteligente para banca, seguros y fintech.",
+    metaDescription:
+      "Tecnología para banca y seguros: ciberseguridad, cumplimiento, automatización inteligente y cloud para entidades financieras, aseguradoras y fintech.",
     intro:
       "El sector financiero es uno de los más exigentes en seguridad, cumplimiento y disponibilidad. Diseñamos arquitecturas robustas y automatizamos procesos críticos manteniendo el control y la conformidad normativa.",
     challenges: [
@@ -118,6 +126,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Conectividad y datos para una logística sin fricción",
     subtitle:
       "Trazabilidad, conectividad y automatización para operaciones logísticas de alto rendimiento.",
+    metaDescription:
+      "Tecnología para transporte y logística: trazabilidad, conectividad, automatización y seguridad vial para operaciones logísticas de alto rendimiento.",
     intro:
       "La logística vive de la coordinación y la información en tiempo real. Integramos sistemas, conectamos operaciones y automatizamos procesos para acelerar tu cadena de valor.",
     challenges: [
@@ -152,6 +162,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Tecnología que potencia el aprendizaje",
     subtitle:
       "Plataformas, conectividad y colaboración para instituciones educativas modernas.",
+    metaDescription:
+      "Tecnología para educación: plataformas, conectividad, colaboración y ciberseguridad para colegios, universidades e instituciones educativas modernas.",
     intro:
       "Las instituciones educativas necesitan plataformas confiables, conectividad robusta y herramientas de colaboración. Habilitamos entornos de aprendizaje digitales, seguros y escalables.",
     challenges: [
@@ -184,6 +196,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Ecosistemas digitales para el retail moderno",
     subtitle:
       "Omnicanalidad, e-commerce y experiencias conectadas que aumentan tus conversiones.",
+    metaDescription:
+      "Tecnología para retail: omnicanalidad, e-commerce, automatización e inteligencia artificial para experiencias conectadas que aumentan las conversiones.",
     intro:
       "El retail compite por experiencia. Conectamos tus canales de venta, atención y operación en un ecosistema digital que mejora la experiencia del cliente y aumenta la conversión.",
     challenges: [
@@ -216,6 +230,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Gobierno digital, eficiente y seguro",
     subtitle:
       "Modernización tecnológica, ciberseguridad y eficiencia operativa para entidades públicas.",
+    metaDescription:
+      "Tecnología para el sector público: modernización tecnológica, ciberseguridad y eficiencia operativa para entidades públicas con servicios más confiables.",
     intro:
       "Las entidades públicas necesitan modernizarse manteniendo la seguridad y la transparencia. Acompañamos la transformación digital del sector público con soluciones eficientes y conformes.",
     challenges: [
@@ -248,6 +264,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Infraestructura confiable para firmas de consultoría",
     subtitle:
       "Estabilidad, productividad y reducción de downtime para empresas de servicios profesionales.",
+    metaDescription:
+      "Tecnología para consultoría: estabilidad, productividad y menos tiempo de inactividad para empresas de servicios profesionales, con soporte gestionado.",
     intro:
       "Las firmas de consultoría dependen de la disponibilidad y la productividad. Aseguramos infraestructura estable, colaboración fluida y soporte continuo para que tu equipo nunca se detenga.",
     challenges: [
@@ -280,6 +298,8 @@ export const industriesContent: Record<string, IndustryContent> = {
     title: "Tecnología con impacto para organizaciones sociales",
     subtitle:
       "Soluciones escalables y económicas para que tu causa llegue más lejos.",
+    metaDescription:
+      "Tecnología para ONG: soluciones escalables y económicas en cloud, sitios web y ciberseguridad para que su causa llegue más lejos con recursos limitados.",
     intro:
       "Las organizaciones sin fines de lucro necesitan maximizar cada recurso. Diseñamos soluciones tecnológicas escalables y económicas que amplifican tu impacto social.",
     challenges: [

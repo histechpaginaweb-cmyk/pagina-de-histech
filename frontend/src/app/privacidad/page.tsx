@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata = buildMetadata({
   title: "Política de Privacidad",
   description:
-    "Política de tratamiento de datos personales de HISTECH Tecnología conforme a la Ley 1581 de 2012 de Colombia.",
+    "Política de tratamiento de datos personales de HISTECH Tecnología conforme a la Ley 1581 de 2012 de Colombia: finalidades, derechos de los titulares y contacto.",
   path: "/privacidad",
 });
 

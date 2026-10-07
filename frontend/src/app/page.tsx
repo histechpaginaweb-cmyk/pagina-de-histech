@@ -16,9 +16,9 @@ import { homeFaqs } from "@/lib/content";
 import { buildMetadata, JsonLd, webPageJsonLd } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Transformación Digital, IA y Ciberseguridad para empresas",
+  title: "Transformación Digital, IA y Ciberseguridad",
   description:
-    "HISTECH impulsa la transformación digital de empresas en Colombia con Inteligencia Artificial, Automatización, Ciberseguridad, Cloud, Infraestructura de Redes y Desarrollo de Software. Tu aliado estratégico en tecnología.",
+    "HISTECH impulsa la transformación digital de empresas en Colombia con inteligencia artificial, automatización, ciberseguridad, cloud y desarrollo de software.",
   path: "/",
   keywords: [
     "transformación digital empresas Colombia",

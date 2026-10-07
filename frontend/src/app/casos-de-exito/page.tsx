@@ -15,7 +15,7 @@ import { servicesContent } from "@/lib/services-content";
 export const metadata = buildMetadata({
   title: "Casos de Éxito",
   description:
-    "Casos de éxito reales de HISTECH en automatización, integración de sistemas, inteligencia artificial y desarrollo de software. Resultados medibles: del reto a la solución.",
+    "Casos de éxito de HISTECH en automatización, integración de sistemas, inteligencia artificial y desarrollo de software: del reto a la solución.",
   path: "/casos-de-exito",
   keywords: [
     "casos de éxito tecnología",

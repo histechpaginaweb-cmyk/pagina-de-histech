@@ -54,6 +54,11 @@ review started. Parent re-runs the checks and reads the diff before closing each
   approval, auditable PDF and history, indicators, roles, private-security use case,
   implementation steps, five new FAQs. Requested by the owner on 2026-10-07.
   Route: inline (one file, copy within the existing `ServiceContent` shape).
+- [x] T5 Product screenshots on `/seguridad-vial-pesv`: eight captures from the same deck in
+  `public/servicios/control-vial/`, client logo in the app header replaced by the HisTech logo,
+  optional `screenshots` field and an "Así funciona" section in the service template, dashboard
+  as hero image. Requested by the owner on 2026-10-07.
+  Route: inline (one template section; type and data edits are mechanical).
 
 ## Acceptance criteria
 
@@ -79,7 +84,11 @@ Strategy: `ask-on-risk`. Forecast: about 500-600 authored lines, mostly page cop
 - T4: `services-content.ts` only. Capabilities 5 -> 9, use cases 4 -> 6, benefits 6 -> 8,
   FAQs 6 -> 11, product name "HISTECH Control Vial" in the intro. typecheck passed; dev server
   returns 200 for the page with the new copy and no "escort" / "ESS" string. Production build
-  not re-run for T4. The deck's screenshots carry a client's branding and were not used.
+  not re-run for T4.
+- T5: typecheck passed; page and the eight WebP files return 200 on the dev server; headless
+  Edge capture at 1400 px shows the hero image and the section rendering (5 phone + 3 wide).
+  Mobile width not captured. Production build not re-run. Four phone captures had the client
+  logo replaced; the deck's page-4 infographic is fully client-branded and was not used.
 - `npm run lint`: NOT run. `next lint` has no ESLint config and stops at an interactive prompt.
 - Build logs `ECONNREFUSED` fetches (backend not running locally); build still succeeds.
 - Review tier: unassessed (`gentle-ai` unavailable). No native review run.
@@ -88,7 +97,7 @@ Strategy: `ask-on-risk`. Forecast: about 500-600 authored lines, mostly page cop
 ## Open items for the owner
 
 - ESLint: add a config or drop the lint check.
-- PESV page has no hero image (icon fallback).
+- PESV screenshots still show the Next.js dev badge and demo data; retake clean captures later.
 - `automatizacion-empresarial` and `desarrollo-software-colombia` are still missing from `services[]`.
 - Is HisTech an authorized Teltonika distributor (changes wording)?
 - Real LinkedIn / Facebook / X URLs for `sameAs`; the current X URL looks like a placeholder.

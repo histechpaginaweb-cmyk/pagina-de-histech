@@ -11,6 +11,16 @@ export type UseCase = { title: string; description: string; icon: string };
 /** Paso del proceso de trabajo de HISTECH para este servicio (bloque AEO). */
 export type ProcessStep = { step: string; title: string; description: string };
 
+/** Captura del producto en uso. `phone` es vertical (celular); `wide` es de escritorio o documento. */
+export type Screenshot = {
+  title: string;
+  description: string;
+  image: string;
+  width: number;
+  height: number;
+  kind: "phone" | "wide";
+};
+
 export type ServiceContent = {
   slug: string;
   name: string;
@@ -29,6 +39,8 @@ export type ServiceContent = {
   image?: string;
   visual: "orbit" | "shield" | "grid" | "stream";
   capabilities: Capability[];
+  /** Registro fotográfico del producto en uso. Si falta, no se muestra la sección. */
+  screenshots?: Screenshot[];
   /** Casos de uso — cuándo se utiliza (AEO/GEO). */
   useCases: UseCase[];
   /** Proceso de trabajo de HISTECH para este servicio (AEO/GEO). */
@@ -723,7 +735,18 @@ export const servicesContent: Record<string, ServiceContent> = {
     intro:
       "El Plan Estratégico de Seguridad Vial (PESV) es obligatorio en Colombia para las entidades públicas y privadas con una flota de más de diez vehículos o que contratan o administran conductores. Una de sus exigencias más operativas es la inspección preoperacional diaria, y no basta con diligenciar un formato: hay que demostrar gestión, control y evidencia. HISTECH Control Vial es nuestro software web y móvil para ese proceso: el conductor inspecciona el vehículo desde el celular, el supervisor aprueba o rechaza con su firma y la empresa conserva un PDF auditable, el histórico y los indicadores. Es una herramienta de apoyo: no sustituye la gestión del PESV ni la asesoría especializada.",
     icon: "Truck",
+    image: "/servicios/control-vial/tablero-indicadores.webp",
     visual: "shield",
+    screenshots: [
+      { title: "1. El conductor inicia la inspección", description: "Cada ítem de la lista de chequeo se marca como correcto o con falla, daño o faltante.", image: "/servicios/control-vial/inspeccion-luces.webp", width: 452, height: 786, kind: "phone" },
+      { title: "2. Revisión visual guiada", description: "La barra de progreso muestra cuántos ítems se han revisado y cuántos faltan.", image: "/servicios/control-vial/inspeccion-latoneria.webp", width: 382, height: 793, kind: "phone" },
+      { title: "3. Documentos del conductor", description: "SOAT, licencia de conducción, tarjeta de propiedad y demás documentos, con opción de reportar un problema.", image: "/servicios/control-vial/checklist-documentos.webp", width: 440, height: 801, kind: "phone" },
+      { title: "4. Inspecciones pendientes", description: "El supervisor recibe las inspecciones por revisar, con placa, conductor y hora.", image: "/servicios/control-vial/inspecciones-pendientes.webp", width: 402, height: 767, kind: "phone" },
+      { title: "5. Decisión del supervisor", description: "El supervisor aprueba o rechaza la inspección; para rechazar, la observación es obligatoria.", image: "/servicios/control-vial/decision-supervisor.webp", width: 386, height: 795, kind: "phone" },
+      { title: "Formato PDF de la inspección", description: "Lista de chequeo, estado, declaración de operación y firmas del conductor y del supervisor.", image: "/servicios/control-vial/pdf-inspeccion.webp", width: 826, height: 853, kind: "wide" },
+      { title: "Tablero de indicadores", description: "Inspecciones realizadas, tasa de aprobación, rechazadas y con novedades, con exportación a Excel.", image: "/servicios/control-vial/tablero-indicadores.webp", width: 1211, height: 802, kind: "wide" },
+      { title: "Detalle e histórico", description: "Vehículos con más novedades, elementos con más fallas y el detalle de cada inspección con su PDF.", image: "/servicios/control-vial/detalle-inspecciones.webp", width: 1138, height: 831, kind: "wide" },
+    ],
     metaTitle: "Software PESV: Inspección Preoperacional Digital",
     metaDescription:
       "Software PESV para Colombia: inspecciones preoperacionales digitales con evidencia, trazabilidad y reportes para auditoría. Apoya tu cumplimiento con HISTECH.",

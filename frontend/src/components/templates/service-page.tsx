@@ -130,6 +130,58 @@ export async function ServicePage({ data }: { data: ServiceContent }) {
         </Container>
       </Section>
 
+      {/* Registro fotográfico del producto (opcional) */}
+      {data.screenshots && data.screenshots.length > 0 && (
+        <Section className="py-12">
+          <Container>
+            <SectionHeader
+              eyebrow="Así funciona"
+              title="La aplicación en uso"
+              align="left"
+            />
+            {(["phone", "wide"] as const).map((kind) => {
+              const shots = data.screenshots!.filter((s) => s.kind === kind);
+              if (shots.length === 0) return null;
+              return (
+                <RevealStagger
+                  key={kind}
+                  className={
+                    kind === "phone"
+                      ? "mt-12 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5"
+                      : "mt-8 grid gap-5 lg:grid-cols-3"
+                  }
+                >
+                  {shots.map((s) => (
+                    <figure key={s.image} className="card-surface h-full p-4">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={s.image}
+                        alt={`${data.name} — ${s.title}`}
+                        width={s.width}
+                        height={s.height}
+                        decoding="async"
+                        loading="lazy"
+                        className={
+                          kind === "phone"
+                            ? "mx-auto h-auto w-full max-w-[220px]"
+                            : "h-auto w-full rounded-lg border border-[#E5E7EB]"
+                        }
+                      />
+                      <figcaption className="mt-4">
+                        <span className="block text-sm font-semibold">{s.title}</span>
+                        <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">
+                          {s.description}
+                        </span>
+                      </figcaption>
+                    </figure>
+                  ))}
+                </RevealStagger>
+              );
+            })}
+          </Container>
+        </Section>
+      )}
+
       {/* Casos de uso (AEO: ¿cuándo se utiliza?) */}
       <Section className="py-12">
         <Container>

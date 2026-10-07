@@ -108,7 +108,7 @@ export async function ServicePage({ data }: { data: ServiceContent }) {
 
       {/* Registro fotográfico del producto (opcional) */}
       {data.screenshots && data.screenshots.length > 0 && (
-        <Section className="py-12">
+        <Section className="pb-12 pt-0 sm:-mt-16 sm:pt-0">
           <Container>
             <SectionHeader
               eyebrow="Así funciona"

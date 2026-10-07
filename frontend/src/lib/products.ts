@@ -26,6 +26,7 @@ export const products: Product[] = [
     title: "Seguridad perimetral gestionada",
     excerpt:
       "Firewall de nueva generación, control de acceso y monitoreo continuo para proteger tu red y tus datos frente a amenazas en evolución.",
+    image: "/servicios/ciberseguridad.png",
     icon: "ShieldCheck",
     href: "/ciberseguridad",
   },
@@ -45,6 +46,7 @@ export const products: Product[] = [
     title: "Respaldo y recuperación ante desastres",
     excerpt:
       "Copias automatizadas y planes de DR que mantienen tu operación en línea sin importar lo que ocurra. Recupera en minutos, no en días.",
+    image: "/servicios/cloud-continuidad.png",
     icon: "Cloud",
     href: "/cloud-continuidad",
   },
@@ -54,6 +56,7 @@ export const products: Product[] = [
     title: "Microsoft 365 y licenciamiento",
     excerpt:
       "Implementación, migración y soporte de Microsoft 365 para que tu equipo colabore de forma segura desde cualquier lugar.",
+    image: "/servicios/transformacion-digital.png",
     icon: "Workflow",
     href: "/transformacion-digital",
   },
@@ -63,6 +66,7 @@ export const products: Product[] = [
     title: "Servidores e infraestructura escalable",
     excerpt:
       "Infraestructura robusta, virtualización y alta disponibilidad diseñada a la medida de tu negocio para maximizar tu inversión.",
+    image: "/servicios/infraestructura-de-redes.png",
     icon: "Server",
     href: "/infraestructura-de-redes",
   },
@@ -72,6 +76,7 @@ export const products: Product[] = [
     title: "Asistente de IA empresarial",
     excerpt:
       "Agentes inteligentes que automatizan tareas, responden a tus clientes y liberan a tu equipo para lo que realmente importa.",
+    image: "/servicios/inteligencia-artificial.png",
     icon: "BrainCircuit",
     href: "/inteligencia-artificial",
   },
@@ -81,6 +86,7 @@ export const products: Product[] = [
     title: "Monitoreo y soporte 24/7",
     excerpt:
       "Vigilancia continua de tu infraestructura y respuesta proactiva ante incidentes, para que tu tecnología nunca te detenga.",
+    image: "/servicios/managed-services.png",
     icon: "Activity",
     href: "/servicios",
   },

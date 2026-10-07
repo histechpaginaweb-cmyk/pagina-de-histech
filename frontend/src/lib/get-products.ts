@@ -19,13 +19,16 @@ export async function getProducts(): Promise<Product[]> {
     const rows: unknown = await res.json();
     if (!Array.isArray(rows) || rows.length === 0) return seed;
 
+    // Una tarjeta del backend sin imagen usa la del seed con el mismo id.
+    const seedImages = new Map(seed.map((p) => [p.id, p.image]));
+
     return rows.map(
       (r: Record<string, unknown>): Product => ({
         id: String(r.id),
         badge: (r.badge as string) || undefined,
         title: String(r.title ?? ""),
         excerpt: (r.excerpt as string) || "",
-        image: (r.image as string) || undefined,
+        image: (r.image as string) || seedImages.get(String(r.id)) || undefined,
         icon: (r.icon as string) || undefined,
         href: (r.href as string) || undefined,
       }),

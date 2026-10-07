@@ -191,15 +191,6 @@ function CardArt({ icon }: { icon: string }) {
         </div>
       ))}
 
-      {/* Marca */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/logo-histech.webp"
-        alt=""
-        aria-hidden
-        draggable={false}
-        className="absolute bottom-3 right-3 h-5 w-auto opacity-95 brightness-0 invert"
-      />
     </div>
   );
 }
@@ -233,6 +224,17 @@ function ProductCard({
         ) : (
           <CardArt icon={icon ?? "Sparkles"} />
         )}
+        {/* Marca HISTECH sobre la imagen */}
+        <span className="absolute bottom-3 right-3 rounded-lg border border-[#E5E7EB] bg-white/90 px-2.5 py-1.5 backdrop-blur">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-histech.webp"
+            alt=""
+            aria-hidden
+            draggable={false}
+            className="h-4 w-auto"
+          />
+        </span>
         {badge ? (
           <span className="absolute left-3 top-3 rounded-full border border-[#E5E7EB] bg-white/90 px-3 py-1 text-xs font-medium text-[#111827] backdrop-blur">
             {badge}

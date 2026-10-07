@@ -21,6 +21,15 @@ export type Product = {
 
 export const products: Product[] = [
   {
+    id: "seguridad-gestionada",
+    badge: "Ciberseguridad",
+    title: "Seguridad perimetral gestionada",
+    excerpt:
+      "Firewall de nueva generación, control de acceso y monitoreo continuo para proteger tu red y tus datos frente a amenazas en evolución.",
+    icon: "ShieldCheck",
+    href: "/ciberseguridad",
+  },
+  {
     id: "control-vial",
     badge: "Seguridad Vial · PESV",
     title: "HISTECH Control Vial",
@@ -29,15 +38,6 @@ export const products: Product[] = [
     image: "/inicio/control-vial.webp",
     icon: "Truck",
     href: "/seguridad-vial-pesv",
-  },
-  {
-    id: "seguridad-gestionada",
-    badge: "Ciberseguridad",
-    title: "Seguridad perimetral gestionada",
-    excerpt:
-      "Firewall de nueva generación, control de acceso y monitoreo continuo para proteger tu red y tus datos frente a amenazas en evolución.",
-    icon: "ShieldCheck",
-    href: "/ciberseguridad",
   },
   {
     id: "backup-dr",

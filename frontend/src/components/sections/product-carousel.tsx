@@ -121,6 +121,89 @@ export function ProductCarousel({ items = products }: { items?: Product[] }) {
   );
 }
 
+/** Íconos secundarios que acompañan al principal en la ilustración de la tarjeta. */
+const SATELLITES: Record<string, [string, string, string]> = {
+  ShieldCheck: ["Eye", "Network", "Server"],
+  Cloud: ["Server", "ShieldCheck", "Activity"],
+  Workflow: ["Cloud", "Layers", "Sparkles"],
+  Server: ["Network", "Cpu", "Cloud"],
+  BrainCircuit: ["Sparkles", "Workflow", "Activity"],
+  Activity: ["Eye", "Server", "ShieldCheck"],
+};
+const DEFAULT_SATELLITES: [string, string, string] = ["Network", "Layers", "Sparkles"];
+
+// Posición de cada ícono secundario en % del lienzo (16:10); el SVG usa las mismas coordenadas.
+const NODES = [
+  { x: 17.5, y: 36 },
+  { x: 82.5, y: 28 },
+  { x: 24, y: 76 },
+];
+
+/** Ilustración de marca para las tarjetas sin imagen propia. */
+function CardArt({ icon }: { icon: string }) {
+  const satellites = SATELLITES[icon] ?? DEFAULT_SATELLITES;
+  return (
+    <div className="relative size-full overflow-hidden bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#A855F7]">
+      {/* Retícula y brillos de fondo */}
+      <span
+        aria-hidden
+        className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.16)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_78%)]"
+      />
+      <span aria-hidden className="absolute -left-10 -top-12 size-44 rounded-full bg-[#C084FC]/50 blur-3xl" />
+      <span aria-hidden className="absolute -bottom-14 -right-6 size-48 rounded-full bg-[#22D3EE]/25 blur-3xl" />
+
+      {/* Conexiones entre el ícono principal y los secundarios */}
+      <svg
+        aria-hidden
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        className="absolute inset-0 size-full"
+      >
+        {NODES.map((n) => (
+          <line
+            key={`${n.x}-${n.y}`}
+            x1="50"
+            y1="50"
+            x2={n.x}
+            y2={n.y}
+            stroke="rgba(255,255,255,0.45)"
+            strokeWidth="1"
+            strokeDasharray="3 3"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
+      </svg>
+
+      {/* Anillos y ícono principal */}
+      <span aria-hidden className="absolute left-1/2 top-1/2 size-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15" />
+      <span aria-hidden className="absolute left-1/2 top-1/2 size-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-white/30" />
+      <div className="absolute left-1/2 top-1/2 grid size-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-2xl border border-white/40 bg-white/15 shadow-[0_18px_40px_-12px_rgba(17,24,39,0.55)] backdrop-blur transition duration-500 group-hover:scale-110">
+        <Icon name={icon} className="size-10 text-white" />
+      </div>
+
+      {satellites.map((name, i) => (
+        <div
+          key={name}
+          style={{ left: `${NODES[i].x}%`, top: `${NODES[i].y}%` }}
+          className="absolute grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl border border-white/30 bg-white/15 backdrop-blur"
+        >
+          <Icon name={name} className="size-5 text-white/90" />
+        </div>
+      ))}
+
+      {/* Marca */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/logo-histech.webp"
+        alt=""
+        aria-hidden
+        draggable={false}
+        className="absolute bottom-3 right-3 h-5 w-auto opacity-95 brightness-0 invert"
+      />
+    </div>
+  );
+}
+
 function ProductCard({
   product,
   duplicate = false,
@@ -148,9 +231,7 @@ function ProductCard({
             decoding="async"
           />
         ) : (
-          <div className="flex size-full items-center justify-center bg-gradient-to-br from-[#7C3AED]/10 via-[#F3F4F6] to-white">
-            <Icon name={icon ?? "Sparkles"} className="size-14 text-brand-purple/70" />
-          </div>
+          <CardArt icon={icon ?? "Sparkles"} />
         )}
         {badge ? (
           <span className="absolute left-3 top-3 rounded-full border border-[#E5E7EB] bg-white/90 px-3 py-1 text-xs font-medium text-[#111827] backdrop-blur">

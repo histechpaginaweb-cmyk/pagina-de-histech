@@ -6,6 +6,8 @@ import { products as seed, type Product } from "@/lib/products";
  * - Si BACKEND_URL no está definido o el backend no responde, usa el SEED local
  *   (así el sitio nunca se queda sin tarjetas).
  */
+const PINNED_ID = "control-vial";
+
 export async function getProducts(): Promise<Product[]> {
   const base = process.env.BACKEND_URL;
   if (!base) return seed;
@@ -22,7 +24,7 @@ export async function getProducts(): Promise<Product[]> {
     // Una tarjeta del backend sin imagen usa la del seed con el mismo id.
     const seedImages = new Map(seed.map((p) => [p.id, p.image]));
 
-    return rows.map(
+    const items = rows.map(
       (r: Record<string, unknown>): Product => ({
         id: String(r.id),
         badge: (r.badge as string) || undefined,
@@ -33,6 +35,13 @@ export async function getProducts(): Promise<Product[]> {
         href: (r.href as string) || undefined,
       }),
     );
+
+    // Tarjeta fija: se muestra siempre en la 2ª posición aunque no exista en el admin.
+    const pinned = seed.find((p) => p.id === PINNED_ID);
+    if (pinned && !items.some((p) => p.id === PINNED_ID || p.href === pinned.href)) {
+      items.splice(1, 0, pinned);
+    }
+    return items;
   } catch (err) {
     console.warn("[get-products] backend no disponible, usando seed:", err);
     return seed;

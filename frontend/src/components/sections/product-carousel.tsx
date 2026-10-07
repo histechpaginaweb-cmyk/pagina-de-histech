@@ -133,7 +133,7 @@ function ProductCard({
     <article
       data-card
       aria-hidden={duplicate || undefined}
-      className="group flex w-[85%] shrink-0 flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_1px_2px_rgba(17,24,39,0.04),0_10px_30px_-18px_rgba(17,24,39,0.12)] transition hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-[0_22px_48px_-24px_rgba(124,58,237,0.32)] sm:w-[46%] lg:w-[31.5%]"
+      className="group relative flex w-[85%] shrink-0 flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_1px_2px_rgba(17,24,39,0.04),0_10px_30px_-18px_rgba(17,24,39,0.12)] transition hover:-translate-y-1 hover:border-brand-purple/40 hover:shadow-[0_22px_48px_-24px_rgba(124,58,237,0.32)] sm:w-[46%] lg:w-[31.5%]"
     >
       {/* Imagen / placeholder */}
       <div className="relative aspect-[16/10] overflow-hidden">
@@ -170,7 +170,8 @@ function ProductCard({
             href={href}
             draggable={false}
             tabIndex={duplicate ? -1 : undefined}
-            className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-cyan transition hover:gap-2"
+            // El pseudo-elemento extiende el enlace a toda la tarjeta.
+            className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-cyan transition after:absolute after:inset-0 after:content-[''] group-hover:gap-2"
           >
             Leer más
             <ArrowUpRight className="size-4" />

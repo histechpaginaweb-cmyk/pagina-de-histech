@@ -21,6 +21,16 @@ export type Product = {
 
 export const products: Product[] = [
   {
+    id: "control-vial",
+    badge: "Seguridad Vial · PESV",
+    title: "HISTECH Control Vial",
+    excerpt:
+      "Inspección preoperacional digital desde el celular: el conductor revisa el vehículo, el supervisor aprueba y la empresa conserva evidencia e indicadores para el PESV.",
+    image: "/inicio/control-vial.webp",
+    icon: "Truck",
+    href: "/seguridad-vial-pesv",
+  },
+  {
     id: "seguridad-gestionada",
     badge: "Ciberseguridad",
     title: "Seguridad perimetral gestionada",

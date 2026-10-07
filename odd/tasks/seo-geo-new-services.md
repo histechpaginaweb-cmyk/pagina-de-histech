@@ -59,6 +59,10 @@ review started. Parent re-runs the checks and reads the diff before closing each
   optional `screenshots` field and an "Así funciona" section in the service template, dashboard
   as hero image. Requested by the owner on 2026-10-07.
   Route: inline (one template section; type and data edits are mechanical).
+- [x] T6 Home carousel card "HISTECH Control Vial" linking to `/seguridad-vial-pesv`, with a
+  composed image (`public/inicio/control-vial.webp`); whole card clickable. Also closed the
+  hero/intro and intro/screenshots gaps in the service template. Requested by the owner on
+  2026-10-07. Route: inline.
 
 ## Acceptance criteria
 
@@ -89,6 +93,11 @@ Strategy: `ask-on-risk`. Forecast: about 500-600 authored lines, mostly page cop
   Edge capture at 1400 px shows the hero image and the section rendering (5 phone + 3 wide).
   Mobile width not captured. Production build not re-run. Four phone captures had the client
   logo replaced; the deck's page-4 infographic is fully client-branded and was not used.
+- T6: typecheck passed; after a dev-server restart the home renders the card first with its
+  image and link (headless Edge capture, 1400 px). Click-through not exercised in a browser.
+  The card lives only in the seed (`src/lib/products.ts`). Production reads the carousel from
+  the backend (`GET /api/products`, stored via the admin panel), so the card must also be
+  created there or it will not show in production.
 - `npm run lint`: NOT run. `next lint` has no ESLint config and stops at an interactive prompt.
 - Build logs `ECONNREFUSED` fetches (backend not running locally); build still succeeds.
 - Review tier: unassessed (`gentle-ai` unavailable). No native review run.

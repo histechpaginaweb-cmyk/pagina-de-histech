@@ -40,12 +40,12 @@ review started. Parent re-runs the checks and reads the diff before closing each
 
 ## Tasks
 
-- [ ] T1 Remove Escort Security Services from the client marquee and delete its logo.
+- [x] T1 Remove Escort Security Services from the client marquee and delete its logo.
   Route: inline (one mechanical file + asset delete).
-- [ ] T2 Metadata fixes: duplicated `| HISTECH` title suffix, keyword-bearing titles and
+- [x] T2 Metadata fixes: duplicated `| HISTECH` title suffix, keyword-bearing titles and
   descriptions for service pages, robots policy for AI crawlers and `/portal`, `llms.txt` refresh.
   Route: delegated writer (2+ non-trivial files).
-- [ ] T3 New service pages `/teltonika-colombia`, `/outsourcing-ti`, `/seguridad-vial-pesv`
+- [x] T3 New service pages `/teltonika-colombia`, `/outsourcing-ti`, `/seguridad-vial-pesv`
   following the `servicesContent` pattern; add to `services[]`, nav, footer, OfferCatalog,
   `BRAND_ENTITIES`, `llms.txt`; Brand markup for Teltonika.
   Route: delegated writer (2+ non-trivial files).
@@ -64,10 +64,23 @@ Strategy: `ask-on-risk`. Forecast: about 500-600 authored lines, mostly page cop
 
 ## Progress and evidence
 
-(updated per task)
+- T1 `6a73eea`: logo entry and `public/clientes/ESCORT.png` removed. typecheck passed.
+- T2 `ed08095`: `buildMetadata` returns `title.absolute`; `metaTitle` / `metaDescription` on all
+  service entries; robots disallows `/portal/` and names nine AI crawlers; `llms.txt` refreshed.
+- T3 `d581079`: `/teltonika-colombia`, `/outsourcing-ti`, `/seguridad-vial-pesv` added to
+  `servicesContent`, `services[]`, `llms.txt`; optional `brand` on `ServiceContent`.
+- Parent re-run on 2026-10-07: typecheck passed, build compiled, built `<title>` of the three
+  new pages and `/managed-services` carries `| HISTECH` once; no "escort" / "autorizado" in copy.
+- `npm run lint`: NOT run. `next lint` has no ESLint config and stops at an interactive prompt.
+- Build logs `ECONNREFUSED` fetches (backend not running locally); build still succeeds.
+- Review tier: unassessed (`gentle-ai` unavailable). No native review run.
+- Not pushed, no PR, not deployed.
 
 ## Open items for the owner
 
+- ESLint: add a config or drop the lint check.
+- PESV page has no hero image (icon fallback).
+- `automatizacion-empresarial` and `desarrollo-software-colombia` are still missing from `services[]`.
 - Is HisTech an authorized Teltonika distributor (changes wording)?
 - Real LinkedIn / Facebook / X URLs for `sameAs`; the current X URL looks like a placeholder.
 - Google Search Console / Bing verification codes.

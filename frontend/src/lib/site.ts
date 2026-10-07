@@ -114,6 +114,29 @@ export const services: (NavLink & { short: string })[] = [
     description:
       "Plataformas y aplicaciones web de alto rendimiento, seguras y escalables.",
   },
+  // Los servicios nuevos van al final: `mainNav` toma slice(5) para "Infraestructura &
+  // Operación" y slice(0, 5) / slice(0, 6) para el resto, así que el orden previo no cambia.
+  {
+    label: "Teltonika en Colombia",
+    href: "/teltonika-colombia",
+    short: "Teltonika",
+    description:
+      "Distribuidor de Teltonika: routers 4G/LTE industriales, gateways y gestión remota.",
+  },
+  {
+    label: "Outsourcing de TI",
+    href: "/outsourcing-ti",
+    short: "Outsourcing",
+    description:
+      "Mesa de ayuda y soporte técnico por tickets, remoto y en sitio, con seguimiento por empresa.",
+  },
+  {
+    label: "Seguridad Vial y PESV",
+    href: "/seguridad-vial-pesv",
+    short: "PESV",
+    description:
+      "Inspecciones preoperacionales digitales, evidencia y reportes para cumplir el PESV.",
+  },
 ];
 
 /** Industrias — sectores atendidos. */

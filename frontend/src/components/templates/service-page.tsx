@@ -234,6 +234,7 @@ export async function ServicePage({ data }: { data: ServiceContent }) {
           name: data.name,
           description: subtitle,
           path: `/${data.slug}`,
+          brand: data.brand,
         })}
       />
       <JsonLd

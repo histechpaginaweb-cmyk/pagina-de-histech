@@ -131,6 +131,8 @@ export const industriesContent: Record<string, IndustryContent> = {
       { service: "Infraestructura de Redes", slug: "infraestructura-de-redes" },
       { service: "Inteligencia Artificial", slug: "inteligencia-artificial" },
       { service: "Cloud y Continuidad", slug: "cloud-continuidad" },
+      { service: "Seguridad Vial y PESV", slug: "seguridad-vial-pesv" },
+      { service: "Teltonika en Colombia", slug: "teltonika-colombia" },
     ],
     outcomes: [
       { metric: "− tiempos", label: "de gestión" },

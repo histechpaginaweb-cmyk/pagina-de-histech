@@ -20,6 +20,7 @@ export const BRAND_ENTITIES = [
   "Transformación Digital",
   "Infraestructura de Redes",
   "Servicios Gestionados de TI",
+  "Teltonika",
 ] as const;
 
 /** Build page-level metadata with sensible enterprise defaults. */
@@ -176,10 +177,13 @@ export function serviceJsonLd({
   name,
   description,
   path,
+  brand,
 }: {
   name: string;
   description: string;
   path: string;
+  /** Marca que HISTECH distribuye en este servicio (opcional). */
+  brand?: string;
 }) {
   const url = absoluteUrl(path);
   return {
@@ -193,6 +197,7 @@ export function serviceJsonLd({
     provider: { "@id": ORG_ID },
     areaServed: ["CO", "Latinoamérica"],
     isPartOf: { "@id": WEBSITE_ID },
+    ...(brand && { brand: { "@type": "Brand", name: brand } }),
   };
 }
 

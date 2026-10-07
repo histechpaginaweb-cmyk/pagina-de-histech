@@ -21,6 +21,8 @@ export type ServiceContent = {
   metaTitle?: string;
   /** Meta description (140-160 caracteres). Si falta, se usa `subtitle`. */
   metaDescription?: string;
+  /** Marca distribuida en este servicio; se emite como `brand` en el JSON-LD de Service. */
+  brand?: string;
   intro: string;
   icon: string;
   /** Imagen alusiva (en /public/servicios/<slug>.png). Si falta, se usa el visual de ícono. */
@@ -320,7 +322,7 @@ export const servicesContent: Record<string, ServiceContent> = {
       { q: "¿Trabajan con mi infraestructura actual?", a: "Sí. Evaluamos tu entorno y diseñamos soluciones que aprovechan e integran lo que ya tienes." },
       { q: "¿Qué fabricantes utilizan?", a: "Trabajamos con líderes como Cisco, Extreme Networks, Sophos y WatchGuard, según el mejor ajuste para tu caso." },
     ],
-    related: ["ciberseguridad", "cloud-continuidad", "computo"],
+    related: ["ciberseguridad", "teltonika-colombia", "computo"],
   },
 
   computo: {
@@ -461,7 +463,7 @@ export const servicesContent: Record<string, ServiceContent> = {
       { q: "¿Cómo se cobra el servicio gestionado?", a: "Con una tarifa mensual predecible que cubre la cobertura acordada. Sin sorpresas cuando algo falla." },
       { q: "¿Reemplaza a mi área de TI?", a: "Puede reemplazarla o complementarla. Nos adaptamos: desde cubrir toda la operación hasta apoyar a tu equipo interno." },
     ],
-    related: ["ciberseguridad", "infraestructura-de-redes", "computo"],
+    related: ["ciberseguridad", "infraestructura-de-redes", "outsourcing-ti"],
   },
 
   "soluciones-web": {
@@ -603,6 +605,164 @@ export const servicesContent: Record<string, ServiceContent> = {
       { q: "¿Incluye mantenimiento después del lanzamiento?", a: "Sí. Ofrecemos planes de soporte y evolución continua para que tu plataforma se mantenga segura y siga creciendo con tu negocio." },
     ],
     related: ["soluciones-web", "inteligencia-artificial", "ecosistemas-digitales"],
+  },
+  "teltonika-colombia": {
+    slug: "teltonika-colombia",
+    name: "Teltonika en Colombia",
+    eyebrow: "Distribuidor de Teltonika",
+    brand: "Teltonika",
+    title: "Routers 4G y conectividad industrial Teltonika en Colombia",
+    subtitle:
+      "Venta, configuración e instalación de routers y gateways Teltonika 4G/LTE para conectar sedes, puntos de venta, cámaras y equipos IoT con gestión remota.",
+    intro:
+      "HISTECH es distribuidor de Teltonika en Colombia. Te asesoramos en la selección, te vendemos los equipos y los entregamos configurados, instalados y con soporte, para que tu operación mantenga una conexión estable incluso donde no llega el internet fijo.",
+    icon: "Network",
+    image: "/servicios/infraestructura-de-redes.png",
+    visual: "grid",
+    metaTitle: "Distribuidor Teltonika Colombia: Routers 4G Industriales",
+    metaDescription:
+      "Venta de equipos Teltonika en Colombia: routers 4G/LTE industriales, gateways y gestión remota RMS, con asesoría, instalación y soporte de HISTECH en Bogotá.",
+    capabilities: [
+      { title: "Routers industriales 4G/LTE y 5G", description: "Equipos de las series RUT para conectividad celular empresarial en sedes, vehículos y sitios remotos.", icon: "Network" },
+      { title: "Gateways e IoT", description: "Pasarelas para conectar sensores, controladores y equipos industriales con tus plataformas.", icon: "Cpu" },
+      { title: "Respaldo con doble SIM y failover", description: "Cambio automático entre operadores o hacia el enlace fijo, según el equipo, para no perder la conexión.", icon: "Activity" },
+      { title: "Gestión remota con Teltonika RMS", description: "Monitoreo, configuración y actualización centralizada de tus equipos desde una sola plataforma.", icon: "Server" },
+      { title: "Asesoría, configuración, instalación y soporte", description: "HISTECH selecciona el equipo, lo configura, lo instala en sitio y te acompaña después.", icon: "Settings2" },
+    ],
+    useCases: [
+      { title: "Sucursales y oficinas remotas", description: "Internet celular como enlace principal o de respaldo cuando el servicio fijo no está disponible o falla.", icon: "Building2" },
+      { title: "Puntos de venta", description: "Conectividad continua para transacciones, con respaldo automático si cae el enlace principal.", icon: "ShoppingBag" },
+      { title: "Cámaras de seguridad (CCTV)", description: "Transmisión de video desde sitios sin red cableada, con gestión remota de los equipos.", icon: "Eye" },
+      { title: "Flotas, telemetría e IoT", description: "Conexión de vehículos, maquinaria y sensores que operan en movimiento o a la intemperie.", icon: "Truck" },
+    ],
+    process: [
+      { step: "01", title: "Levantamiento", description: "Revisamos tu sitio, la cobertura celular, la cantidad de equipos y el uso que tendrá la conexión." },
+      { step: "02", title: "Selección del equipo", description: "Recomendamos la serie y el modelo de Teltonika que mejor se ajustan a tu caso." },
+      { step: "03", title: "Configuración e instalación", description: "Entregamos el equipo configurado, con doble SIM o failover si aplica, e instalado en sitio." },
+      { step: "04", title: "Gestión y soporte", description: "Conectamos tus equipos a la gestión remota cuando se requiere y brindamos soporte técnico posterior." },
+    ],
+    benefits: [
+      "Conectividad donde no llega el internet fijo",
+      "Respaldo ante fallas del enlace principal",
+      "Gestión remota y centralizada de los equipos",
+      "Despliegue ordenado en varias sedes",
+      "Un solo proveedor para venta, instalación y soporte",
+      "Equipos pensados para entornos industriales",
+    ],
+    faqs: [
+      { q: "¿HISTECH es distribuidor de Teltonika en Colombia?", a: "Sí. HISTECH es distribuidor de Teltonika en Colombia: vende equipos Teltonika y acompaña a las empresas con asesoría, configuración, instalación y soporte técnico." },
+      { q: "¿Qué es un router 4G industrial?", a: "Un router 4G industrial es un equipo que da acceso a internet por la red celular (SIM) y está diseñado para operar de forma continua en entornos exigentes, como sedes remotas, vehículos o plantas. A diferencia de un router doméstico, ofrece respaldo, gestión remota y funciones de seguridad empresarial." },
+      { q: "¿Para qué sirve un router LTE empresarial?", a: "Sirve para conectar sedes, puntos de venta, cámaras o equipos IoT a internet por la red celular, ya sea como enlace principal donde no hay fibra o como respaldo automático cuando falla el enlace fijo." },
+      { q: "¿Qué es Teltonika RMS?", a: "Teltonika RMS (Remote Management System) es la plataforma de gestión remota de Teltonika. Permite monitorear, configurar y actualizar los equipos de forma centralizada, sin desplazarse a cada sede." },
+      { q: "¿Cuánto cuesta un router Teltonika en Colombia?", a: "El precio depende de la serie, el modelo y la cantidad de equipos, por lo que se cotiza según cada proyecto. Cuéntanos tu caso de uso y te enviamos una propuesta." },
+      { q: "¿Pueden instalar equipos Teltonika en varias sedes?", a: "Sí. HISTECH puede planear y desplegar equipos en varias sedes con una configuración estandarizada y gestión centralizada, y prestar soporte remoto y, según la ubicación, en sitio." },
+    ],
+    related: ["infraestructura-de-redes", "managed-services", "ciberseguridad"],
+  },
+
+  "outsourcing-ti": {
+    slug: "outsourcing-ti",
+    name: "Outsourcing de TI y Mesa de Ayuda",
+    eyebrow: "Outsourcing de TI",
+    title: "Soporte técnico por tickets y outsourcing de TI para tu empresa",
+    subtitle:
+      "Mesa de ayuda, soporte remoto y en sitio, y administración de infraestructura, con un portal donde creas y sigues cada ticket.",
+    intro:
+      "Con el outsourcing de TI de HISTECH tu empresa cuenta con un equipo técnico y una mesa de ayuda sin asumir la contratación y gestión de personal propio. Cada solicitud se registra como un ticket en nuestro portal de soporte, para que sepas qué se pidió, quién lo atiende y cómo avanza.",
+    icon: "HeartHandshake",
+    image: "/servicios/managed-services.png",
+    visual: "stream",
+    metaTitle: "Outsourcing de TI y Mesa de Ayuda en Colombia",
+    metaDescription:
+      "Outsourcing de TI en Colombia: mesa de ayuda y soporte técnico remoto y en sitio por tickets, con portal de seguimiento y costos predecibles. Habla con HISTECH.",
+    capabilities: [
+      { title: "Mesa de ayuda (help desk)", description: "Punto único de contacto para que tus usuarios reporten incidentes y soliciten servicios.", icon: "HeartHandshake" },
+      { title: "Soporte remoto y en sitio", description: "Atención a distancia y visitas técnicas cuando el caso lo requiere.", icon: "Settings2" },
+      { title: "Portal de soporte con tickets", description: "Creación y seguimiento de solicitudes en línea, con historial de cada caso.", icon: "Workflow" },
+      { title: "Seguimiento por empresa", description: "Estado, historial y reportes de los tickets de tu organización.", icon: "Activity" },
+      { title: "Administración de infraestructura", description: "Gestión de equipos, usuarios, redes y servidores de tu empresa.", icon: "Server" },
+    ],
+    useCases: [
+      { title: "Empresa sin área de TI", description: "Cubre el soporte tecnológico completo sin contratar personal de planta.", icon: "Briefcase" },
+      { title: "Área de TI pequeña o sobrecargada", description: "El primer nivel de atención y las tareas repetitivas pasan a la mesa de ayuda.", icon: "Settings2" },
+      { title: "Varias sedes o usuarios remotos", description: "Soporte centralizado por tickets para equipos ubicados en distintos lugares.", icon: "Network" },
+      { title: "Necesidad de trazabilidad", description: "Cada solicitud queda registrada, con responsable e historial, para control y auditoría.", icon: "Eye" },
+    ],
+    process: [
+      { step: "01", title: "Diagnóstico y alcance", description: "Conocemos tu entorno y tus usuarios, y definimos qué cubre el servicio." },
+      { step: "02", title: "Acuerdo de servicio", description: "Se acuerdan por contrato los canales de atención, los horarios y los tiempos de respuesta." },
+      { step: "03", title: "Operación por tickets", description: "Tu equipo crea los tickets en el portal y nuestros técnicos los atienden de forma remota o en sitio." },
+      { step: "04", title: "Seguimiento y mejora", description: "Revisamos el historial y los reportes para resolver causas recurrentes y mejorar el servicio." },
+    ],
+    benefits: [
+      "Costos predecibles",
+      "Equipo técnico sin la carga de contratar y gestionar personal",
+      "Trazabilidad de cada solicitud",
+      "Visibilidad del estado de tus tickets en cualquier momento",
+      "Tu área de TI se enfoca en lo estratégico",
+      "Soporte remoto y en sitio con un solo proveedor",
+    ],
+    faqs: [
+      { q: "¿Qué es el outsourcing de TI?", a: "El outsourcing de TI consiste en contratar a un proveedor externo para que se encargue del soporte técnico y de la administración de la tecnología de la empresa. Con HISTECH incluye mesa de ayuda, soporte remoto y en sitio y administración de infraestructura, con costos predecibles." },
+      { q: "¿Cómo funciona el soporte técnico por tickets?", a: "Cada solicitud se registra como un ticket en el portal de soporte de HISTECH, donde la empresa lo crea y consulta su estado. Un técnico lo atiende y todo queda con historial para seguimiento y reportes." },
+      { q: "¿Cómo accedo al portal de soporte de HISTECH?", a: "Los clientes ingresan con su usuario en histech.com.co/portal/login. Allí crean tickets y consultan el seguimiento de los casos de su empresa." },
+      { q: "¿Cuáles son los tiempos de respuesta del servicio?", a: "Los tiempos de respuesta y los horarios de atención se acuerdan por contrato según las necesidades de cada empresa y se definen antes de iniciar el servicio." },
+      { q: "¿Qué diferencia hay entre outsourcing de TI y servicios gestionados?", a: "Los servicios gestionados se enfocan en el monitoreo 24/7 y la administración proactiva de la infraestructura, mientras que el outsourcing de TI aporta personal técnico y una mesa de ayuda que atiende a los usuarios mediante tickets. Se pueden contratar por separado o combinados." },
+      { q: "¿El servicio incluye soporte en sitio?", a: "Sí. Cuando el caso lo requiere, HISTECH envía un técnico a tu sede; el alcance y la cobertura geográfica se definen en el contrato. Muchos casos se resuelven de forma remota." },
+    ],
+    related: ["managed-services", "infraestructura-de-redes", "consultoria-it"],
+  },
+
+  "seguridad-vial-pesv": {
+    slug: "seguridad-vial-pesv",
+    name: "Seguridad Vial y PESV",
+    eyebrow: "Seguridad Vial · PESV",
+    title: "Tecnología para cumplir el Plan Estratégico de Seguridad Vial (PESV)",
+    subtitle:
+      "Inspecciones preoperacionales digitales, evidencia trazable y reportes para auditoría, para que tu empresa gestione el cumplimiento de la normativa de seguridad vial.",
+    intro:
+      "El Plan Estratégico de Seguridad Vial (PESV) es obligatorio en Colombia para las entidades públicas y privadas con una flota de más de diez vehículos o que contratan o administran conductores. Una de sus exigencias más operativas es la inspección preoperacional diaria. En HISTECH desarrollamos soluciones digitales para registrar esas inspecciones con evidencia, trazabilidad y reportes, y dejar atrás el papel. Es una herramienta de apoyo: no sustituye la gestión del PESV ni la asesoría especializada.",
+    icon: "Truck",
+    visual: "shield",
+    metaTitle: "Software PESV: Inspección Preoperacional Digital",
+    metaDescription:
+      "Software PESV para Colombia: inspecciones preoperacionales digitales con evidencia, trazabilidad y reportes para auditoría. Apoya tu cumplimiento con HISTECH.",
+    capabilities: [
+      { title: "Inspección preoperacional digital", description: "Lista de chequeo por tipo de vehículo (moto o carro) diligenciada desde el celular.", icon: "ShieldCheck" },
+      { title: "Evidencia y trazabilidad", description: "Registro con fecha, hora, responsable, fotos y firma de cada inspección.", icon: "Eye" },
+      { title: "Alertas por hallazgos", description: "Las fallas detectadas quedan marcadas para revisión del supervisor, con alertas de documentos por vencer según la configuración del proyecto.", icon: "Activity" },
+      { title: "Registro de conductores y vehículos", description: "Documentos, vencimientos e historial de cada vehículo y conductor en un solo lugar.", icon: "Layers" },
+      { title: "Reportes para auditoría", description: "Indicadores y exportación de datos para auditorías internas y verificaciones.", icon: "Target" },
+    ],
+    useCases: [
+      { title: "Empresas con flota propia", description: "Control diario del estado de motos y carros de la operación.", icon: "Truck" },
+      { title: "Empresas con conductores a cargo", description: "Organizaciones que contratan o administran conductores y deben registrar sus inspecciones.", icon: "HeartHandshake" },
+      { title: "Preparación de auditorías", description: "Evidencia ordenada y consultable para auditorías internas y verificaciones de las autoridades.", icon: "Eye" },
+      { title: "Reemplazo del formato en papel", description: "Digitalizar listas de chequeo que hoy se pierden, se diligencian tarde o no se pueden consultar.", icon: "Layers" },
+    ],
+    process: [
+      { step: "01", title: "Diagnóstico", description: "Revisamos tu flota, tus conductores y el formato de inspección que usas hoy." },
+      { step: "02", title: "Configuración", description: "Adaptamos la lista de chequeo, los roles (conductor y supervisor) y los documentos a controlar." },
+      { step: "03", title: "Puesta en marcha", description: "Capacitamos a conductores y supervisores y comenzamos a registrar inspecciones." },
+      { step: "04", title: "Seguimiento y reportes", description: "Revisamos hallazgos y cumplimiento, y generamos reportes para tus auditorías." },
+    ],
+    benefits: [
+      "Evidencia fechada y trazable de cada inspección",
+      "Menos papel y registros fáciles de consultar",
+      "Visibilidad del cumplimiento por vehículo y conductor",
+      "Detección oportuna de fallas y documentos por vencer",
+      "Información lista para auditorías",
+      "Solución a la medida de tu flota",
+    ],
+    faqs: [
+      { q: "¿Qué es el PESV?", a: "El PESV (Plan Estratégico de Seguridad Vial) es el plan que las organizaciones obligadas deben diseñar e implementar en Colombia para gestionar la seguridad vial de su operación. Se rige por la Ley 1503 de 2011 y por la metodología de la Resolución 40595 de 2022 del Ministerio de Transporte, que define 24 pasos." },
+      { q: "¿Quién está obligado a tener un PESV?", a: "Está obligada toda entidad, organización o empresa, pública o privada, que tenga una flota de más de diez vehículos o que contrate o administre personal de conductores. Cuentan también los vehículos de los trabajadores que se usan para la actividad de la empresa. Conviene confirmar tu caso con un asesor en PESV." },
+      { q: "¿Qué es la inspección preoperacional y por qué importa para el PESV?", a: "La inspección preoperacional es la revisión diaria del vehículo, con una lista de chequeo, antes de operarlo. El Paso 16 de la metodología del PESV (Resolución 40595 de 2022) exige un mecanismo de registro de esa inspección, con responsables de ejecutarla y de controlarla, y la conservación del registro del último año." },
+      { q: "¿Qué es una inspección preoperacional digital?", a: "Es la lista de chequeo del vehículo diligenciada desde el celular u otro dispositivo en lugar de papel, con fecha, hora, responsable, fotos y firma. Facilita guardar la evidencia, consultarla y generar reportes para auditoría." },
+      { q: "¿El software de HISTECH garantiza el cumplimiento del PESV?", a: "No. El PESV tiene 24 pasos y la mayoría son de gestión organizacional, como el liderazgo, las políticas y la capacitación. Nuestra solución apoya la parte operativa de la inspección preoperacional con evidencia y reportes, y no sustituye la gestión del PESV ni la asesoría especializada." },
+      { q: "¿Qué registros puede generar la solución para una auditoría?", a: "Genera el registro de cada inspección con su lista de chequeo, responsable, fecha, hora, fotos y firmas, además de indicadores de cumplimiento y exportación de datos. Así tienes evidencia ordenada para auditorías internas o verificaciones." },
+    ],
+    related: ["desarrollo-software-colombia", "automatizacion-empresarial", "ecosistemas-digitales"],
   },
 };
 

@@ -7,7 +7,7 @@ import { Section, Container } from "@/components/ui/section";
 import { Icon } from "@/components/ui/icon";
 import { products, type Product } from "@/lib/products";
 
-const SPEED = 0.4; // px por frame (~24px/s) — ritmo de pasarela, legible
+const SPEED = 0.24; // px por frame (~14px/s) — ritmo de pasarela, legible
 
 export function ProductCarousel({ items = products }: { items?: Product[] }) {
   const scrollerRef = React.useRef<HTMLDivElement>(null);
@@ -106,7 +106,7 @@ export function ProductCarousel({ items = products }: { items?: Product[] }) {
           onMouseUp={endDrag}
           onMouseLeave={endDrag}
           onClickCapture={onClickCapture}
-          className="mask-fade-x flex cursor-grab select-none gap-5 overflow-x-auto pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex cursor-grab [-webkit-mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)] select-none gap-5 overflow-x-auto pb-4 active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {loop.map((p, i) => (
             <ProductCard

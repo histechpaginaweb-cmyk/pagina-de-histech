@@ -102,16 +102,16 @@ Admin API (existing admin JWT cookie): CRUD under `/api/admin/catalog/{products,
 - [x] **T4 Admin UI.** Catalog section in the existing admin: products, categories, brands,
   quick price/availability edit, publish/draft, global show-prices toggle. Route: delegated.
   Checks: backend `npm test`; automated headless-browser walkthrough done by the writer; manual owner walkthrough pending.
-- [ ] **T5 Public catalog pages.** Data layer (ISR), `/tienda`, `/tienda/[categoria]`,
+- [x] **T5 Public catalog pages.** Data layer (ISR), `/tienda`, `/tienda/[categoria]`,
   `/tienda/producto/[slug]`, product card, filters, gallery, specs table, price block,
   header/footer entry points. Route: delegated. Checks: frontend `npm test`, `npm run typecheck`,
   `npm run lint`, `npm run build`.
-- [ ] **T6 Advisor contact.** WhatsApp prefilled-message builder, phone link, quote request form
+- [x] **T6 Advisor contact.** WhatsApp prefilled-message builder, phone link, quote request form
   reusing the contact action with product context. Route: delegated. Checks: as T5.
-- [ ] **T7 SEO.** Per-product and per-category metadata, JSON-LD `Product`/`Offer`
+- [x] **T7 SEO.** Per-product and per-category metadata, JSON-LD `Product`/`Offer`
   (VAT-excluded price specification)/`BreadcrumbList`/`ItemList`, sitemap entries, `llms.txt`.
   Route: delegated. Checks: as T5.
-- [ ] **T8 Seed and docs.** Idempotent seed with initial categories/brands and the products that
+- [x] **T8 Seed and docs.** Idempotent seed with initial categories/brands and the products that
   have real source material (Teltonika RUT956, RUT200) as drafts with "consult price";
   README/DEPLOY notes for migration and seed. Route: delegated. Checks: backend `npm test`.
 
@@ -134,12 +134,12 @@ Admin API (existing admin JWT cookie): CRUD under `/api/admin/catalog/{products,
 | T2 | done | delegated | 490ab84 | RED (module missing) then GREEN; backend 59 tests pass; `prisma validate` ok; migration generated offline, not applied |
 | T3 | done | delegated | f47ff40 | RED (module missing) then GREEN; backend 75 tests pass incl. HTTP router tests with fake admin and fake uploader |
 | T4 | done (owner walkthrough pending) | delegated | 303c6e6 | RED then GREEN for pure helpers; backend 88 tests pass; headless Edge drove create/quick-edit/publish/settings flow against in-memory API |
-| T5 | pending | delegated | - | - |
-| T6 | pending | delegated | - | - |
-| T7 | pending | delegated | - | - |
-| T8 | pending | delegated | - | - |
+| T5 | done | delegated | 564c6e1 | RED (modules missing) then GREEN; frontend 41 tests; typecheck clean; build ok with backend down and with in-memory backend; HTTP smoke of /tienda, category, product, 404s |
+| T6 | done | delegated | 00e7b2c | RED then GREEN; 56 frontend tests; email builder keeps original subject/body without product |
+| T7 | done | delegated | 7a497c8 | RED then GREEN; 75 frontend tests; smoke: Offer only with visible price, noindex on ?q=, sitemap lists store URLs |
+| T8 | done (seed authored, NOT run) | delegated | 06c61e6 | RED (module missing) then GREEN; backend 95 tests incl. seed validity and idempotency against stub |
 
-Running authored-line count: about 3,361 (T1 38, T2 1,627, T3 558, T4 1,138; lockfile and generated SQL excluded; tests included)
+Running authored-line count: about 5,900 (T1 38, T2 1,627, T3 558, T4 1,138, T5 about 1,820, T6 about 520, T7 about 620, T8 about 520; lockfile and generated SQL excluded; tests included)
 
 ## Pending owner actions
 
@@ -150,6 +150,13 @@ Running authored-line count: about 3,361 (T1 38, T2 1,627, T3 558, T4 1,138; loc
 - Provide product content: photos, specs, prices.
 - Push `main` to deploy (owner decision).
 
+## Notes (T5-T8)
+
+- `npm run lint` is not configured in `frontend/` (no ESLint config; `next lint` prompts interactively). Pre-existing.
+- Descriptions render through a small safe markdown parser (`lib/catalog/markdown.ts`), not MDX (MDX evaluates code).
+- Filtered/paged URLs canonicalize to the clean listing; `?q=` is also noindex. Availability `on_request` maps to schema.org BackOrder.
+- Seed products use only facts from the RUT956/RUT200 presentations; photos are manufacturer images from the source folders (confirm usage rights).
+
 ## Next step
 
-T5-T7 (frontend) with one writer; T8 seed and docs after the migration is applied.
+Owner: review, apply schema, run `npm run catalog:seed`, complete product data (price, SKU, datasheet), publish, push.

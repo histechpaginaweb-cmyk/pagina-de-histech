@@ -175,6 +175,26 @@ async function uploadImage(buffer, mimetype) {
   return `${R2_PUBLIC_URL.replace(/\/$/, "")}/${key}`;
 }
 
+/** Sube un documento (ficha técnica PDF) a R2 y devuelve su URL pública. */
+async function uploadDocument(buffer, mimetype) {
+  if (!client) throw new Error("R2 no está configurado en el servidor");
+  if (!R2_PUBLIC_URL) {
+    throw new Error("Falta R2_PUBLIC_URL (URL pública del bucket)");
+  }
+  const key = `catalog/datasheets/${crypto.randomUUID()}.pdf`;
+  await client.send(
+    new PutObjectCommand({
+      Bucket: R2_BUCKET,
+      Key: key,
+      Body: buffer,
+      ContentType: mimetype || "application/pdf",
+      ContentDisposition: "inline",
+      CacheControl: "public, max-age=31536000, immutable",
+    }),
+  );
+  return `${R2_PUBLIC_URL.replace(/\/$/, "")}/${key}`;
+}
+
 // ─────────────────────────────────────────────────────────────
 // TEXTOS DE LAS PÁGINAS DE SERVICIO (editables desde el admin).
 // Solo texto: title / subtitle / intro por cada slug de servicio.
@@ -639,6 +659,7 @@ module.exports = {
   readProducts,
   writeProducts,
   uploadImage,
+  uploadDocument,
   readServiceTexts,
   writeServiceTexts,
   readPosts,

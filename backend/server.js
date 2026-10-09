@@ -16,6 +16,7 @@ const {
   readProducts,
   writeProducts,
   uploadImage,
+  uploadDocument,
   isConfigured,
   readServiceTexts,
   writeServiceTexts,
@@ -35,6 +36,9 @@ const {
 
 // Portal de Soporte Empresarial — módulo aislado (BD dedicada, auth propia).
 const portalRouter = require("./portal");
+
+// Catálogo de la tienda (/api/catalog/* público, /api/admin/catalog/* con sesión admin).
+const { buildCatalogRouter } = require("./catalog");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -83,6 +87,15 @@ app.get("/", (_req, res) =>
 // ── Portal de Soporte Empresarial (módulo independiente, /api/portal/*) ──
 // No interfiere con las rutas de productos/blog: prefijo y errores propios.
 app.use("/api/portal", portalRouter);
+
+// ── Catálogo de productos físicos (tienda). Módulo propio en ./catalog ──
+app.use(
+  "/api",
+  buildCatalogRouter({
+    requireAdmin,
+    uploader: { isConfigured, uploadImage, uploadDocument },
+  }),
+);
 
 // ── API PÚBLICA: lista de productos (la consume el frontend) ──
 app.get("/api/products", async (_req, res) => {

@@ -16,7 +16,9 @@ import { ProductGallery } from "@/components/catalog/product-gallery";
 import { SpecsTable } from "@/components/catalog/specs-table";
 import { getAllCatalogProducts, getCatalogProduct } from "@/lib/get-catalog";
 import { productReference } from "@/lib/catalog/contact";
-import { buildMetadata } from "@/lib/seo";
+import { productJsonLd, productMetadataInput } from "@/lib/catalog/seo";
+import { buildMetadata, JsonLd, webPageJsonLd } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
 import { absoluteUrl } from "@/lib/utils";
 
 // ISR: the product is rebuilt at most every 60s after the first request.
@@ -33,13 +35,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const lookup = await getCatalogProduct(slug);
+  if (lookup.status === "unavailable") return { robots: { index: false, follow: true } };
   if (lookup.status !== "ok") return {};
-  const { product } = lookup;
-  return buildMetadata({
-    title: product.seoTitle ?? product.name,
-    description: product.seoDescription ?? product.shortDescription ?? undefined,
-    path: `/tienda/producto/${product.slug}`,
-  });
+  return buildMetadata(productMetadataInput(lookup.product));
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -135,9 +133,9 @@ export default async function ProductPage({ params }: Props) {
 
       {product.specs.length > 0 ? (
         <Section className="py-10 sm:py-12">
-          <Container className="max-w-4xl">
+          <Container>
             <h2 className="font-display text-2xl font-bold">Especificaciones</h2>
-            <div className="mt-5">
+            <div className="mt-5 max-w-4xl">
               <SpecsTable specs={product.specs} />
             </div>
           </Container>
@@ -145,12 +143,12 @@ export default async function ProductPage({ params }: Props) {
       ) : null}
 
       <Section id="cotizacion" className="scroll-mt-24 py-10 sm:py-12">
-        <Container className="max-w-3xl">
+        <Container>
           <h2 className="font-display text-2xl font-bold">Solicita una cotización</h2>
           <p className="mt-2 text-muted-foreground">
             Déjanos tus datos y un asesor de HISTECH te enviará la cotización de {product.name}.
           </p>
-          <div className="card-surface !transform-none mt-6 p-7 sm:p-9">
+          <div className="card-surface !transform-none mt-6 max-w-3xl p-7 sm:p-9">
             <ContactForm
               product={{
                 name: product.name,
@@ -161,6 +159,15 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </Container>
       </Section>
+
+      <JsonLd data={productJsonLd(product, { siteUrl: siteConfig.url })} />
+      <JsonLd
+        data={webPageJsonLd({
+          title: product.name,
+          description: productMetadataInput(product).description,
+          path,
+        })}
+      />
 
       {product.related.length > 0 ? (
         <Section className="py-10 sm:py-12">

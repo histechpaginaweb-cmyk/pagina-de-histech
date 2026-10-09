@@ -3,6 +3,7 @@ import { StoreAdvisorActions } from "@/components/catalog/advisor-actions";
 import { CatalogListing } from "@/components/templates/catalog-listing";
 import { getCatalogBrands, getCatalogCategories, getCatalogProducts } from "@/lib/get-catalog";
 import { parseListingParams, type RawSearchParams } from "@/lib/catalog/listing-query";
+import { categoryMetadataInput } from "@/lib/catalog/seo";
 import { buildMetadata } from "@/lib/seo";
 
 type Props = {
@@ -10,16 +11,12 @@ type Props = {
   searchParams: Promise<RawSearchParams>;
 };
 
-export async function generateMetadata({ params }: Pick<Props, "params">) {
+export async function generateMetadata({ params, searchParams }: Props) {
   const { categoria } = await params;
   const categories = await getCatalogCategories();
   const category = categories.items.find((c) => c.slug === categoria);
   if (!category) return {};
-  return buildMetadata({
-    title: category.seoTitle ?? `${category.name} | Tienda`,
-    description: category.seoDescription ?? category.description ?? undefined,
-    path: `/tienda/${category.slug}`,
-  });
+  return buildMetadata(categoryMetadataInput(category, parseListingParams(await searchParams)));
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {

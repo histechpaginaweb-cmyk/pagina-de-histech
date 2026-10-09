@@ -8,6 +8,9 @@ import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CatalogFilters } from "@/components/catalog/catalog-filters";
 import { Pagination } from "@/components/catalog/pagination";
 import { ProductCard } from "@/components/catalog/product-card";
+import { JsonLd } from "@/lib/seo";
+import { itemListJsonLd } from "@/lib/catalog/seo";
+import { siteConfig } from "@/lib/site";
 import { hasListingVariant, type ListingParams } from "@/lib/catalog/listing-query";
 import type { ProductListResult, PublicBrand, PublicCategory } from "@/lib/catalog/types";
 
@@ -102,6 +105,10 @@ export function CatalogListing({
           </div>
         </Container>
       </Section>
+
+      {result.items.length > 0 ? (
+        <JsonLd data={itemListJsonLd(result.items, { siteUrl: siteConfig.url, name: title })} />
+      ) : null}
 
       {footer}
     </>

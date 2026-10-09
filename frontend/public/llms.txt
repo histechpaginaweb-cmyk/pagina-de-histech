@@ -22,6 +22,11 @@ Integramos tecnología de punta en cada capa de la empresa —desde la infraestr
 - [Outsourcing de TI y Mesa de Ayuda](https://histech.com.co/outsourcing-ti): Mesa de ayuda y soporte técnico remoto y en sitio por tickets, con portal de seguimiento por empresa.
 - [Seguridad Vial y PESV](https://histech.com.co/seguridad-vial-pesv): Inspecciones preoperacionales digitales, evidencia trazable y reportes de apoyo para la normativa de seguridad vial (PESV).
 
+## Tienda
+
+- [Tienda de equipos de red](https://histech.com.co/tienda): Catálogo de routers industriales, gateways y equipos de networking con asesoría de HISTECH. Cada producto muestra especificaciones, disponibilidad y precio sin IVA (o "Consultar precio"); la compra se gestiona con un asesor por WhatsApp, teléfono o formulario de cotización.
+- Categorías: https://histech.com.co/tienda/{categoria} · Productos: https://histech.com.co/tienda/producto/{producto}
+
 ## Industrias
 
 - [Industrias](https://histech.com.co/industrias): Soluciones por sector (manufactura, salud, banca y seguros, entre otros).

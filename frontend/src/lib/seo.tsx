@@ -29,17 +29,26 @@ export function buildMetadata({
   description,
   path = "/",
   keywords,
+  image,
+  noindex = false,
 }: {
   title?: string;
   description?: string;
   path?: string;
   keywords?: string[];
+  /** Open Graph / Twitter image (site-relative or absolute). Defaults to the site card. */
+  image?: string;
+  /** Keeps the canonical but asks crawlers not to index the page (links are still followed). */
+  noindex?: boolean;
 }): Metadata {
   const url = absoluteUrl(path);
   const metaTitle = title
     ? `${title} | ${siteConfig.name}`
     : `${siteConfig.name} — Tecnología Inteligente para Empresas`;
   const metaDescription = description ?? siteConfig.description;
+  const ogImage = image
+    ? { url: /^https?:\/\//.test(image) ? image : absoluteUrl(image), alt: metaTitle }
+    : { url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name };
 
   return {
     // `absolute` evita que la plantilla del layout (`%s | HISTECH`) duplique la marca.
@@ -47,6 +56,7 @@ export function buildMetadata({
     description: metaDescription,
     keywords,
     alternates: { canonical: url },
+    ...(noindex && { robots: { index: false, follow: true } }),
     openGraph: {
       type: "website",
       locale: "es_CO",
@@ -54,13 +64,13 @@ export function buildMetadata({
       siteName: siteConfig.legalName,
       title: metaTitle,
       description: metaDescription,
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: siteConfig.name }],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: metaTitle,
       description: metaDescription,
-      images: ["/opengraph-image"],
+      images: [ogImage.url],
     },
   };
 }

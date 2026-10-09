@@ -3,17 +3,18 @@ import { StoreAdvisorActions } from "@/components/catalog/advisor-actions";
 import { CatalogListing } from "@/components/templates/catalog-listing";
 import { getCatalogBrands, getCatalogCategories, getCatalogProducts } from "@/lib/get-catalog";
 import { parseListingParams, type RawSearchParams } from "@/lib/catalog/listing-query";
+import { listingMetadataInput } from "@/lib/catalog/seo";
 import { buildMetadata } from "@/lib/seo";
 
 type Props = { searchParams: Promise<RawSearchParams> };
 
-export async function generateMetadata() {
-  return buildMetadata({
-    title: "Tienda de equipos de red",
-    description:
-      "Routers industriales, gateways y equipos de networking con asesoría de HISTECH. Consulta especificaciones, disponibilidad y precio con un asesor.",
-    path: "/tienda",
-  });
+const TITLE = "Tienda de equipos de red";
+const DESCRIPTION =
+  "Routers industriales, gateways y equipos de networking con asesoría de HISTECH. Consulta especificaciones, disponibilidad y precio con un asesor.";
+
+export async function generateMetadata({ searchParams }: Props) {
+  const params = parseListingParams(await searchParams);
+  return buildMetadata(listingMetadataInput({ basePath: "/tienda", title: TITLE, description: DESCRIPTION, params }));
 }
 
 export default async function StorePage({ searchParams }: Props) {
@@ -30,7 +31,7 @@ export default async function StorePage({ searchParams }: Props) {
   return (
     <CatalogListing
       basePath="/tienda"
-      title="Tienda de equipos de red"
+      title={TITLE}
       description="Equipos de conectividad y networking seleccionados por HISTECH. Cada producto cuenta con acompañamiento de un asesor para elegir, configurar e instalar."
       breadcrumbs={[
         { name: "Inicio", path: "/" },

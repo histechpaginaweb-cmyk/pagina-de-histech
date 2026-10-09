@@ -4,6 +4,9 @@ import { industrySlugs } from "@/lib/industries-content";
 import { guideSlugs } from "@/lib/resources-content";
 import { getSlugs } from "@/lib/get-blog";
 import { absoluteUrl } from "@/lib/utils";
+import { getAllCatalogProducts, getCatalogCategories } from "@/lib/get-catalog";
+import { buildCatalogSitemapEntries } from "@/lib/catalog/seo";
+import { siteConfig } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -61,8 +64,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  // Store: degrades to just /tienda when the backend is unreachable.
+  const [catalogProducts, catalogCategories] = await Promise.all([
+    getAllCatalogProducts(),
+    getCatalogCategories(),
+  ]);
+  const storeRoutes = buildCatalogSitemapEntries({
+    products: catalogProducts,
+    categories: catalogCategories.items,
+    siteUrl: siteConfig.url,
+  });
+
   return [
     ...staticRoutes,
+    ...storeRoutes,
     ...serviceRoutes,
     ...industryRoutes,
     ...guideRoutes,

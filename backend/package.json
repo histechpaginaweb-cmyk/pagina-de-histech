@@ -11,6 +11,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "test": "node --test",
     "postinstall": "prisma generate --schema portal/prisma/schema.prisma",
     "portal:generate": "prisma generate --schema portal/prisma/schema.prisma",
     "portal:migrate": "prisma migrate deploy --schema portal/prisma/schema.prisma",

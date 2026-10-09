@@ -120,8 +120,11 @@ export function Header() {
           )}
         </ul>
 
-        {/* Portal Cliente — SIEMPRE visible (escritorio y móvil), a la derecha */}
-        <div className="flex items-center">
+        {/* Tienda y Portal Cliente — SIEMPRE visibles (escritorio y móvil), a la derecha */}
+        <div className="flex items-center gap-2">
+          <Button href="/tienda" variant="primary" size="sm">
+            Tienda
+          </Button>
           <Button href="/portal/login" variant="primary" size="sm">
             Portal Cliente
           </Button>

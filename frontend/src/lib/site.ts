@@ -200,8 +200,6 @@ export const mainNav: { label: string; href?: string; groups?: NavGroup[] }[] = 
       },
     ],
   },
-  // La tienda NO forma parte de `services` (mainNav corta ese arreglo por índice).
-  { label: "Tienda", href: "/tienda" },
   { label: "Blog", href: "/blog" },
   { label: "Nosotros", href: "/nosotros" },
 ];

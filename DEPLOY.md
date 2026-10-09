@@ -223,6 +223,58 @@ una variable extra). Así las cookies de sesión quedan en tu dominio (seguro, s
 
 ---
 
+## 7) Tienda / Catálogo de productos
+
+La tienda (`/tienda`) vive en el mismo sitio y lee del backend. Los productos, categorías y
+marcas se guardan en la **base de datos del Portal (Neon, `PORTAL_DATABASE_URL`)** y se
+administran desde `/admin` (sección Catálogo). Las imágenes y fichas técnicas usan el mismo R2.
+
+### 7.1) Aplicar el esquema
+
+Las tablas nuevas son aditivas (2 enums, 4 tablas: `catalog_products`, `catalog_categories`,
+`catalog_brands`, `catalog_settings`).
+
+- **Automático:** `render.yaml` ejecuta `npm run portal:push` en cada despliegue, así que al
+  desplegar `main` Render crea las tablas solas.
+- **Manual (revisado):** el SQL está en
+  `backend/portal/prisma/migrations/20261008000000_catalog/migration.sql`. Aplícalo tú mismo
+  (por ejemplo `npm run portal:migrate` con la URL correcta) **después de revisarlo y confirmar
+  la base de datos de destino**.
+
+Mientras las tablas no existan, la tienda muestra "Estamos preparando el catálogo" y el resto
+del sitio no se ve afectado.
+
+### 7.2) Cargar el catálogo inicial (seed)
+
+```bash
+cd backend
+npm run catalog:seed
+```
+
+- Es **idempotente**: busca por `slug` y solo crea lo que falta; no pisa cambios hechos en el admin.
+- Crea categorías, la marca Teltonika y dos productos (**RUT956** y **RUT200**) con datos
+  tomados de las presentaciones de HISTECH, como **borrador** y con **"Consultar precio"**.
+- Las fotos están en `frontend/public/tienda/`. Falta: precio, SKU y ficha técnica.
+- Publica cada producto desde `/admin` cuando esté completo.
+- Ejecútalo solo contra la base que quieras (usa `PORTAL_DATABASE_URL`).
+
+### 7.3) Visibilidad de precios
+
+- Los precios se guardan en **COP, sin IVA** y se muestran como "Precio sin IVA".
+- **Interruptor global** (`/admin` > Catálogo > Ajustes): al desactivar "Mostrar precios en la tienda", todo el
+  catálogo muestra "Consultar precio".
+- **Por producto:** la casilla "Consultar precio" oculta solo ese precio.
+- Un precio oculto tampoco aparece en el HTML, en los metadatos ni en los datos estructurados
+  (JSON-LD). El cambio se refleja en el sitio en hasta ~60 segundos.
+
+### 7.4) Variables
+
+El frontend solo necesita `BACKEND_URL` (la misma del carrusel). Sin ella la tienda se
+muestra vacía en lugar de fallar. Los datos de contacto (WhatsApp, teléfono) salen de
+`frontend/src/lib/site.ts`.
+
+---
+
 ## Desarrollo local (opcional)
 
 **Backend:**

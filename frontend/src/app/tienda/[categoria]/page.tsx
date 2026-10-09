@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { StoreAdvisorActions } from "@/components/catalog/advisor-actions";
 import { CatalogListing } from "@/components/templates/catalog-listing";
 import { getCatalogBrands, getCatalogCategories, getCatalogProducts } from "@/lib/get-catalog";
 import { parseListingParams, type RawSearchParams } from "@/lib/catalog/listing-query";
@@ -45,10 +44,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     <CatalogListing
       basePath={basePath}
       title={name}
-      description={
-        category?.description ??
-        `Productos de la categoría ${name} con acompañamiento de un asesor HISTECH.`
-      }
       breadcrumbs={[
         { name: "Inicio", path: "/" },
         { name: "Tienda", path: "/tienda" },
@@ -58,7 +53,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       result={result}
       categories={categories.items}
       brands={brands.items}
-      heroActions={<StoreAdvisorActions />}
       activeCategory={categoria}
     />
   );

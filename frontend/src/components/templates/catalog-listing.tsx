@@ -1,14 +1,10 @@
 import Link from "next/link";
 import { PackageSearch, ServerCrash } from "lucide-react";
 import { Section, Container } from "@/components/ui/section";
-import { Badge } from "@/components/ui/badge";
-import { Reveal } from "@/components/ui/reveal";
-import { Aurora } from "@/components/visuals/aurora";
-import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CatalogFilters } from "@/components/catalog/catalog-filters";
 import { Pagination } from "@/components/catalog/pagination";
 import { ProductCard } from "@/components/catalog/product-card";
-import { JsonLd } from "@/lib/seo";
+import { JsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import { itemListJsonLd } from "@/lib/catalog/seo";
 import { siteConfig } from "@/lib/site";
 import { hasListingVariant, type ListingParams } from "@/lib/catalog/listing-query";
@@ -17,16 +13,14 @@ import type { ProductListResult, PublicBrand, PublicCategory } from "@/lib/catal
 type Props = {
   /** `/tienda` or `/tienda/<categoria>`. */
   basePath: string;
+  /** Page heading; kept for assistive tech and search engines, not shown. */
   title: string;
-  description: string;
   breadcrumbs: { name: string; path: string }[];
   params: ListingParams;
   result: ProductListResult;
   categories: PublicCategory[];
   brands: PublicBrand[];
   activeCategory?: string;
-  /** Extra content rendered under the hero copy (advisor CTA). */
-  heroActions?: React.ReactNode;
   /** Extra content rendered after the product grid (advisor CTA). */
   footer?: React.ReactNode;
 };
@@ -34,14 +28,12 @@ type Props = {
 export function CatalogListing({
   basePath,
   title,
-  description,
   breadcrumbs,
   params,
   result,
   categories,
   brands,
   activeCategory,
-  heroActions,
   footer,
 }: Props) {
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize));
@@ -49,23 +41,11 @@ export function CatalogListing({
 
   return (
     <>
-      <section className="relative isolate overflow-hidden pb-10 pt-32 sm:pt-40">
-        <Aurora />
+      {/* No hero on the store: the catalog starts right under the fixed header. */}
+      <Section className="pt-28 sm:pt-32">
         <Container>
-          <Breadcrumbs items={breadcrumbs} />
-          <Reveal className="mt-8 max-w-3xl">
-            <Badge>Tienda</Badge>
-            <h1 className="mt-5 text-display-xl text-balance">
-              <span className="text-gradient">{title}</span>
-            </h1>
-            <p className="mt-5 text-lg leading-relaxed text-muted-foreground text-pretty">{description}</p>
-            {heroActions ? <div className="mt-8">{heroActions}</div> : null}
-          </Reveal>
-        </Container>
-      </section>
-
-      <Section className="pt-6">
-        <Container>
+          <h1 className="sr-only">{title}</h1>
+          <JsonLd data={breadcrumbJsonLd(breadcrumbs)} />
           <div className="grid gap-10 lg:grid-cols-[18rem_1fr] lg:gap-12">
             <aside aria-label="Filtros del catálogo">
               <CatalogFilters

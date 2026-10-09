@@ -200,6 +200,8 @@ export const mainNav: { label: string; href?: string; groups?: NavGroup[] }[] = 
       },
     ],
   },
+  // La tienda NO forma parte de `services` (mainNav corta ese arreglo por índice).
+  { label: "Tienda", href: "/tienda" },
   { label: "Blog", href: "/blog" },
   { label: "Nosotros", href: "/nosotros" },
 ];
@@ -208,6 +210,7 @@ export const footerNav = {
   soluciones: services.slice(0, 6),
   compania: [
     { label: "Nosotros", href: "/nosotros" },
+    { label: "Tienda", href: "/tienda" },
     { label: "Casos de Éxito", href: "/casos-de-exito" },
     { label: "Resultados", href: "/resultados" },
     { label: "Laboratorio IA", href: "/laboratorio-ia" },

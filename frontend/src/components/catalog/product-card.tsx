@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { ProductCardAdvisor } from "@/components/catalog/advisor-actions";
 import { AvailabilityBadge } from "@/components/catalog/availability-badge";
 import { PriceBlock } from "@/components/catalog/price-block";
 import { ProductImage } from "@/components/catalog/product-image";
@@ -52,6 +53,8 @@ export function ProductCard({ product, priority = false }: { product: PublicProd
           Ver detalles
           <ArrowRight className="size-3.5 transition group-hover:translate-x-1" aria-hidden />
         </span>
+
+        <ProductCardAdvisor product={product} />
       </div>
     </article>
   );

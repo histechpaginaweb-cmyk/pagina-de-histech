@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { CheckCircle2, Loader2, AlertCircle, Send } from "lucide-react";
 import { submitContact, type ContactState } from "@/app/actions/contact";
 import { serviceOptions } from "@/lib/contact-schema";
+import type { ProductContext } from "@/lib/contact-email";
 import { cn } from "@/lib/utils";
 
 const initialState: ContactState = { ok: false, message: "" };
@@ -52,7 +53,11 @@ function SubmitButton() {
   );
 }
 
-export function ContactForm() {
+/**
+ * Contact form. With `product` (store quote request) it also sends the product
+ * as hidden fields and prefills the message; without it, behavior is unchanged.
+ */
+export function ContactForm({ product }: { product?: ProductContext }) {
   const [state, formAction] = useActionState(submitContact, initialState);
 
   if (state.ok) {
@@ -67,6 +72,13 @@ export function ContactForm() {
 
   return (
     <form action={formAction} className="space-y-5" noValidate>
+      {product ? (
+        <>
+          <input type="hidden" name="productName" value={product.name} />
+          <input type="hidden" name="productReference" value={product.reference} />
+          <input type="hidden" name="productUrl" value={product.url} />
+        </>
+      ) : null}
       {state.message && !state.ok && (
         <div
           role="alert"
@@ -126,7 +138,7 @@ export function ContactForm() {
         <select
           id="service"
           name="service"
-          defaultValue=""
+          defaultValue={product ? "Otro" : ""}
           className={cn(inputBase, "appearance-none")}
           {...a11y("service", state.errors?.service)}
         >
@@ -150,6 +162,7 @@ export function ContactForm() {
           id="message"
           name="message"
           rows={4}
+          defaultValue={product ? `Hola, quisiera una cotización de ${product.name}.` : undefined}
           className={cn(inputBase, "h-auto py-3 resize-y")}
           placeholder="Cuéntanos sobre tu proyecto o necesidad…"
           {...a11y("message", state.errors?.message)}

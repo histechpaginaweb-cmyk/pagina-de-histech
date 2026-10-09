@@ -2,6 +2,7 @@
 
 import { Resend } from "resend";
 import { contactSchema } from "@/lib/contact-schema";
+import { buildContactEmail, parseProductContext } from "@/lib/contact-email";
 import { siteConfig } from "@/lib/site";
 
 export type ContactState = {
@@ -58,21 +59,15 @@ export async function submitContact(
     const to = process.env.CONTACT_TO_EMAIL ?? siteConfig.contact.email;
     const from = process.env.CONTACT_FROM_EMAIL ?? "Histech Web <onboarding@resend.dev>";
 
+    // Optional product context from the store's quote form (null on /contacto).
+    const { subject, text } = buildContactEmail(data, parseProductContext(formData));
+
     await resend.emails.send({
       from,
       to,
       replyTo: data.email,
-      subject: `Nuevo contacto — ${data.firstName} ${data.lastName} (${data.service})`,
-      text: [
-        `Nombre: ${data.firstName} ${data.lastName}`,
-        `Empresa: ${data.company}`,
-        `Correo: ${data.email}`,
-        `Celular: ${data.phone}`,
-        `Servicio: ${data.service}`,
-        "",
-        "Mensaje:",
-        data.message,
-      ].join("\n"),
+      subject,
+      text,
     });
 
     return {

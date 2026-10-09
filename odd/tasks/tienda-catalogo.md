@@ -35,7 +35,10 @@ customer accounts, stock sync.
 - Prices are shown. Prices are stored and displayed **excluding VAT** ("Precio sin IVA"), in COP.
 - Prices may be hidden later: support a global "show prices" setting plus a per-product
   "consult price" flag. Hidden price renders "Consultar precio" and omits `Offer` price data.
-- No purchase flow: every product leads to an advisor (WhatsApp / phone / quote form).
+- No purchase flow: every product leads to an advisor (WhatsApp / phone).
+- 2026-10-09 (owner): the product page has no quote form. "Solicitar cotización" opens WhatsApp
+  directly with a prefilled quote message; the form section was removed. Supersedes the quote
+  form in T6 and in the acceptance criteria.
 
 ## Constraints
 

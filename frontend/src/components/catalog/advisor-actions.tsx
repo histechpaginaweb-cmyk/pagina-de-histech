@@ -31,7 +31,7 @@ export function ProductAdvisorActions({ product }: { product: PublicProduct }) {
         <Phone aria-hidden />
         Llamar: {siteConfig.contact.phone}
       </Button>
-      <Button href="#cotizacion" size="lg" variant="secondary">
+      <Button href={links.quote} size="lg" variant="secondary" {...external}>
         <FileText aria-hidden />
         Solicitar cotización
       </Button>

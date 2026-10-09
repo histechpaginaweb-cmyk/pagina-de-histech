@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { Aurora } from "@/components/visuals/aurora";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
-import { ContactForm } from "@/components/forms/contact-form";
 import { ProductAdvisorActions } from "@/components/catalog/advisor-actions";
 import { AvailabilityBadge } from "@/components/catalog/availability-badge";
 import { MarkdownContent } from "@/components/catalog/markdown-content";
@@ -15,11 +14,9 @@ import { ProductCard } from "@/components/catalog/product-card";
 import { ProductGallery } from "@/components/catalog/product-gallery";
 import { SpecsTable } from "@/components/catalog/specs-table";
 import { getAllCatalogProducts, getCatalogProduct } from "@/lib/get-catalog";
-import { productReference } from "@/lib/catalog/contact";
 import { productJsonLd, productMetadataInput } from "@/lib/catalog/seo";
 import { buildMetadata, JsonLd, webPageJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
-import { absoluteUrl } from "@/lib/utils";
 
 // ISR: the product is rebuilt at most every 60s after the first request.
 export const revalidate = 60;
@@ -141,24 +138,6 @@ export default async function ProductPage({ params }: Props) {
           </Container>
         </Section>
       ) : null}
-
-      <Section id="cotizacion" className="scroll-mt-24 py-10 sm:py-12">
-        <Container>
-          <h2 className="font-display text-2xl font-bold">Solicita una cotización</h2>
-          <p className="mt-2 text-muted-foreground">
-            Déjanos tus datos y un asesor de HISTECH te enviará la cotización de {product.name}.
-          </p>
-          <div className="card-surface !transform-none mt-6 max-w-3xl p-7 sm:p-9">
-            <ContactForm
-              product={{
-                name: product.name,
-                reference: productReference(product) ?? "",
-                url: absoluteUrl(path),
-              }}
-            />
-          </div>
-        </Container>
-      </Section>
 
       <JsonLd data={productJsonLd(product, { siteUrl: siteConfig.url })} />
       <JsonLd

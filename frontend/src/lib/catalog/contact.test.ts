@@ -3,6 +3,7 @@ import {
   buildGenericAdvisorMessage,
   buildPhoneUrl,
   buildProductAdvisorMessage,
+  buildProductQuoteMessage,
   buildWhatsAppUrl,
   productAdvisorLinks,
   productReference,
@@ -110,6 +111,33 @@ describe("productAdvisorLinks", () => {
       { whatsapp: WA, phoneRaw: "+573180008152", productUrl: URL_ },
     );
     expect(decodeURIComponent(links.whatsapp.split("?text=")[1])).toContain("$ 850.000 sin IVA");
+  });
+});
+
+describe("buildProductQuoteMessage", () => {
+  it("asks for a quote naming the product, reference and canonical URL", () => {
+    const message = buildProductQuoteMessage({ name: "Teltonika RUT956", reference: "RUT956", url: URL_ });
+    expect(message).toContain("cotización");
+    expect(message).toContain("Teltonika RUT956");
+    expect(message).toContain("Referencia: RUT956");
+    expect(message).toContain(URL_);
+  });
+
+  it("omits the reference line when absent", () => {
+    expect(buildProductQuoteMessage({ name: "Router", reference: null, url: URL_ })).not.toContain("Referencia");
+  });
+});
+
+describe("productAdvisorLinks quote link", () => {
+  it("sends the quote request straight to WhatsApp with its own message", () => {
+    const links = productAdvisorLinks(product(), { whatsapp: WA, phoneRaw: "+573180008152", productUrl: URL_ });
+    expect(links.quote.startsWith(`${WA}?text=`)).toBe(true);
+    expect(links.quote).not.toBe(links.whatsapp);
+    const text = decodeURIComponent(links.quote.split("?text=")[1]);
+    expect(text).toContain("cotización");
+    expect(text).toContain("Teltonika RUT956");
+    expect(text).toContain("Referencia: RUT956");
+    expect(text).toContain(URL_);
   });
 });
 

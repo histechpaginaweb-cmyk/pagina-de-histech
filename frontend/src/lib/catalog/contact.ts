@@ -26,6 +26,22 @@ export function buildProductAdvisorMessage({
   return lines.join("\n");
 }
 
+/** Prefilled WhatsApp text asking for a quote of one product. */
+export function buildProductQuoteMessage({
+  name,
+  reference,
+  url,
+}: {
+  name: string;
+  reference: string | null;
+  url: string;
+}): string {
+  const lines = [`Hola, quisiera solicitar una cotización del producto ${name}.`];
+  if (reference) lines.push(`Referencia: ${reference}`);
+  lines.push(`Enlace: ${url}`);
+  return lines.join("\n");
+}
+
 export function buildGenericAdvisorMessage(storeUrl: string): string {
   return `Hola, estoy viendo la tienda de HISTECH y quisiera asesoría para elegir un equipo.\nEnlace: ${storeUrl}`;
 }
@@ -40,17 +56,23 @@ export function buildPhoneUrl(phoneRaw: string): string {
   return `tel:${phoneRaw}`;
 }
 
-/** WhatsApp + phone links for a product, built from `siteConfig.contact` values. */
+/** WhatsApp (advice and quote) + phone links for a product, built from `siteConfig.contact` values. */
 export function productAdvisorLinks(
   product: PublicProduct,
   { whatsapp, phoneRaw, productUrl }: { whatsapp: string; phoneRaw: string; productUrl: string },
-): { whatsapp: string; phone: string } {
+): { whatsapp: string; quote: string; phone: string } {
   const display = getPriceDisplay(product);
+  const reference = productReference(product);
   const message = buildProductAdvisorMessage({
     name: product.name,
-    reference: productReference(product),
+    reference,
     price: display.kind === "price" ? display.formatted : null,
     url: productUrl,
   });
-  return { whatsapp: buildWhatsAppUrl(whatsapp, message), phone: buildPhoneUrl(phoneRaw) };
+  const quoteMessage = buildProductQuoteMessage({ name: product.name, reference, url: productUrl });
+  return {
+    whatsapp: buildWhatsAppUrl(whatsapp, message),
+    quote: buildWhatsAppUrl(whatsapp, quoteMessage),
+    phone: buildPhoneUrl(phoneRaw),
+  };
 }

@@ -239,3 +239,93 @@ model TicketEvent {
   @@index([ticketId])
   @@map("ticket_events")
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Catálogo de productos (/tienda)
+//
+// Equipos físicos de redes publicados en la web. Los precios se guardan en COP,
+// SIN IVA, como enteros. Independiente del Portal de Soporte (sin relaciones).
+// Los enums usan los valores en minúscula que expone la API.
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum CatalogAvailability {
+  in_stock
+  on_request
+  out_of_stock
+}
+
+enum CatalogStatus {
+  draft
+  published
+}
+
+model CatalogCategory {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  name           String
+  description    String?  @db.Text
+  seoTitle       String?
+  seoDescription String?  @db.Text
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  products CatalogProduct[]
+
+  @@map("catalog_categories")
+}
+
+model CatalogBrand {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  logoUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products CatalogProduct[]
+
+  @@map("catalog_brands")
+}
+
+model CatalogProduct {
+  id               String              @id @default(cuid())
+  slug             String              @unique
+  name             String
+  categoryId       String
+  category         CatalogCategory     @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  brandId          String?
+  brand            CatalogBrand?       @relation(fields: [brandId], references: [id], onDelete: Restrict)
+  model            String?
+  sku              String?             @unique
+  shortDescription String?             @db.Text
+  description      String?             @db.Text // Markdown
+  specs            Json                @default("[]") // [{ label, value }] en orden
+  images           Json                @default("[]") // [{ url, alt }] en orden
+  datasheetUrl     String?
+  priceCop         Int? // COP, SIN IVA
+  consultPrice     Boolean             @default(false)
+  availability     CatalogAvailability @default(on_request)
+  priceUpdatedAt   DateTime?
+  status           CatalogStatus       @default(draft)
+  featured         Boolean             @default(false)
+  seoTitle         String?
+  seoDescription   String?             @db.Text
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@index([status])
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([featured])
+  @@map("catalog_products")
+}
+
+// Ajustes globales del catálogo: una sola fila con id fijo "global".
+model CatalogSettings {
+  id         String   @id @default("global")
+  showPrices Boolean  @default(true)
+  updatedAt  DateTime @updatedAt
+
+  @@map("catalog_settings")
+}

@@ -10,6 +10,7 @@ let homeLoaded = false; // los textos del inicio se cargan al abrir su pestaña
 let textsLoaded = false; // los textos de páginas se cargan al abrir su pestaña
 let blogLoaded = false; // las entradas del blog se cargan al abrir su pestaña
 let casesLoaded = false; // los casos de éxito se cargan al abrir su pestaña
+let catalogLoaded = false; // el catálogo de la tienda se carga al abrir su pestaña
 
 async function api(path, opts = {}) {
   const res = await fetch(path, { credentials: "include", ...opts });
@@ -36,6 +37,7 @@ function showLogin() {
   textsLoaded = false; // forzar recarga de textos en la próxima sesión
   blogLoaded = false;
   casesLoaded = false;
+  catalogLoaded = false;
 }
 function showPanel() {
   $("loginView").classList.add("hide");
@@ -245,6 +247,7 @@ document.querySelectorAll(".tab").forEach((btn) => {
     $("tab-texts").classList.toggle("hide", tab !== "texts");
     $("tab-cases").classList.toggle("hide", tab !== "cases");
     $("tab-blog").classList.toggle("hide", tab !== "blog");
+    $("tab-catalog").classList.toggle("hide", tab !== "catalog");
     if (tab === "home" && !homeLoaded) {
       homeLoaded = true;
       loadHomeTexts();
@@ -260,6 +263,10 @@ document.querySelectorAll(".tab").forEach((btn) => {
     if (tab === "blog" && !blogLoaded) {
       blogLoaded = true;
       loadBlog();
+    }
+    if (tab === "catalog" && !catalogLoaded) {
+      catalogLoaded = true;
+      loadCatalog();
     }
   });
 });

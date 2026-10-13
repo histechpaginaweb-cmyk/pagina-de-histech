@@ -5,9 +5,11 @@ const clientLogos = [
   { name: "ONECT", logo: "/clientes/ONECT.png" },
   { name: "SIGMA", logo: "/clientes/SIGMA.png" },
   { name: "SOLENIS", logo: "/clientes/SOLENIS.png" },
-  { name: "UNIPLES", logo: "/clientes/UNIPLES.png" },
   { name: "VELVET", logo: "/clientes/VELVET.png" },
   { name: "VSI", logo: "/clientes/VSI.png" },
+  { name: "EMERGENTE", logo: "/clientes/EMERGENTE.png" },
+  { name: "SUMINFINITECH", logo: "/clientes/SUMINFINITECH.png" },
+  { name: "FEM ENERGÍA", logo: "/clientes/FEM-ENERGIA.png" },
 ];
 
 export function TrustBar() {

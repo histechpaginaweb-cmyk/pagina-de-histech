@@ -14,6 +14,7 @@ import { ProductCard } from "@/components/catalog/product-card";
 import { ProductGallery } from "@/components/catalog/product-gallery";
 import { SpecsTable } from "@/components/catalog/specs-table";
 import { getAllCatalogProducts, getCatalogProduct } from "@/lib/get-catalog";
+import { productReferences, searchAliases } from "@/lib/catalog/product-seo";
 import { productJsonLd, productMetadataInput } from "@/lib/catalog/seo";
 import { buildMetadata, JsonLd, webPageJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
@@ -61,7 +62,9 @@ export default async function ProductPage({ params }: Props) {
 
   const { product } = lookup;
   const path = `/tienda/producto/${product.slug}`;
-  const reference = [product.model, product.sku].filter(Boolean).join(" · ");
+  const references = productReferences(product);
+  const reference = references.join(" · ");
+  const aliases = searchAliases(references[0]);
   const crumbs = [
     { name: "Inicio", path: "/" },
     { name: "Tienda", path: "/tienda" },
@@ -88,7 +91,12 @@ export default async function ProductPage({ params }: Props) {
               <h1 className="text-display-lg text-balance">{product.name}</h1>
               {reference ? (
                 <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground/80">Referencia:</span> {reference}
+                  <span className="font-medium text-foreground/80">Referencia / N.º de parte:</span> {reference}
+                </p>
+              ) : null}
+              {aliases.length > 0 ? (
+                <p className="-mt-3 text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground/80">También se busca como:</span> {aliases.join(", ")}
                 </p>
               ) : null}
               {product.shortDescription ? (

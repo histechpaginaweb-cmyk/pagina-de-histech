@@ -31,6 +31,8 @@ export function buildMetadata({
   keywords,
   image,
   noindex = false,
+  ogType,
+  other,
 }: {
   title?: string;
   description?: string;
@@ -40,6 +42,10 @@ export function buildMetadata({
   image?: string;
   /** Keeps the canonical but asks crawlers not to index the page (links are still followed). */
   noindex?: boolean;
+  /** "product" drops `openGraph.type` (Next has no product type): pass `og:type` through `other`. */
+  ogType?: "product";
+  /** Extra `<meta name=...>` tags, e.g. Open Graph product price tags. */
+  other?: Record<string, string>;
 }): Metadata {
   const url = absoluteUrl(path);
   const metaTitle = title
@@ -57,8 +63,9 @@ export function buildMetadata({
     keywords,
     alternates: { canonical: url },
     ...(noindex && { robots: { index: false, follow: true } }),
+    ...(other && { other }),
     openGraph: {
-      type: "website",
+      ...(ogType === "product" ? {} : { type: "website" as const }),
       locale: "es_CO",
       url,
       siteName: siteConfig.legalName,

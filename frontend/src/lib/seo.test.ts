@@ -23,4 +23,16 @@ describe("buildMetadata extensions", () => {
     expect(meta.robots).toEqual({ index: false, follow: true });
     expect(meta.alternates?.canonical).toMatch(/\/tienda$/);
   });
+
+  it("defaults to og:type website and accepts extra meta tags", () => {
+    expect(buildMetadata({ title: "X", path: "/x" }).openGraph).toMatchObject({ type: "website" });
+    const meta = buildMetadata({
+      title: "P",
+      path: "/tienda/producto/x",
+      ogType: "product",
+      other: { "og:type": "product", "product:price:amount": "10" },
+    });
+    expect((meta.openGraph as { type?: string }).type).toBeUndefined();
+    expect(meta.other).toEqual({ "og:type": "product", "product:price:amount": "10" });
+  });
 });

@@ -58,6 +58,7 @@ describe("productJsonLd", () => {
     expect(ld["@type"]).toBe("Product");
     expect(ld.name).toBe("Teltonika RUT956");
     expect(ld.sku).toBe("RUT956-SKU");
+    expect(ld.productID).toBe("RUT956");
     expect(ld.mpn).toBe("RUT956");
     expect(ld.brand).toEqual({ "@type": "Brand", name: "Teltonika" });
     expect(ld.category).toBe("Routers");
@@ -138,7 +139,7 @@ describe("itemListJsonLd", () => {
 describe("productMetadataInput", () => {
   it("prefers the authored SEO fields and uses the first image for Open Graph", () => {
     const input = productMetadataInput(product({ seoTitle: "Custom title", seoDescription: "Custom description" }));
-    expect(input).toEqual({
+    expect(input).toMatchObject({
       title: "Custom title",
       description: "Custom description",
       path: "/tienda/producto/teltonika-rut956",
@@ -146,20 +147,29 @@ describe("productMetadataInput", () => {
     });
   });
 
-  it("falls back to name and short description", () => {
+  it("builds a part-number-first title and a description from the short description", () => {
     const input = productMetadataInput(product());
-    expect(input.title).toBe("Teltonika RUT956");
-    expect(input.description).toBe("Router celular industrial 4G.");
+    expect(input.title).toBe("RUT956 Teltonika Router – Precio");
+    expect(input.description).toBe(
+      "RUT956 de Teltonika: Router celular industrial 4G. Consulta el precio con un asesor. Asesoría y cotización inmediata con HISTECH.",
+    );
   });
 
-  it("builds a price-free fallback description when nothing is authored", () => {
-    const input = productMetadataInput(withPrice({ shortDescription: null, images: [] }));
-    expect(input.description).toContain("Teltonika RUT956");
-    expect(input.description).not.toMatch(/\$|IVA|COP/);
-    expect(input.image).toBeUndefined();
+  it("marks product pages as og:type product, with price tags only when the price is visible", () => {
+    expect(productMetadataInput(withPrice()).other).toEqual({
+      "og:type": "product",
+      "product:price:amount": "850000",
+      "product:price:currency": "COP",
+    });
+    expect(productMetadataInput(product()).other).toEqual({ "og:type": "product" });
   });
 
-  it("truncates long fallback descriptions", () => {
+  it("includes the price + IVA in the description only when the price is public", () => {
+    expect(productMetadataInput(withPrice()).description).toContain("Precio $ 850.000 + IVA en Colombia.");
+    expect(productMetadataInput(product()).description).not.toMatch(/\$|IVA|COP/);
+  });
+
+  it("keeps the description within 160 characters", () => {
     const input = productMetadataInput(product({ shortDescription: "palabra ".repeat(80) }));
     expect(input.description.length).toBeLessThanOrEqual(160);
   });

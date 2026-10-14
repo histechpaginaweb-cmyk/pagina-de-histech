@@ -2,6 +2,7 @@ import { ORG_ID } from "@/lib/seo";
 import { hasListingVariant, type ListingParams } from "./listing-query";
 import type { Availability, PriceCurrency, PublicCategory, PublicProduct } from "./types";
 import { hasVisiblePrice } from "./price";
+import { buildProductDescription, buildProductTitle, productOpenGraphMeta } from "./product-seo";
 
 /**
  * schema.org availability. "Disponible bajo pedido" (HISTECH orders it when the
@@ -46,14 +47,20 @@ export type MetadataInput = {
   path: string;
   image?: string;
   noindex?: boolean;
+  /** Open Graph type override; when set, `og:type` is expected in `other`. */
+  ogType?: "product";
+  /** Extra `<meta>` tags (e.g. `product:price:amount`). */
+  other?: Record<string, string>;
 };
 
 export function productMetadataInput(product: PublicProduct): MetadataInput {
   return {
-    title: product.seoTitle?.trim() || product.name,
-    description: product.seoDescription?.trim() || fallbackDescription(product),
+    title: buildProductTitle(product),
+    description: buildProductDescription(product),
     path: productPath(product.slug),
     image: product.images[0]?.url,
+    ogType: "product",
+    other: productOpenGraphMeta(product),
   };
 }
 
@@ -112,6 +119,7 @@ type ProductLd = {
   name: string;
   description: string;
   url: string;
+  productID?: string;
   sku?: string;
   mpn?: string;
   brand?: { "@type": "Brand"; name: string };
@@ -136,6 +144,7 @@ export function productJsonLd(product: PublicProduct, { siteUrl }: { siteUrl: st
     name: product.name,
     description: product.shortDescription?.trim() || fallbackDescription(product),
     url,
+    ...((mpn || sku) && { productID: mpn || sku }),
     ...(sku && { sku }),
     ...(mpn && { mpn }),
     ...(product.brand && { brand: { "@type": "Brand" as const, name: product.brand.name } }),

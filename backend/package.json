@@ -20,6 +20,7 @@
     "portal:seed": "node portal/seed.js",
     "catalog:seed": "node catalog/seed.js",
     "catalog:import:syscom": "node catalog/import/syscom-import.js",
+    "catalog:repair:text": "node catalog/import/syscom-repair-text.js",
     "portal:studio": "prisma studio --schema portal/prisma/schema.prisma"
   },
   "dependencies": {

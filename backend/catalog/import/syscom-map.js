@@ -1,6 +1,7 @@
 // Pure mapping from the scraped Syscom Ruijie/Reyee catalog to catalog products.
 // No I/O: the runner (syscom-import.js) owns downloads, uploads and writes.
 const { slugify } = require("../slug");
+const { fixMojibake } = require("./mojibake");
 
 const MAX_IMAGES = 6;
 
@@ -24,6 +25,18 @@ const truncate = (text, max) => (text.length <= max ? text : `${text.slice(0, ma
 /** Owner decision: only items with a published Syscom price (in stock, COP). */
 const selectImportable = (products) => products.filter((p) => !p.onOrder && !p.requestDistribution);
 
+const fixSpec = (s) => ({ ...s, label: fixMojibake(s.label), value: fixMojibake(s.value) });
+
+/** Repairs mojibake in every text the mapping emits. */
+const fixProductTexts = (product) => ({
+  ...product,
+  name: fixMojibake(product.name),
+  shortDescription: fixMojibake(product.shortDescription),
+  description: fixMojibake(product.description),
+  specs: product.specs.map(fixSpec),
+});
+
+/** Maps a scraped item to a catalog product; every emitted text is mojibake-repaired. */
 function toCatalogProduct(p) {
   const categoryName = [...new Set(p.breadcrumb)].pop();
   const category = CATEGORY_MAP[categoryName];
@@ -38,7 +51,7 @@ function toCatalogProduct(p) {
     ...p.features.map((f) => `- ${f}`),
     ...(p.specsText ? ["", "## Especificaciones", "", p.specsText] : []),
   ].join("\n");
-  return {
+  return fixProductTexts({
     slug: slugify(name),
     name: truncate(name, 160),
     categorySlug: category.slug,
@@ -58,7 +71,7 @@ function toCatalogProduct(p) {
     featured: false,
     seoTitle: null,
     seoDescription: null,
-  };
+  });
 }
 
-module.exports = { CATEGORY_MAP, BRANDS, MAX_IMAGES, selectImportable, toCatalogProduct };
+module.exports = { CATEGORY_MAP, BRANDS, MAX_IMAGES, selectImportable, toCatalogProduct, fixMojibake };

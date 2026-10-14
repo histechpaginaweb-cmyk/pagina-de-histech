@@ -57,4 +57,4 @@ TDD: enabled (session config "Strict TDD Mode: enabled"). Runners: node --test (
 - 2026-10-14: T3 done. The localhost preview (in-memory backend loaded with the Syscom import) shows `US$ 11,24 USD` on the cards and `$ 85.716 COP` on the product page.
 - 2026-10-14: Owner decision: drop the 52 Syscom items that have no published price (44 "bajo pedido", 8 "Solicitar Distribución", including BRIEFCASERUIJIE). That leaves 76 products (48 Reyee, 28 Ruijie), all priced in COP. USD support stays available for future products.
 - Next: the real import. Upload images to R2, apply both migrations to Neon, and seed the 76 products as published. Each of these needs explicit owner approval.
-- 2026-10-14: T4 import script done in COMMIT_HASH (backend 121/121 pass; RED observed first: missing-module failures for syscom-map and syscom-import tests). Dry run by default, --apply writes. Not run against Neon or R2.
+- 2026-10-14: T4 import script done in 380afd6 (backend 121/121 pass; RED observed first: missing-module failures for syscom-map and syscom-import tests). Dry run by default, --apply writes. Not run against Neon or R2.

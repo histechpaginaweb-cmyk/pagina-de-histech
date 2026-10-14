@@ -19,6 +19,7 @@
     "portal:push": "prisma db push --schema portal/prisma/schema.prisma",
     "portal:seed": "node portal/seed.js",
     "catalog:seed": "node catalog/seed.js",
+    "catalog:import:syscom": "node catalog/import/syscom-import.js",
     "portal:studio": "prisma studio --schema portal/prisma/schema.prisma"
   },
   "dependencies": {

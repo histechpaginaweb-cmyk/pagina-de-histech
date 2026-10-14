@@ -5,7 +5,8 @@
 // The repository contract (all methods are async):
 //   Products
 //     listProducts({ status?, category?, brand?, q?, page, pageSize }) -> { items, total }
-//       `category` / `brand` are slugs; `q` matches name, model, sku or brand name.
+//       `category` / `brand` are slugs; `q` matches name, model, sku or brand name,
+//       ignoring case, hyphens and spaces (see ./search.js).
 //       Order: featured first, newest first.
 //     findProductById(id), findProductBySlug(slug) -> product | null
 //     listRelatedProducts(product, limit) -> published products of the same category
@@ -24,6 +25,7 @@
 // Products are returned with embedded `brand` and `category` records (or null).
 const crypto = require("crypto");
 const { notFound, conflict, inUse } = require("./errors");
+const { matchesSearch } = require("./search");
 
 const clone = (value) => structuredClone(value);
 
@@ -63,11 +65,8 @@ function createMemoryRepository({ now = () => new Date() } = {}) {
   }
 
   function matchesQuery(product, q) {
-    const needle = q.toLowerCase();
     const brandName = product.brandId ? brands.get(product.brandId)?.name : "";
-    return [product.name, product.model, product.sku, brandName].some(
-      (field) => field && String(field).toLowerCase().includes(needle),
-    );
+    return matchesSearch([product.name, product.model, product.sku, brandName], q);
   }
 
   function counts(field, id) {

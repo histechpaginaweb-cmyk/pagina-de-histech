@@ -220,6 +220,15 @@ test("public listing filters by category, brand and q across name, model, sku an
   assert.equal((await service.listPublicProducts({ q: "inexistente" })).total, 0);
 });
 
+test("public listing q ignores hyphens, spaces and case so part numbers are found as typed", async () => {
+  const { service } = makeService();
+  await seedCatalog(service);
+  assert.equal((await service.listPublicProducts({ q: "rut956" })).total, 1);
+  assert.equal((await service.listPublicProducts({ q: "RUT 956" })).total, 1);
+  assert.equal((await service.listPublicProducts({ q: "tplink" })).total, 1);
+  assert.equal((await service.listPublicProducts({ q: "sku956" })).total, 1);
+});
+
 test("public listing paginates and bounds the page size", async () => {
   const { service } = makeService();
   await seedCatalog(service);

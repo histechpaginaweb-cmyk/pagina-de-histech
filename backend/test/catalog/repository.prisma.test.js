@@ -138,3 +138,40 @@ test("Decimal prices from Prisma are exposed as JS numbers", async () => {
   assert.equal(items[0].price, 71.19);
   assert.equal(items[1].price, null);
 });
+
+test("listProducts with q resolves hyphen/space/case-insensitive matches in two steps", async () => {
+  const prisma = stubPrisma();
+  prisma.catalogProduct.findMany = async (args) => {
+    prisma.calls.push(["findMany", args]);
+    if (args.select) {
+      return [
+        { id: "a", name: "Reyee RG-ES116G-L", model: "RG-ES116G-L", sku: "RG-ES116G-L", brand: { name: "Reyee" } },
+        { id: "b", name: "Reyee RG-ES106F-P", model: "RG-ES106F-P", sku: "RG-ES106F-P", brand: { name: "Reyee" } },
+        { id: "c", name: "Sin marca", model: null, sku: null, brand: null },
+      ];
+    }
+    return [{ id: "a", specs: null, images: null }];
+  };
+  prisma.catalogProduct.count = async (args) => {
+    prisma.calls.push(["count", args]);
+    return 1;
+  };
+  const repo = createPrismaRepository(prisma);
+  const out = await repo.listProducts({ status: "published", brand: "reyee", q: "rges116gl", page: 1, pageSize: 10 });
+  assert.equal(out.total, 1);
+  const [candidates, page] = prisma.calls.filter(([name]) => name === "findMany").map(([, args]) => args);
+  assert.deepEqual(candidates.where, { status: "published", brand: { slug: "reyee" } });
+  assert.deepEqual(page.where, { status: "published", brand: { slug: "reyee" }, id: { in: ["a"] } });
+});
+
+test("listProducts with q that matches nothing skips the page query", async () => {
+  const prisma = stubPrisma();
+  prisma.catalogProduct.findMany = async (args) => {
+    prisma.calls.push(["findMany", args]);
+    return [];
+  };
+  const repo = createPrismaRepository(prisma);
+  const out = await repo.listProducts({ q: "zzz", page: 1, pageSize: 10 });
+  assert.deepEqual(out, { items: [], total: 0 });
+  assert.equal(prisma.calls.filter(([name]) => name === "findMany").length, 1);
+});

@@ -1,6 +1,7 @@
 // Prisma implementation of the catalog repository (contract documented in
 // repository.memory.js). The Prisma client is injected so tests can stub it.
 const { CatalogError, notFound, conflict, inUse } = require("./errors");
+const { matchesSearch } = require("./search");
 
 const SETTINGS_ID = "global";
 const PRODUCT_ORDER = [{ featured: "desc" }, { createdAt: "desc" }, { id: "asc" }];
@@ -85,7 +86,26 @@ function createPrismaRepository(prisma) {
 
   return {
     async listProducts({ status, category, brand, q, page, pageSize }) {
-      const where = buildProductWhere({ status, category, brand, q });
+      // Free-text search ignores case, hyphens and spaces ("rges116gl" finds
+      // "RG-ES116G-L"). Postgres cannot do that with `contains`, and adding a
+      // normalized column would need a migration + backfill for a catalog of
+      // ~100 rows, so: step 1 reads only the searchable columns of the products
+      // that pass the other filters and matches them in JS (same rule as the
+      // in-memory repository, see search.js); step 2 pages by the matching ids.
+      // Revisit (stored `searchKey` column or raw SQL) if the catalog grows past a few thousand rows.
+      const filters = buildProductWhere({ status, category, brand });
+      let where = filters;
+      if (q) {
+        const candidates = await prisma.catalogProduct.findMany({
+          where: filters,
+          select: { id: true, name: true, model: true, sku: true, brand: { select: { name: true } } },
+        });
+        const ids = candidates
+          .filter((p) => matchesSearch([p.name, p.model, p.sku, p.brand?.name], q))
+          .map((p) => p.id);
+        if (ids.length === 0) return { items: [], total: 0 };
+        where = { ...filters, id: { in: ids } };
+      }
       const [rows, total] = await Promise.all([
         prisma.catalogProduct.findMany({
           where,

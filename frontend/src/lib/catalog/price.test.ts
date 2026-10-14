@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { availabilityLabel, formatCop, getPriceDisplay, PRICE_REFERENCE_NOTE } from "./price";
+import { availabilityLabel, formatCop, formatUsd, getPriceDisplay, PRICE_REFERENCE_NOTE } from "./price";
 import type { PublicProduct } from "./types";
 
 function product(overrides: Partial<PublicProduct> = {}): PublicProduct {
@@ -39,7 +39,27 @@ describe("formatCop", () => {
   });
 });
 
+describe("formatUsd", () => {
+  it("uses es-CO grouping with a comma and always 2 decimals", () => {
+    expect(formatUsd(71.19)).toBe("US$ 71,19");
+    expect(formatUsd(70)).toBe("US$ 70,00");
+    expect(formatUsd(1234.5)).toBe("US$ 1.234,50");
+  });
+});
+
 describe("getPriceDisplay", () => {
+  it("formats a USD price with cents and carries the currency", () => {
+    const display = getPriceDisplay(
+      product({ consultPrice: false, price: 71.19, priceCurrency: "USD", priceUpdatedAt: null }),
+    );
+    expect(display).toMatchObject({ kind: "price", amount: 71.19, currency: "USD", formatted: "US$ 71,19" });
+  });
+
+  it("falls back to consult for an unknown currency", () => {
+    const odd = { ...product(), consultPrice: false, price: 10, priceCurrency: "EUR", priceUpdatedAt: null } as unknown as PublicProduct;
+    expect(getPriceDisplay(odd).kind).toBe("consult");
+  });
+
   it("returns the consult label when the price is hidden", () => {
     expect(getPriceDisplay(product({ consultPrice: true }))).toEqual({
       kind: "consult",
@@ -49,11 +69,12 @@ describe("getPriceDisplay", () => {
 
   it("returns a VAT-excluded price with a reference note when priceUpdatedAt exists", () => {
     const display = getPriceDisplay(
-      product({ consultPrice: false, priceCop: 850000, priceUpdatedAt: "2026-02-01T00:00:00.000Z" }),
+      product({ consultPrice: false, price: 850000, priceCurrency: "COP", priceUpdatedAt: "2026-02-01T00:00:00.000Z" }),
     );
     expect(display).toEqual({
       kind: "price",
       amount: 850000,
+      currency: "COP",
       formatted: "$ 850.000",
       taxLabel: "Precio sin IVA",
       note: PRICE_REFERENCE_NOTE,
@@ -63,14 +84,14 @@ describe("getPriceDisplay", () => {
 
   it("omits the note when priceUpdatedAt is null", () => {
     const display = getPriceDisplay(
-      product({ consultPrice: false, priceCop: 850000, priceUpdatedAt: null }),
+      product({ consultPrice: false, price: 850000, priceCurrency: "COP", priceUpdatedAt: null }),
     );
     expect(display.kind).toBe("price");
     if (display.kind === "price") expect(display.note).toBeNull();
   });
 
   it("falls back to consult when the payload claims a price but the amount is unusable", () => {
-    const broken = { ...product(), consultPrice: false, priceCop: 0, priceUpdatedAt: null } as PublicProduct;
+    const broken = { ...product(), consultPrice: false, price: 0, priceCurrency: "COP", priceUpdatedAt: null } as PublicProduct;
     expect(getPriceDisplay(broken).kind).toBe("consult");
     const missing = { ...product(), consultPrice: false } as PublicProduct;
     expect(getPriceDisplay(missing).kind).toBe("consult");

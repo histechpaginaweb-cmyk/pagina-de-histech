@@ -30,14 +30,16 @@ type ProductBase = {
   updatedAt: string;
 };
 
+export type PriceCurrency = "COP" | "USD";
+
 /**
- * The backend omits `priceCop` / `priceUpdatedAt` entirely when the price is
- * hidden, so the two variants are mutually exclusive on `consultPrice`.
+ * The backend omits `price` / `priceCurrency` / `priceUpdatedAt` entirely when
+ * the price is hidden, so the two variants are mutually exclusive on `consultPrice`.
  */
 export type PublicProduct = ProductBase &
   (
-    | { consultPrice: true; priceCop?: undefined; priceUpdatedAt?: undefined }
-    | { consultPrice: false; priceCop: number; priceUpdatedAt: string | null }
+    | { consultPrice: true; price?: undefined; priceCurrency?: undefined; priceUpdatedAt?: undefined }
+    | { consultPrice: false; price: number; priceCurrency: PriceCurrency; priceUpdatedAt: string | null }
   );
 
 export type PublicProductDetail = PublicProduct & { related: PublicProduct[] };

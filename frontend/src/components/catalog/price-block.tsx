@@ -35,6 +35,7 @@ export function PriceBlock({
         )}
       >
         {display.formatted}
+        <span className="ml-2 align-middle text-sm font-semibold text-foreground/80">{display.currency}</span>
         <span className="ml-2 align-middle text-sm font-medium text-muted-foreground">{display.taxLabel}</span>
       </p>
       {detail && display.note ? (

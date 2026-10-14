@@ -41,7 +41,7 @@ function product(overrides: Record<string, unknown> = {}): PublicProduct {
 }
 
 const withPrice = (overrides: Record<string, unknown> = {}) =>
-  product({ consultPrice: false, priceCop: 850000, priceUpdatedAt: "2026-02-01T00:00:00.000Z", ...overrides });
+  product({ consultPrice: false, price: 850000, priceCurrency: "COP", priceUpdatedAt: "2026-02-01T00:00:00.000Z", ...overrides });
 
 describe("availabilityToSchema", () => {
   it("maps the three availabilities to schema.org values", () => {
@@ -91,6 +91,14 @@ describe("productJsonLd", () => {
         valueAddedTaxIncluded: false,
       },
     });
+  });
+
+  it("uses the product currency and decimals in the Offer", () => {
+    const ld = productJsonLd(withPrice({ price: 71.19, priceCurrency: "USD" }), { siteUrl: SITE });
+    expect(ld.offers?.priceCurrency).toBe("USD");
+    expect(ld.offers?.price).toBe(71.19);
+    expect(ld.offers?.priceSpecification.priceCurrency).toBe("USD");
+    expect(ld.offers?.priceSpecification.price).toBe(71.19);
   });
 
   it("maps on_request and out_of_stock availability inside the offer", () => {

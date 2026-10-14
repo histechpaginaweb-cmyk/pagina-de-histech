@@ -1,4 +1,4 @@
-import type { Availability, PublicProduct } from "./types";
+import type { Availability, PriceCurrency, PublicProduct } from "./types";
 
 export const PRICE_TAX_LABEL = "Precio sin IVA";
 export const PRICE_CONSULT_LABEL = "Consultar precio";
@@ -9,6 +9,7 @@ export type PriceDisplay =
   | {
       kind: "price";
       amount: number;
+      currency: PriceCurrency;
       formatted: string;
       taxLabel: typeof PRICE_TAX_LABEL;
       note: string | null;
@@ -21,16 +22,25 @@ export function formatCop(amount: number): string {
   return `${whole < 0 ? "-" : ""}$ ${digits}`;
 }
 
+/** USD in es-CO style with exactly 2 decimals, e.g. `US$ 1.234,50`. Locale-independent. */
+export function formatUsd(amount: number): string {
+  const [whole, cents] = Math.abs(amount).toFixed(2).split(".");
+  const digits = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return `${amount < 0 ? "-" : ""}US$ ${digits},${cents}`;
+}
+
 /** True only for the payload shape the backend emits when the price is public. */
 export function hasVisiblePrice(product: PublicProduct): product is PublicProduct & {
   consultPrice: false;
-  priceCop: number;
+  price: number;
+  priceCurrency: PriceCurrency;
 } {
   return (
     product.consultPrice === false &&
-    typeof product.priceCop === "number" &&
-    Number.isInteger(product.priceCop) &&
-    product.priceCop > 0
+    typeof product.price === "number" &&
+    Number.isFinite(product.price) &&
+    product.price > 0 &&
+    (product.priceCurrency === "COP" || product.priceCurrency === "USD")
   );
 }
 
@@ -39,8 +49,9 @@ export function getPriceDisplay(product: PublicProduct): PriceDisplay {
   if (!hasVisiblePrice(product)) return { kind: "consult", label: PRICE_CONSULT_LABEL };
   return {
     kind: "price",
-    amount: product.priceCop,
-    formatted: formatCop(product.priceCop),
+    amount: product.price,
+    currency: product.priceCurrency,
+    formatted: product.priceCurrency === "USD" ? formatUsd(product.price) : formatCop(product.price),
     taxLabel: PRICE_TAX_LABEL,
     note: product.priceUpdatedAt ? PRICE_REFERENCE_NOTE : null,
   };

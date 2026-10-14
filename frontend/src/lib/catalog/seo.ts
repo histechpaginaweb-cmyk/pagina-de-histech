@@ -1,6 +1,6 @@
 import { ORG_ID } from "@/lib/seo";
 import { hasListingVariant, type ListingParams } from "./listing-query";
-import type { Availability, PublicCategory, PublicProduct } from "./types";
+import type { Availability, PriceCurrency, PublicCategory, PublicProduct } from "./types";
 import { hasVisiblePrice } from "./price";
 
 /**
@@ -93,14 +93,14 @@ export function categoryMetadataInput(category: PublicCategory, params: ListingP
 type ProductOffer = {
   "@type": "Offer";
   url: string;
-  priceCurrency: "COP";
+  priceCurrency: PriceCurrency;
   price: number;
   availability: string;
   seller: { "@id": string };
   priceSpecification: {
     "@type": "PriceSpecification";
     price: number;
-    priceCurrency: "COP";
+    priceCurrency: PriceCurrency;
     valueAddedTaxIncluded: false;
   };
 };
@@ -147,14 +147,14 @@ export function productJsonLd(product: PublicProduct, { siteUrl }: { siteUrl: st
     ld.offers = {
       "@type": "Offer",
       url,
-      priceCurrency: "COP",
-      price: product.priceCop,
+      priceCurrency: product.priceCurrency,
+      price: product.price,
       availability: availabilityToSchema(product.availability),
       seller: { "@id": ORG_ID },
       priceSpecification: {
         "@type": "PriceSpecification",
-        price: product.priceCop,
-        priceCurrency: "COP",
+        price: product.price,
+        priceCurrency: product.priceCurrency,
         valueAddedTaxIncluded: false,
       },
     };

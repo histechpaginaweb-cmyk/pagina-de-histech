@@ -15,7 +15,7 @@ export function buildProductAdvisorMessage({
 }: {
   name: string;
   reference: string | null;
-  /** Already formatted, e.g. `$ 850.000`. Null when the price is hidden. */
+  /** Already formatted with its currency, e.g. `$ 850.000 COP`. Null when the price is hidden. */
   price: string | null;
   url: string;
 }): string {
@@ -66,7 +66,7 @@ export function productAdvisorLinks(
   const message = buildProductAdvisorMessage({
     name: product.name,
     reference,
-    price: display.kind === "price" ? display.formatted : null,
+    price: display.kind === "price" ? `${display.formatted} ${display.currency}` : null,
     url: productUrl,
   });
   const quoteMessage = buildProductQuoteMessage({ name: product.name, reference, url: productUrl });

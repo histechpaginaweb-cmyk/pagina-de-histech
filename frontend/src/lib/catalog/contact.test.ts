@@ -107,10 +107,20 @@ describe("productAdvisorLinks", () => {
 
   it("adds the visible price (VAT excluded) only when the price is public", () => {
     const links = productAdvisorLinks(
-      product({ consultPrice: false, priceCop: 850000, priceUpdatedAt: null }),
+      product({ consultPrice: false, price: 850000, priceCurrency: "COP", priceUpdatedAt: null }),
       { whatsapp: WA, phoneRaw: "+573180008152", productUrl: URL_ },
     );
-    expect(decodeURIComponent(links.whatsapp.split("?text=")[1])).toContain("$ 850.000 sin IVA");
+    expect(decodeURIComponent(links.whatsapp.split("?text=")[1])).toContain("$ 850.000 COP sin IVA");
+  });
+});
+
+describe("productAdvisorLinks currency", () => {
+  it("names the USD currency in the advisor message", () => {
+    const links = productAdvisorLinks(
+      product({ consultPrice: false, price: 71.19, priceCurrency: "USD", priceUpdatedAt: null }),
+      { whatsapp: WA, phoneRaw: "+573180008152", productUrl: URL_ },
+    );
+    expect(decodeURIComponent(links.whatsapp.split("?text=")[1])).toContain("US$ 71,19 USD sin IVA");
   });
 });
 

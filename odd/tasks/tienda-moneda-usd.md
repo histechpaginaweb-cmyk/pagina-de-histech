@@ -46,10 +46,13 @@ TDD: enabled (session config "Strict TDD Mode: enabled"). Runners: node --test (
 
 - [x] T1: Model and backend support price + priceCurrency (schema, migration, validation, pricing, service, repositories, seed, admin UI) with tests. Route: delegated (2+ non-trivial files).
 - [x] T2: Frontend shows the currency on the card, the product page and JSON-LD, with tests. Route: delegated (2+ non-trivial files).
-- [ ] T3: Update the Syscom preview mapping and verify on localhost. Route: inline (scratchpad script).
+- [x] T3: Update the Syscom preview mapping and verify on localhost. Route: inline (scratchpad script).
 
 ## Progress
 
 - 2026-10-14: document created. Delivery strategy: ask-on-risk. Forecast is about 300 to 450 changed lines.
 - 2026-10-14: T1 done in 07b7574 (backend 106/106 pass; RED observed first: 6 admin-utils failures plus pricing, validation, service, router, seed, prisma-repo tests). Migration `20261014000000_catalog_price_currency` added, not applied to any DB.
 - 2026-10-14: T2 done in 76fa4b8 (frontend 83/83 pass, typecheck clean; RED observed first: 10 failures in price, contact and seo tests). WhatsApp advisor message now reads "<amount> <COP|USD> sin IVA".
+- 2026-10-14: T3 done. The localhost preview (in-memory backend loaded with the Syscom import) shows `US$ 11,24 USD` on the cards and `$ 85.716 COP` on the product page.
+- 2026-10-14: Owner decision: drop the 52 Syscom items that have no published price (44 "bajo pedido", 8 "Solicitar Distribución", including BRIEFCASERUIJIE). That leaves 76 products (48 Reyee, 28 Ruijie), all priced in COP. USD support stays available for future products.
+- Next: the real import. Upload images to R2, apply both migrations to Neon, and seed the 76 products as published. Each of these needs explicit owner approval.

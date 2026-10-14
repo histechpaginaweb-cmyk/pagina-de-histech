@@ -24,7 +24,7 @@ Integramos tecnología de punta en cada capa de la empresa —desde la infraestr
 
 ## Tienda
 
-- [Tienda de equipos de red](https://histech.com.co/tienda): Catálogo de routers industriales, gateways y equipos de networking con asesoría de HISTECH. Cada producto muestra especificaciones, disponibilidad y precio sin IVA (o "Consultar precio"); la compra se gestiona con un asesor por WhatsApp, teléfono o formulario de cotización.
+- [Tienda de equipos de red](https://histech.com.co/tienda): Catálogo de equipos de red Ruijie y Reyee: switches y switches PoE, routers, firewalls, transceptores de fibra (SFP/SFP+), inyectores PoE y licencias. Los precios se publican en pesos colombianos sin IVA (19%) y algunos productos muestran "Consultar precio". Se puede buscar por número de parte, con o sin guiones (por ejemplo "RG-ES116G-L" o "RGES116GL"); la compra y la cotización se gestionan con un asesor por WhatsApp, teléfono o formulario.
 - Categorías: https://histech.com.co/tienda/{categoria} · Productos: https://histech.com.co/tienda/producto/{producto}
 
 ## Industrias

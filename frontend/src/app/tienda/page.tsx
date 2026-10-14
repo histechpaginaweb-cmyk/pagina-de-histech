@@ -7,9 +7,9 @@ import { buildMetadata } from "@/lib/seo";
 
 type Props = { searchParams: Promise<RawSearchParams> };
 
-const TITLE = "Tienda de equipos de red";
+const TITLE = "Tienda de equipos de red Ruijie y Reyee";
 const DESCRIPTION =
-  "Routers industriales, gateways y equipos de networking con asesoría de HISTECH. Consulta especificaciones, disponibilidad y precio con un asesor.";
+  "Switches y switches PoE, routers, firewalls y transceptores de fibra Ruijie y Reyee con precios publicados + IVA. Busca por número de parte y recibe asesoría y cotización de HISTECH.";
 
 export async function generateMetadata({ searchParams }: Props) {
   const params = parseListingParams(await searchParams);

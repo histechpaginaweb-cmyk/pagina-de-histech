@@ -64,6 +64,10 @@ describe("extractProductType", () => {
     ["Fuente de Alimentación para Switch Ruijie, Potencia de Salida de hasta 1000 W", "Fuente de alimentación 1000 W"],
     ["Jumper de fibra óptica con MINI-GBIC SFP+ 10GB de 3 metros", "Jumper de fibra SFP+ 10G"],
     ["Cable óptico activo de conexión directa QSFP-40G-AOC5M", "Cable óptico"],
+    ["Switch No PoE Gestionable en la Nube de 28 Puertos Gigabit", "Switch 28 puertos Gigabit"],
+    ["Fuente de poder con 600W para switch de chasis", "Fuente de alimentación 600W"],
+    ["Gateway PoE para 200 usuarios, 10 puertos, 600Mbps", "Gateway PoE 10 puertos"],
+    ["Paquete de expansión para controladores", "Licencia de expansión"],
     ["RG-NBF5200M-8FS16GT4XS SWITCH CORE E-LIGHTEN", "Switch"],
     ["Switch Core Administrable Capa 3 con 48 SFP y 4 SFP+ para fibra 10Gb", "Switch"],
   ];

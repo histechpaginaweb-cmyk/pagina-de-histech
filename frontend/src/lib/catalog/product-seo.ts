@@ -57,6 +57,7 @@ export function extractProductType(shortDescription: string | null | undefined):
   if (!original) return "";
   const text = fold(original);
 
+  if (/paquete de expansion/.test(text)) return "Licencia de expansión";
   if (/\blicencia\b/.test(text)) {
     if (/perpetua/.test(text)) return "Licencia perpetua";
     const years = text.match(/(\d+)\s*anos?/);
@@ -64,7 +65,7 @@ export function extractProductType(shortDescription: string | null | undefined):
     return "Licencia";
   }
   if (/^tarjeta\b/.test(text)) return join("Tarjeta", portsLabel(text), ethernetSpeed(text));
-  if (/^fuente de alimentacion/.test(text)) {
+  if (/^fuente de (?:alimentacion|poder)/.test(text)) {
     return join("Fuente de alimentación", original.match(/\d+\s*W\b/i)?.[0] ?? "");
   }
   if (/jumper/.test(text)) return join("Jumper de fibra", sfpVariant(text), opticalSpeed(text));
@@ -82,13 +83,14 @@ export function extractProductType(shortDescription: string | null | undefined):
   const candidates: [string, number][] = [
     ["Switch", text.search(/\bswitch\b/)],
     ["Router", text.search(/\brouter\b/)],
+    ["Gateway", text.search(/\bgateway\b/)],
     ["Firewall", text.search(/\bfirewall\b/)],
   ];
   const found = candidates.filter(([, index]) => index >= 0).sort((a, b) => a[1] - b[1])[0];
   if (!found) return "";
   const [kind] = found;
   if (kind === "Firewall") return "Firewall";
-  const hasPoe = /poe/.test(text.replace(/non-?poe|sin\s+poe/g, ""));
+  const hasPoe = /poe/.test(text.replace(/non-?poe|(?:sin|no)\s+poe/g, ""));
   return join(kind, hasPoe ? "PoE" : "", portsLabel(text), ethernetSpeed(text));
 }
 

@@ -5,7 +5,8 @@
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.CatalogUtils = api;
 })(typeof self !== "undefined" ? self : this, function () {
-  const MAX_PRICE_COP = 2000000000;
+  const MAX_PRICE = 2000000000;
+  const CURRENCIES = ["COP", "USD"];
 
   const AVAILABILITY_LABELS = {
     in_stock: "En stock",
@@ -14,29 +15,44 @@
   };
   const STATUS_LABELS = { draft: "Borrador", published: "Publicado" };
 
-  /** Parses the price field: "" -> no price, "1.500.000" -> 1500000, decimals/zero -> error. */
+  /**
+   * Parses the price field: "" -> no price, "1.500.000" -> 1500000, "71,19" -> 71.19.
+   * Up to 2 decimals; zero, negatives and text are errors. A single group of exactly
+   * 3 digits ("1.500") reads as a thousands separator, not as decimals.
+   */
   function parsePriceInput(raw) {
     if (raw === null || raw === undefined) return { ok: true, value: null };
+    const invalid = { ok: false, error: "El precio debe ser un número mayor que cero, con máximo 2 decimales" };
     if (typeof raw === "number") {
-      return Number.isInteger(raw) && raw > 0 && raw <= MAX_PRICE_COP
+      const cents = raw * 100;
+      return Number.isFinite(raw) && raw > 0 && raw <= MAX_PRICE && Math.abs(cents - Math.round(cents)) < 1e-6
         ? { ok: true, value: raw }
-        : { ok: false, error: "El precio debe ser un número entero mayor que cero" };
+        : invalid;
     }
     const text = String(raw).trim();
     if (text === "") return { ok: true, value: null };
-    const grouped = /^\d{1,3}([.,\s]\d{3})+$/.test(text);
-    if (!grouped && !/^\d+$/.test(text)) {
-      return { ok: false, error: "El precio debe ser un número entero en COP, sin decimales" };
-    }
-    const value = Number(text.replace(/\D/g, ""));
-    if (value <= 0) return { ok: false, error: "El precio debe ser mayor que cero" };
-    if (value > MAX_PRICE_COP) return { ok: false, error: "El precio es demasiado alto" };
+    let value;
+    if (/^\d{1,3}([.,\s]\d{3})+$/.test(text)) value = Number(text.replace(/\D/g, ""));
+    else if (/^\d+([.,]\d{1,2})?$/.test(text)) value = Number(text.replace(",", "."));
+    else return invalid;
+    if (!(value > 0)) return { ok: false, error: "El precio debe ser mayor que cero" };
+    if (value > MAX_PRICE) return { ok: false, error: "El precio es demasiado alto" };
     return { ok: true, value };
   }
 
   function formatCop(value) {
     if (value === null || value === undefined) return "—";
     return "$" + String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  /** Price with its currency label: "$1.500.000 COP" or "US$71,19 USD". */
+  function formatPrice(value, currency) {
+    if (value === null || value === undefined) return "—";
+    if (currency === "USD") {
+      const [int, dec] = Number(value).toFixed(2).split(".");
+      return "US$" + int.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "," + dec + " USD";
+    }
+    return formatCop(Math.round(value)) + " COP";
   }
 
   /** Live character counter: "42 / 60", flagged "over" past the recommended size. */
@@ -90,7 +106,7 @@
     if (!name) return { ok: false, error: "El nombre es obligatorio" };
     if (!form.categoryId) return { ok: false, error: "Selecciona una categoría" };
 
-    const price = parsePriceInput(form.priceCop);
+    const price = parsePriceInput(form.price);
     if (!price.ok) return { ok: false, error: price.error };
 
     const { specs, incomplete } = cleanSpecs(form.specs);
@@ -109,7 +125,8 @@
       sku: orNull(form.sku),
       shortDescription: orNull(form.shortDescription),
       description: orNull(form.description),
-      priceCop: price.value,
+      price: price.value,
+      priceCurrency: CURRENCIES.includes(form.priceCurrency) ? form.priceCurrency : "COP",
       consultPrice: Boolean(form.consultPrice),
       availability: form.availability,
       status: form.status,
@@ -130,6 +147,8 @@
     STATUS_LABELS,
     parsePriceInput,
     formatCop,
+    formatPrice,
+    CURRENCIES,
     counterState,
     moveItem,
     cleanSpecs,

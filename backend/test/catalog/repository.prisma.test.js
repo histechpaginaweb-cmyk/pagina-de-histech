@@ -121,3 +121,20 @@ test("deleteCategory reports IN_USE when products still reference it", async () 
   const repo = createPrismaRepository(prisma);
   await assert.rejects(repo.deleteCategory("c1"), (e) => e.code === "IN_USE");
 });
+
+test("Decimal prices from Prisma are exposed as JS numbers", async () => {
+  const decimal = { toNumber: () => 71.19, toString: () => "71.19" };
+  const prisma = stubPrisma();
+  prisma.catalogProduct.findUnique = async () => ({ id: "p1", price: decimal, priceCurrency: "USD", specs: [], images: [] });
+  prisma.catalogProduct.findMany = async () => [
+    { id: "p1", price: decimal, specs: [], images: [] },
+    { id: "p2", price: null, specs: [], images: [] },
+  ];
+  const repo = createPrismaRepository(prisma);
+  const one = await repo.findProductById("p1");
+  assert.equal(one.price, 71.19);
+  assert.equal(typeof one.price, "number");
+  const { items } = await repo.listProducts({ page: 1, pageSize: 10 });
+  assert.equal(items[0].price, 71.19);
+  assert.equal(items[1].price, null);
+});

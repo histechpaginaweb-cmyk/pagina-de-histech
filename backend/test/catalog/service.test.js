@@ -54,17 +54,17 @@ test("priceUpdatedAt is set on create, kept when price is unchanged, bumped when
   const noPrice = await service.createProduct({ name: "Free", categoryId: category.id });
   assert.equal(noPrice.priceUpdatedAt, null);
 
-  const p = await service.createProduct({ name: "P", categoryId: category.id, priceCop: 100000 });
+  const p = await service.createProduct({ name: "P", categoryId: category.id, price: 100000 });
   assert.ok(p.priceUpdatedAt instanceof Date);
 
-  const same = await service.updateProduct(p.id, { name: "P renamed", categoryId: category.id, priceCop: 100000 });
+  const same = await service.updateProduct(p.id, { name: "P renamed", categoryId: category.id, price: 100000 });
   assert.equal(same.priceUpdatedAt.getTime(), p.priceUpdatedAt.getTime());
 
-  const changed = await service.updateProduct(p.id, { name: "P renamed", categoryId: category.id, priceCop: 120000 });
+  const changed = await service.updateProduct(p.id, { name: "P renamed", categoryId: category.id, price: 120000 });
   assert.ok(changed.priceUpdatedAt.getTime() > p.priceUpdatedAt.getTime());
 
-  const cleared = await service.updateProduct(p.id, { name: "P renamed", categoryId: category.id, priceCop: null });
-  assert.equal(cleared.priceCop, null);
+  const cleared = await service.updateProduct(p.id, { name: "P renamed", categoryId: category.id, price: null });
+  assert.equal(cleared.price, null);
   assert.equal(cleared.priceUpdatedAt, null);
 });
 
@@ -88,18 +88,41 @@ test("update may change the slug explicitly but not to a slug used by another pr
   await rejectsWith(service.updateProduct(a.id, { name: "A", slug: "b", categoryId: category.id }), "CONFLICT");
 });
 
+test("currency defaults to COP, USD keeps cents and a currency change bumps priceUpdatedAt", async () => {
+  const { service } = makeService();
+  const { category } = await seedTaxonomy(service);
+  const cop = await service.createProduct({ name: "A", categoryId: category.id, price: 100 });
+  assert.equal(cop.priceCurrency, "COP");
+  const usd = await service.createProduct({ name: "B", categoryId: category.id, price: 71.19, priceCurrency: "USD" });
+  assert.equal(usd.price, 71.19);
+  assert.equal(usd.priceCurrency, "USD");
+
+  const switched = await service.patchProduct(cop.id, { priceCurrency: "USD" });
+  assert.equal(switched.priceCurrency, "USD");
+  assert.ok(switched.priceUpdatedAt.getTime() > cop.priceUpdatedAt.getTime());
+});
+
+test("public payload exposes priceCurrency with the price", async () => {
+  const { service } = makeService();
+  const { category } = await seedTaxonomy(service);
+  await service.createProduct({ name: "Usd", categoryId: category.id, price: 71.19, priceCurrency: "USD", status: "published" });
+  const [item] = (await service.listPublicProducts({})).items;
+  assert.equal(item.price, 71.19);
+  assert.equal(item.priceCurrency, "USD");
+});
+
 test("patch updates price, availability and status and bumps priceUpdatedAt only on price change", async () => {
   const { service } = makeService();
   const { category } = await seedTaxonomy(service);
-  const p = await service.createProduct({ name: "P", categoryId: category.id, priceCop: 50000 });
+  const p = await service.createProduct({ name: "P", categoryId: category.id, price: 50000 });
   const avail = await service.patchProduct(p.id, { availability: "in_stock", status: "published" });
   assert.equal(avail.availability, "in_stock");
   assert.equal(avail.status, "published");
   assert.equal(avail.priceUpdatedAt.getTime(), p.priceUpdatedAt.getTime());
-  const priced = await service.patchProduct(p.id, { priceCop: 60000 });
-  assert.equal(priced.priceCop, 60000);
+  const priced = await service.patchProduct(p.id, { price: 60000 });
+  assert.equal(priced.price, 60000);
   assert.ok(priced.priceUpdatedAt.getTime() > p.priceUpdatedAt.getTime());
-  await rejectsWith(service.patchProduct("missing", { priceCop: 1 }), "NOT_FOUND");
+  await rejectsWith(service.patchProduct("missing", { price: 1 }), "NOT_FOUND");
   await rejectsWith(service.patchProduct(p.id, {}), "VALIDATION");
 });
 
@@ -166,10 +189,10 @@ async function seedCatalog(service) {
   const tel = await service.createBrand({ name: "Teltonika" });
   const tp = await service.createBrand({ name: "TP-Link" });
   const mk = (data) => service.createProduct({ status: "published", ...data });
-  const rut956 = await mk({ name: "RUT956", model: "RUT956-NA", sku: "SKU-956", categoryId: routers.id, brandId: tel.id, priceCop: 1200000, availability: "in_stock", featured: true });
-  const rut200 = await mk({ name: "RUT200", categoryId: routers.id, brandId: tel.id, consultPrice: true, priceCop: 500000 });
+  const rut956 = await mk({ name: "RUT956", model: "RUT956-NA", sku: "SKU-956", categoryId: routers.id, brandId: tel.id, price: 1200000, availability: "in_stock", featured: true });
+  const rut200 = await mk({ name: "RUT200", categoryId: routers.id, brandId: tel.id, consultPrice: true, price: 500000 });
   const sw = await mk({ name: "Switch gestionado", categoryId: switches.id, brandId: tp.id });
-  const draft = await service.createProduct({ name: "Borrador", categoryId: routers.id, brandId: tel.id, priceCop: 1 });
+  const draft = await service.createProduct({ name: "Borrador", categoryId: routers.id, brandId: tel.id, price: 1 });
   return { routers, switches, tel, tp, rut956, rut200, sw, draft };
 }
 
@@ -213,9 +236,9 @@ test("public payload applies the price visibility rule", async () => {
   await seedCatalog(service);
   const items = (await service.listPublicProducts({})).items;
   const bySlug = Object.fromEntries(items.map((i) => [i.slug, i]));
-  assert.equal(bySlug["rut956"].priceCop, 1200000);
+  assert.equal(bySlug["rut956"].price, 1200000);
   assert.equal(bySlug["rut956"].consultPrice, false);
-  assert.equal("priceCop" in bySlug["rut200"], false, "consultPrice product leaks no price");
+  assert.equal("price" in bySlug["rut200"], false, "consultPrice product leaks no price");
   assert.equal(bySlug["rut200"].consultPrice, true);
   assert.equal(bySlug["switch-gestionado"].consultPrice, true, "no price means consult");
 
@@ -223,7 +246,7 @@ test("public payload applies the price visibility rule", async () => {
   const hidden = (await service.listPublicProducts({})).items;
   for (const item of hidden) {
     assert.equal(item.consultPrice, true);
-    assert.equal("priceCop" in item, false);
+    assert.equal("price" in item, false);
     assert.equal("priceUpdatedAt" in item, false);
   }
 });
@@ -270,5 +293,5 @@ test("admin listing includes drafts and supports a status filter", async () => {
   assert.equal((await service.listAdminProducts({})).total, 4);
   const drafts = await service.listAdminProducts({ status: "draft" });
   assert.deepEqual(drafts.items.map((i) => i.id), [s.draft.id]);
-  assert.equal(drafts.items[0].priceCop, 1, "admin view always carries the raw price");
+  assert.equal(drafts.items[0].price, 1, "admin view always carries the raw price");
 });

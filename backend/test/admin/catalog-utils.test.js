@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 const {
   parsePriceInput,
   formatCop,
+  formatPrice,
   counterState,
   moveItem,
   cleanSpecs,
@@ -26,12 +27,27 @@ test("parsePriceInput treats blank as no price", () => {
   assert.deepEqual(parsePriceInput(null), { ok: true, value: null });
 });
 
-test("parsePriceInput rejects decimals, zero, negatives and text", () => {
-  for (const raw of ["1500,50", "12.5", "0", "-10", "abc", "1.5.5", "$100"]) {
+test("parsePriceInput accepts up to 2 decimals (USD cents)", () => {
+  assert.deepEqual(parsePriceInput("71.19"), { ok: true, value: 71.19 });
+  assert.deepEqual(parsePriceInput("71,19"), { ok: true, value: 71.19 });
+  assert.deepEqual(parsePriceInput("12.5"), { ok: true, value: 12.5 });
+  assert.deepEqual(parsePriceInput(71.19), { ok: true, value: 71.19 });
+});
+
+test("parsePriceInput rejects 3+ decimals, zero, negatives and text", () => {
+  for (const raw of ["1.5.5", "12.345678", "0", "-10", "abc", "$100", "0,00"]) {
     const out = parsePriceInput(raw);
     assert.equal(out.ok, false, raw);
     assert.equal(typeof out.error, "string");
   }
+});
+
+test("formatPrice labels the currency", () => {
+  assert.equal(formatPrice(1500000, "COP"), "$1.500.000 COP");
+  assert.equal(formatPrice(71.19, "USD"), "US$71,19 USD");
+  assert.equal(formatPrice(70, "USD"), "US$70,00 USD");
+  assert.equal(formatPrice(null, "USD"), "—");
+  assert.equal(formatPrice(950), "$950 COP");
 });
 
 test("formatCop groups thousands with dots", () => {
@@ -86,7 +102,8 @@ const baseForm = {
   sku: " ",
   shortDescription: "",
   description: "",
-  priceCop: "1.200.000",
+  price: "1.200.000",
+  priceCurrency: "COP",
   consultPrice: false,
   availability: "in_stock",
   status: "draft",
@@ -102,11 +119,22 @@ test("buildProductPayload normalizes a form into the API payload", () => {
   const out = buildProductPayload(baseForm);
   assert.equal(out.ok, true);
   assert.equal(out.payload.name, "RUT956");
-  assert.equal(out.payload.priceCop, 1200000);
+  assert.equal(out.payload.price, 1200000);
+  assert.equal(out.payload.priceCurrency, "COP");
   assert.equal(out.payload.brandId, null);
   assert.equal(out.payload.sku, null);
   assert.equal("slug" in out.payload, false, "blank slug is omitted so the server generates or keeps it");
   assert.deepEqual(out.payload.specs, [{ label: "Puertos", value: "4" }]);
+});
+
+test("buildProductPayload carries a USD currency with decimals", () => {
+  const out = buildProductPayload({ ...baseForm, price: "71,19", priceCurrency: "USD" });
+  assert.equal(out.payload.price, 71.19);
+  assert.equal(out.payload.priceCurrency, "USD");
+});
+
+test("buildProductPayload defaults a missing currency to COP", () => {
+  assert.equal(buildProductPayload({ ...baseForm, priceCurrency: undefined }).payload.priceCurrency, "COP");
 });
 
 test("buildProductPayload keeps an explicit slug", () => {
@@ -119,7 +147,7 @@ test("buildProductPayload requires a name and a category", () => {
 });
 
 test("buildProductPayload surfaces invalid prices and incomplete specs", () => {
-  const price = buildProductPayload({ ...baseForm, priceCop: "12,5" });
+  const price = buildProductPayload({ ...baseForm, price: "12,5678", priceCurrency: "USD" });
   assert.equal(price.ok, false);
   assert.match(price.error, /precio/i);
   const specs = buildProductPayload({ ...baseForm, specs: [{ label: "Solo", value: "" }] });

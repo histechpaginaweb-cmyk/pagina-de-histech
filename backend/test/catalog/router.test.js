@@ -105,7 +105,7 @@ test("admin creates a product and it stays hidden publicly until published", asy
     const { cat, brand } = await seed(call);
     const created = await call("POST", "/api/admin/catalog/products", {
       headers: ADMIN,
-      body: { name: "RUT956", categoryId: cat.id, brandId: brand.id, priceCop: 1200000 },
+      body: { name: "RUT956", categoryId: cat.id, brandId: brand.id, price: 1200000 },
     });
     assert.equal(created.status, 201);
     assert.equal(created.json.slug, "rut956");
@@ -122,7 +122,7 @@ test("admin creates a product and it stays hidden publicly until published", asy
 
     const list = await call("GET", "/api/catalog/products");
     assert.equal(list.json.total, 1);
-    assert.equal(list.json.items[0].priceCop, 1200000);
+    assert.equal(list.json.items[0].price, 1200000);
     assert.equal(list.json.items[0].consultPrice, false);
     const detail = await call("GET", "/api/catalog/products/rut956");
     assert.equal(detail.status, 200);
@@ -135,25 +135,25 @@ test("toggling showPrices hides prices in the public API", async () => {
     const { cat } = await seed(call);
     await call("POST", "/api/admin/catalog/products", {
       headers: ADMIN,
-      body: { name: "P", categoryId: cat.id, priceCop: 5000, status: "published" },
+      body: { name: "P", categoryId: cat.id, price: 5000, status: "published" },
     });
     assert.deepEqual((await call("GET", "/api/catalog/settings")).json, { showPrices: true });
     const put = await call("PUT", "/api/admin/catalog/settings", { headers: ADMIN, body: { showPrices: false } });
     assert.deepEqual(put.json, { showPrices: false });
     const item = (await call("GET", "/api/catalog/products")).json.items[0];
     assert.equal(item.consultPrice, true);
-    assert.equal("priceCop" in item, false);
+    assert.equal("price" in item, false);
     assert.deepEqual((await call("GET", "/api/admin/catalog/settings", { headers: ADMIN })).json, { showPrices: false });
   });
 });
 
 test("validation errors return 400 with field details", async () => {
   await withApp(async ({ call }) => {
-    const res = await call("POST", "/api/admin/catalog/products", { headers: ADMIN, body: { priceCop: -1 } });
+    const res = await call("POST", "/api/admin/catalog/products", { headers: ADMIN, body: { price: -1 } });
     assert.equal(res.status, 400);
     assert.equal(typeof res.json.error, "string");
     assert.ok(res.json.details.some((d) => d.path === "name"));
-    assert.ok(res.json.details.some((d) => d.path === "priceCop"));
+    assert.ok(res.json.details.some((d) => d.path === "price"));
   });
 });
 
@@ -164,7 +164,7 @@ test("conflicts return 409, unknown ids return 404", async () => {
     assert.equal((await call("POST", "/api/admin/catalog/products", { headers: ADMIN, body })).status, 201);
     assert.equal((await call("POST", "/api/admin/catalog/products", { headers: ADMIN, body })).status, 409);
     assert.equal((await call("GET", "/api/admin/catalog/products/missing", { headers: ADMIN })).status, 404);
-    assert.equal((await call("PATCH", "/api/admin/catalog/products/missing", { headers: ADMIN, body: { priceCop: 1 } })).status, 404);
+    assert.equal((await call("PATCH", "/api/admin/catalog/products/missing", { headers: ADMIN, body: { price: 1 } })).status, 404);
     assert.equal((await call("DELETE", "/api/admin/catalog/products/missing", { headers: ADMIN })).status, 404);
   });
 });

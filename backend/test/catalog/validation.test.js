@@ -33,19 +33,30 @@ test("product input applies defaults and trims text", () => {
   assert.equal(out.featured, false);
   assert.deepEqual(out.specs, []);
   assert.deepEqual(out.images, []);
-  assert.equal(out.priceCop, null);
+  assert.equal(out.price, null);
+  assert.equal(out.priceCurrency, "COP");
 });
 
 test("product input requires name and categoryId", () => {
   assert.deepEqual(invalidPaths(() => parseProductInput({})).sort(), ["categoryId", "name"]);
 });
 
-test("priceCop must be a positive integer or null", () => {
-  assert.equal(parseProductInput({ ...base, priceCop: 250000 }).priceCop, 250000);
-  assert.equal(parseProductInput({ ...base, priceCop: null }).priceCop, null);
-  assert.equal(parseProductInput({ ...base, priceCop: "" }).priceCop, null);
-  for (const priceCop of [0, -1, 10.5, "abc", 3_000_000_000]) {
-    assert.deepEqual(invalidPaths(() => parseProductInput({ ...base, priceCop })), ["priceCop"]);
+test("price must be a positive number with at most 2 decimals or null", () => {
+  assert.equal(parseProductInput({ ...base, price: 250000 }).price, 250000);
+  assert.equal(parseProductInput({ ...base, price: 71.19 }).price, 71.19);
+  assert.equal(parseProductInput({ ...base, price: null }).price, null);
+  assert.equal(parseProductInput({ ...base, price: "" }).price, null);
+  for (const price of [0, -1, 10.123, "abc", 3_000_000_000]) {
+    assert.deepEqual(invalidPaths(() => parseProductInput({ ...base, price })), ["price"]);
+  }
+});
+
+test("priceCurrency accepts COP or USD and defaults to COP", () => {
+  assert.equal(parseProductInput({ ...base, priceCurrency: "USD" }).priceCurrency, "USD");
+  assert.equal(parseProductInput({ ...base, priceCurrency: "COP" }).priceCurrency, "COP");
+  assert.equal(parseProductInput(base).priceCurrency, "COP");
+  for (const priceCurrency of ["EUR", "usd", "", null]) {
+    assert.deepEqual(invalidPaths(() => parseProductInput({ ...base, priceCurrency })), ["priceCurrency"]);
   }
 });
 
@@ -84,14 +95,15 @@ test("explicit slug must be well formed", () => {
 });
 
 test("patch accepts only the quick-edit fields, at least one of them", () => {
-  assert.deepEqual(parseProductPatch({ priceCop: 100, availability: "in_stock" }), {
-    priceCop: 100,
+  assert.deepEqual(parseProductPatch({ price: 100, priceCurrency: "USD", availability: "in_stock" }), {
+    price: 100,
+    priceCurrency: "USD",
     availability: "in_stock",
   });
   assert.deepEqual(parseProductPatch({ status: "published" }), { status: "published" });
   assert.deepEqual(invalidPaths(() => parseProductPatch({})), ["_"]);
   assert.deepEqual(invalidPaths(() => parseProductPatch({ name: "x" })), ["_"]);
-  assert.deepEqual(invalidPaths(() => parseProductPatch({ priceCop: -5 })), ["priceCop"]);
+  assert.deepEqual(invalidPaths(() => parseProductPatch({ price: -5 })), ["price"]);
 });
 
 test("category input validates name, slug and the reserved route segment", () => {

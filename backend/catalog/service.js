@@ -74,9 +74,9 @@ function createCatalogService({ repo, now = () => new Date() }) {
     }
   }
 
-  // priceUpdatedAt moves only when the price value actually changes.
-  function priceStamp(previous, nextPrice) {
-    if (previous.priceCop === nextPrice) return previous.priceUpdatedAt ?? null;
+  // priceUpdatedAt moves only when the price value or its currency actually changes.
+  function priceStamp(previous, nextPrice, nextCurrency = previous.priceCurrency) {
+    if (previous.price === nextPrice && previous.priceCurrency === nextCurrency) return previous.priceUpdatedAt ?? null;
     return nextPrice == null ? null : now();
   }
 
@@ -150,7 +150,7 @@ function createCatalogService({ repo, now = () => new Date() }) {
       return repo.createProduct({
         ...input,
         slug,
-        priceUpdatedAt: input.priceCop == null ? null : now(),
+        priceUpdatedAt: input.price == null ? null : now(),
       });
     },
 
@@ -165,7 +165,7 @@ function createCatalogService({ repo, now = () => new Date() }) {
       return repo.updateProduct(current.id, {
         ...input,
         slug,
-        priceUpdatedAt: priceStamp(current, input.priceCop),
+        priceUpdatedAt: priceStamp(current, input.price, input.priceCurrency),
       });
     },
 
@@ -173,7 +173,13 @@ function createCatalogService({ repo, now = () => new Date() }) {
       const patch = parseProductPatch(body);
       const current = requireFound(await repo.findProductById(String(id)), "Producto");
       const data = { ...patch };
-      if ("priceCop" in patch) data.priceUpdatedAt = priceStamp(current, patch.priceCop);
+      if ("price" in patch || "priceCurrency" in patch) {
+        data.priceUpdatedAt = priceStamp(
+          current,
+          "price" in patch ? patch.price : current.price,
+          patch.priceCurrency ?? current.priceCurrency,
+        );
+      }
       return repo.updateProduct(current.id, data);
     },
 

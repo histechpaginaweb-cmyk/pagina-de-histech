@@ -44,6 +44,7 @@
     h("select", { ...props, value }, options.map(([val, text]) => h("option", { value: val }, text)));
 
   const availabilityOptions = () => Object.entries(U.AVAILABILITY_LABELS);
+  const currencyOptions = () => U.CURRENCIES.map((c) => [c, c]);
   const statusOptions = () => Object.entries(U.STATUS_LABELS);
 
   async function capi(path, opts) {
@@ -224,7 +225,7 @@
         h(
           "tr",
           {},
-          ["Producto", "Precio sin IVA (COP)", "Disponibilidad", "Estado", ""].map((t) => h("th", {}, t)),
+          ["Producto", "Precio sin IVA", "Disponibilidad", "Estado", ""].map((t) => h("th", {}, t)),
         ),
       ),
       h("tbody", {}, items.map((p) => productRow(p, reload))),
@@ -236,16 +237,17 @@
       class: "cat-price",
       inputmode: "numeric",
       placeholder: "Sin precio",
-      "aria-label": "Precio sin IVA (COP)",
-      value: p.priceCop ?? "",
+      "aria-label": "Precio sin IVA",
+      value: p.price ?? "",
     });
+    const currency = select(currencyOptions(), p.priceCurrency || "COP", { "aria-label": "Moneda" });
     const consult = h("input", { type: "checkbox", checked: p.consultPrice });
     const availability = select(availabilityOptions(), p.availability, { "aria-label": "Disponibilidad" });
     const save = h("button", { class: "primary", type: "button", disabled: true }, "Guardar");
     const dirty = () => {
       save.disabled = false;
     };
-    [price, consult, availability].forEach((c) => c.addEventListener("input", dirty));
+    [price, currency, consult, availability].forEach((c) => c.addEventListener("input", dirty));
 
     save.addEventListener("click", async () => {
       const parsed = U.parsePriceInput(price.value);
@@ -253,7 +255,8 @@
       save.disabled = true;
       try {
         await send("PATCH", "/products/" + p.id, {
-          priceCop: parsed.value,
+          price: parsed.value,
+          priceCurrency: currency.value,
           consultPrice: consult.checked,
           availability: availability.value,
         });
@@ -299,6 +302,7 @@
         "td",
         {},
         price,
+        currency,
         h("label", { class: "cat-check" }, consult, " Consultar precio"),
       ),
       h("td", {}, availability),
@@ -343,7 +347,8 @@
       sku: product ? product.sku || "" : "",
       shortDescription: product ? product.shortDescription || "" : "",
       description: product ? product.description || "" : "",
-      priceCop: product && product.priceCop ? String(product.priceCop) : "",
+      price: product && product.price ? String(product.price) : "",
+      priceCurrency: product ? product.priceCurrency || "COP" : "COP",
       consultPrice: product ? product.consultPrice : false,
       availability: product ? product.availability : "on_request",
       status: product ? product.status : "draft",
@@ -537,10 +542,11 @@
         "div",
         { class: "row" },
         field(
-          "Precio sin IVA (COP)",
-          bind("priceCop", h("input", { value: f.priceCop, inputmode: "numeric", placeholder: "Ej. 1500000 (vacío = sin precio)" })),
-          "Entero en pesos colombianos, sin IVA ni decimales.",
+          "Precio sin IVA",
+          bind("price", h("input", { value: f.price, inputmode: "decimal", placeholder: "Ej. 1500000 o 71,19 (vacío = sin precio)" })),
+          "Sin IVA. COP sin decimales; USD admite hasta 2 decimales.",
         ),
+        field("Moneda", bind("priceCurrency", select(currencyOptions(), f.priceCurrency), "change")),
         field("Disponibilidad", bind("availability", select(availabilityOptions(), f.availability), "change")),
         field("Estado", bind("status", select(statusOptions(), f.status), "change")),
       ),

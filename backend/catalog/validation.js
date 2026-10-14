@@ -6,7 +6,8 @@ const { CatalogError } = require("./errors");
 
 const AVAILABILITY = ["in_stock", "on_request", "out_of_stock"];
 const STATUSES = ["draft", "published"];
-const MAX_PRICE_COP = 2_000_000_000; // stays inside a signed 32-bit integer column
+const CURRENCIES = ["COP", "USD"];
+const MAX_PRICE = 2_000_000_000;
 // `/tienda/producto/...` is the product route, so a category cannot use that slug.
 const RESERVED_CATEGORY_SLUGS = ["producto"];
 
@@ -57,10 +58,10 @@ const priceField = z
   .preprocess(
     (v) => (v === "" ? null : v),
     z
-      .number({ invalid_type_error: "El precio debe ser un número entero" })
-      .int("El precio debe ser un número entero")
+      .number({ invalid_type_error: "El precio debe ser un número" })
       .positive("El precio debe ser mayor que cero")
-      .max(MAX_PRICE_COP, "El precio es demasiado alto")
+      .max(MAX_PRICE, "El precio es demasiado alto")
+      .refine((n) => Math.abs(n * 100 - Math.round(n * 100)) < 1e-6, "El precio admite máximo 2 decimales")
       .nullable()
       .optional(),
   )
@@ -95,7 +96,8 @@ const productShape = {
   specs: z.array(specSchema).max(100).default([]),
   images: z.array(imageSchema).max(20).default([]),
   datasheetUrl: urlField,
-  priceCop: priceField,
+  price: priceField,
+  priceCurrency: z.enum(CURRENCIES, { errorMap: () => ({ message: "La moneda debe ser COP o USD" }) }).default("COP"),
   consultPrice: z.boolean().default(false),
   availability: z.enum(AVAILABILITY).default("on_request"),
   status: z.enum(STATUSES).default("draft"),
@@ -106,10 +108,11 @@ const productShape = {
 const productSchema = z.object(productShape);
 
 // Quick edit from the admin list: price, availability and publication only.
-const PATCH_KEYS = ["priceCop", "consultPrice", "availability", "status", "featured"];
+const PATCH_KEYS = ["price", "priceCurrency", "consultPrice", "availability", "status", "featured"];
 const patchSchema = z
   .object({
-    priceCop: productShape.priceCop,
+    price: productShape.price,
+    priceCurrency: productShape.priceCurrency,
     consultPrice: z.boolean(),
     availability: z.enum(AVAILABILITY),
     status: z.enum(STATUSES),
@@ -185,6 +188,7 @@ function parseListQuery(query = {}, { maxPageSize = DEFAULT_MAX_PAGE_SIZE, allow
 
 module.exports = {
   AVAILABILITY,
+  CURRENCIES,
   STATUSES,
   RESERVED_CATEGORY_SLUGS,
   parseProductInput,

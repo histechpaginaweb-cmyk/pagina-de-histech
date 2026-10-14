@@ -46,6 +46,8 @@ function toProduct(row) {
   if (!row) return null;
   return {
     ...row,
+    // Prisma returns Decimal objects; the rest of the app works with numbers.
+    price: row.price == null ? null : Number(row.price),
     specs: Array.isArray(row.specs) ? row.specs : [],
     images: Array.isArray(row.images) ? row.images : [],
   };

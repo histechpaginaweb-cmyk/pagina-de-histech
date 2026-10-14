@@ -28,7 +28,7 @@ test("seed products never invent prices and are not published", () => {
   for (const p of products) {
     assert.equal(p.status, "draft");
     assert.equal(p.consultPrice, true);
-    assert.equal(p.priceCop, null);
+    assert.equal(p.price, null);
   }
 });
 
@@ -82,9 +82,9 @@ test("runSeed links products to their category and brand ids", async () => {
 test("runSeed does not overwrite an existing product edited in the admin", async () => {
   const prisma = fakePrisma();
   await runSeed(prisma, { categories, brands, products }, () => {});
-  prisma.tables.catalogProduct[0].priceCop = 123456;
+  prisma.tables.catalogProduct[0].price = 123456;
   prisma.tables.catalogProduct[0].status = "published";
   await runSeed(prisma, { categories, brands, products }, () => {});
-  assert.equal(prisma.tables.catalogProduct[0].priceCop, 123456);
+  assert.equal(prisma.tables.catalogProduct[0].price, 123456);
   assert.equal(prisma.tables.catalogProduct[0].status, "published");
 });

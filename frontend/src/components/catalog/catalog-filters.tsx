@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Search } from "lucide-react";
+import { BRAND_PAGE_SLUGS, brandPagePath, getBrandPage } from "@/lib/catalog/brands";
 import { buildListingHref } from "@/lib/catalog/listing-query";
 import type { PublicBrand, PublicCategory } from "@/lib/catalog/types";
 import { cn } from "@/lib/utils";
@@ -122,6 +123,15 @@ export function CatalogFilters({
                 >
                   {b.name}
                   <span className="text-xs text-muted-foreground">({b.productCount})</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="mt-3 space-y-1 text-sm">
+            {BRAND_PAGE_SLUGS.filter((slug) => visibleBrands.some((b) => b.slug === slug)).map((slug) => (
+              <li key={slug}>
+                <Link href={brandPagePath(slug)} className="text-brand-purple underline-offset-2 hover:underline">
+                  {getBrandPage(slug)!.heading}
                 </Link>
               </li>
             ))}

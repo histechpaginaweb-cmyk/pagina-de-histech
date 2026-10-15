@@ -21,6 +21,8 @@ type Props = {
   categories: PublicCategory[];
   brands: PublicBrand[];
   activeCategory?: string;
+  /** Heading and intro shown above the grid (brand landing pages). */
+  intro?: React.ReactNode;
   /** Extra content rendered after the product grid (advisor CTA). */
   footer?: React.ReactNode;
 };
@@ -34,6 +36,7 @@ export function CatalogListing({
   categories,
   brands,
   activeCategory,
+  intro,
   footer,
 }: Props) {
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize));
@@ -59,6 +62,7 @@ export function CatalogListing({
             </aside>
 
             <div>
+              {intro}
               <p className="mb-6 text-sm text-muted-foreground" aria-live="polite">
                 {result.unavailable
                   ? ""

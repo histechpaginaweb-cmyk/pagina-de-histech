@@ -1,6 +1,7 @@
 import { ORG_ID } from "@/lib/seo";
 import { hasListingVariant, type ListingParams } from "./listing-query";
-import type { Availability, PriceCurrency, PublicCategory, PublicProduct } from "./types";
+import type { Availability, PriceCurrency, PublicBrand, PublicCategory, PublicProduct } from "./types";
+import { brandPagePath, isBrandPageSlug } from "./brands";
 import { hasVisiblePrice } from "./price";
 import { buildProductDescription, buildProductTitle } from "./product-seo";
 
@@ -199,14 +200,16 @@ function latest(dates: (string | undefined)[]): Date | undefined {
   return times.length ? new Date(Math.max(...times)) : undefined;
 }
 
-/** /tienda, non-empty categories and published products. Never throws on empty input. */
+/** /tienda, non-empty categories, brand landing pages and published products. Never throws on empty input. */
 export function buildCatalogSitemapEntries({
   products,
   categories,
+  brands = [],
   siteUrl,
 }: {
   products: PublicProduct[];
   categories: PublicCategory[];
+  brands?: PublicBrand[];
   siteUrl: string;
 }): CatalogSitemapEntry[] {
   const entries: CatalogSitemapEntry[] = [
@@ -222,6 +225,15 @@ export function buildCatalogSitemapEntries({
     entries.push({
       url: absolute(siteUrl, `/tienda/${category.slug}`),
       lastModified: latest(products.filter((p) => p.category?.slug === category.slug).map((p) => p.updatedAt)),
+      changeFrequency: "daily",
+      priority: 0.8,
+    });
+  }
+
+  for (const brand of brands.filter((b) => b.productCount > 0 && isBrandPageSlug(b.slug))) {
+    entries.push({
+      url: absolute(siteUrl, brandPagePath(brand.slug)),
+      lastModified: latest(products.filter((p) => p.brand?.slug === brand.slug).map((p) => p.updatedAt)),
       changeFrequency: "daily",
       priority: 0.8,
     });

@@ -246,4 +246,22 @@ describe("buildCatalogSitemapEntries", () => {
     expect(entries.map((e) => e.url)).toEqual([`${SITE}/tienda`]);
     expect(entries[0].lastModified).toBeUndefined();
   });
+
+  it("adds brand landing pages for known brands with products", () => {
+    const brands = [
+      { id: "1", slug: "ruijie", name: "Ruijie", logoUrl: null, productCount: 3 },
+      { id: "2", slug: "reyee", name: "Reyee", logoUrl: null, productCount: 0 },
+      { id: "3", slug: "teltonika", name: "Teltonika", logoUrl: null, productCount: 5 },
+    ];
+    const entries = buildCatalogSitemapEntries({
+      products: [product({ brand: { id: "1", slug: "ruijie", name: "Ruijie", logoUrl: null } })],
+      categories,
+      brands,
+      siteUrl: SITE,
+    });
+    const urls = entries.map((e) => e.url);
+    expect(urls).toContain(`${SITE}/tienda/marca/ruijie`);
+    expect(urls).not.toContain(`${SITE}/tienda/marca/reyee`);
+    expect(urls).not.toContain(`${SITE}/tienda/marca/teltonika`);
+  });
 });

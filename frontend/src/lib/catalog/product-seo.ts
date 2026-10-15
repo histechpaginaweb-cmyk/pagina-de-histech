@@ -168,13 +168,20 @@ export function productReferences(product: Pick<PublicProduct, "model" | "sku">)
   return [...new Set(values)];
 }
 
-/** Open Graph product tags (`other` metadata); price tags only when the price is public. */
-export function productOpenGraphMeta(product: PublicProduct): Record<string, string> {
-  return {
-    "og:type": "product",
-    ...(hasVisiblePrice(product) && {
-      "product:price:amount": String(product.price),
-      "product:price:currency": product.priceCurrency,
-    }),
-  };
+export type OpenGraphTag = { property: string; content: string };
+
+/**
+ * Open Graph product tags, as `<meta property>` pairs (Next's `other` metadata renders
+ * `name=`, which Open Graph ignores). Price tags only when the price is public.
+ */
+export function productOpenGraphMeta(product: PublicProduct): OpenGraphTag[] {
+  return [
+    { property: "og:type", content: "product" },
+    ...(hasVisiblePrice(product)
+      ? [
+          { property: "product:price:amount", content: String(product.price) },
+          { property: "product:price:currency", content: product.priceCurrency },
+        ]
+      : []),
+  ];
 }

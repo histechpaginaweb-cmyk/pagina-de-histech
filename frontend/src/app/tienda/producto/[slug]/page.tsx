@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ProductAdvisorActions } from "@/components/catalog/advisor-actions";
 import { AvailabilityBadge } from "@/components/catalog/availability-badge";
 import { MarkdownContent } from "@/components/catalog/markdown-content";
+import { ProductOpenGraphMeta } from "@/components/catalog/product-open-graph-meta";
 import { PriceBlock } from "@/components/catalog/price-block";
 import { ProductCard } from "@/components/catalog/product-card";
 import { ProductGallery } from "@/components/catalog/product-gallery";
@@ -147,6 +148,7 @@ export default async function ProductPage({ params }: Props) {
         </Section>
       ) : null}
 
+      <ProductOpenGraphMeta product={product} />
       <JsonLd data={productJsonLd(product, { siteUrl: siteConfig.url })} />
       <JsonLd
         data={webPageJsonLd({

@@ -199,15 +199,17 @@ describe("productReferences", () => {
 });
 
 describe("productOpenGraphMeta", () => {
-  it("sets og:type product with price tags when the price is visible", () => {
-    expect(productOpenGraphMeta(product())).toEqual({
-      "og:type": "product",
-      "product:price:amount": "189900",
-      "product:price:currency": "COP",
-    });
+  it("returns og:type product plus price tags as property/content pairs when the price is visible", () => {
+    expect(productOpenGraphMeta(product())).toEqual([
+      { property: "og:type", content: "product" },
+      { property: "product:price:amount", content: "189900" },
+      { property: "product:price:currency", content: "COP" },
+    ]);
   });
 
   it("omits price tags when the price is hidden", () => {
-    expect(productOpenGraphMeta(product({ consultPrice: true }))).toEqual({ "og:type": "product" });
+    expect(productOpenGraphMeta(product({ consultPrice: true }))).toEqual([
+      { property: "og:type", content: "product" },
+    ]);
   });
 });

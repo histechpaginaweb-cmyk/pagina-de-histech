@@ -2,7 +2,7 @@ import { ORG_ID } from "@/lib/seo";
 import { hasListingVariant, type ListingParams } from "./listing-query";
 import type { Availability, PriceCurrency, PublicCategory, PublicProduct } from "./types";
 import { hasVisiblePrice } from "./price";
-import { buildProductDescription, buildProductTitle, productOpenGraphMeta } from "./product-seo";
+import { buildProductDescription, buildProductTitle } from "./product-seo";
 
 /**
  * schema.org availability. "Disponible bajo pedido" (HISTECH orders it when the
@@ -47,7 +47,7 @@ export type MetadataInput = {
   path: string;
   image?: string;
   noindex?: boolean;
-  /** Open Graph type override; when set, `og:type` is expected in `other`. */
+  /** Open Graph type override; Next has no product type, so the page renders `og:type` via `ProductOpenGraphMeta`. */
   ogType?: "product";
   /** Extra `<meta>` tags (e.g. `product:price:amount`). */
   other?: Record<string, string>;
@@ -60,7 +60,6 @@ export function productMetadataInput(product: PublicProduct): MetadataInput {
     path: productPath(product.slug),
     image: product.images[0]?.url,
     ogType: "product",
-    other: productOpenGraphMeta(product),
   };
 }
 

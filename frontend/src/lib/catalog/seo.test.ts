@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { buildMetadata } from "@/lib/seo";
 import {
   availabilityToSchema,
   buildCatalogSitemapEntries,
@@ -155,13 +156,12 @@ describe("productMetadataInput", () => {
     );
   });
 
-  it("marks product pages as og:type product, with price tags only when the price is visible", () => {
-    expect(productMetadataInput(withPrice()).other).toEqual({
-      "og:type": "product",
-      "product:price:amount": "850000",
-      "product:price:currency": "COP",
-    });
-    expect(productMetadataInput(product()).other).toEqual({ "og:type": "product" });
+  it("marks product pages with ogType product and leaves Open Graph tags out of name-based `other`", () => {
+    expect(productMetadataInput(withPrice()).ogType).toBe("product");
+    expect(productMetadataInput(withPrice()).other).toBeUndefined();
+    const meta = buildMetadata(productMetadataInput(withPrice()));
+    expect((meta.openGraph as { type?: string }).type).toBeUndefined();
+    expect(meta.other).toBeUndefined();
   });
 
   it("includes the price with IVA included in the description only when the price is public", () => {

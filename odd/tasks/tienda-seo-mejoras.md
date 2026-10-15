@@ -46,7 +46,7 @@ TDD: enabled (session config). Runners: vitest (frontend), node --test (backend)
 - [x] T1: Fix og:type and product price meta to render as `property`. Route: delegated (writer).
 - [x] T2: Brand pages `/tienda/marca/[marca]` plus sitemap and links. Route: delegated (writer, 2+ files).
 - [x] T3: Category FAQ (visible plus FAQPage JSON-LD). Route: delegated (writer).
-- [ ] T4: Google Merchant feed `/tienda/feed.xml`. Route: delegated (writer).
+- [x] T4: Google Merchant feed `/tienda/feed.xml`. Route: delegated (writer).
 
 ## Progress
 
@@ -54,3 +54,4 @@ TDD: enabled (session config). Runners: vitest (frontend), node --test (backend)
 - 2026-10-15 T1 done: RED = 3 vitest failures (product-seo, seo tests); GREEN = 130 tests pass, typecheck ok. Built with a mock catalog backend; rendered product HTML has exactly one `<meta property="og:type" content="product"/>` plus property price tags (only og:type when price is hidden). Commit: 26a8be5.
 - 2026-10-15 T2 done: backend already filters by brand slug (`brand` query), so no backend change. RED = brands.test.ts missing module plus sitemap brand test failing; GREEN = 137 vitest pass, typecheck ok, build ok. Verified with mock backend: /tienda/marca/ruijie and /reyee return 200 with only their products, unknown brand 404, both in sitemap, linked from store filters. Commit: 40dc9c5.
 - 2026-10-15 T3 done: RED = category-faq.test.ts missing module; GREEN = 141 vitest pass, typecheck ok, build ok. Rendered /tienda/switches-poe shows the FAQ section and one FAQPage JSON-LD from the same data; none on search variants. Commit: e7e83ba.
+- 2026-10-15 T4 done: RED = merchant-feed.test.ts missing module; GREEN = 151 vitest pass, typecheck ok, build ok. /tienda/feed.xml served 200 application/xml with 2 items (draft and consult-price products excluded, ampersands escaped). Products without images are also excluded (Merchant requires image_link). Commit: b2e343d.

@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
+import { CategoryFaq } from "@/components/catalog/category-faq";
 import { CatalogListing } from "@/components/templates/catalog-listing";
 import { getCatalogBrands, getCatalogCategories, getCatalogProducts } from "@/lib/get-catalog";
-import { parseListingParams, type RawSearchParams } from "@/lib/catalog/listing-query";
+import { getCategoryFaq } from "@/lib/catalog/category-faq";
+import { hasListingVariant, parseListingParams, type RawSearchParams } from "@/lib/catalog/listing-query";
 import { categoryMetadataInput } from "@/lib/catalog/seo";
 import { buildMetadata } from "@/lib/seo";
 
@@ -39,6 +41,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const name = category?.name ?? "Categoría";
   const basePath = `/tienda/${categoria}`;
+  const faq = getCategoryFaq(categoria);
 
   return (
     <CatalogListing
@@ -54,6 +57,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       categories={categories.items}
       brands={brands.items}
       activeCategory={categoria}
+      footer={faq && !hasListingVariant(listing) ? <CategoryFaq categoryName={name} faq={faq} /> : null}
     />
   );
 }

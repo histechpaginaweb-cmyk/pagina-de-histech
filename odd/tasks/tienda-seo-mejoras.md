@@ -51,4 +51,4 @@ TDD: enabled (session config). Runners: vitest (frontend), node --test (backend)
 ## Progress
 
 - 2026-10-15: document created. Delivery strategy: ask-on-risk. Forecast is about 500 to 700 changed lines.
-- 2026-10-15 T1 done: RED = 3 vitest failures (product-seo, seo tests); GREEN = 130 tests pass, typecheck ok. Built with a mock catalog backend; rendered product HTML has exactly one `<meta property="og:type" content="product"/>` plus property price tags (only og:type when price is hidden). Commit: c7ad7c8.
+- 2026-10-15 T1 done: RED = 3 vitest failures (product-seo, seo tests); GREEN = 130 tests pass, typecheck ok. Built with a mock catalog backend; rendered product HTML has exactly one `<meta property="og:type" content="product"/>` plus property price tags (only og:type when price is hidden). Commit: 26a8be5.

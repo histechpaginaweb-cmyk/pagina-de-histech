@@ -76,7 +76,7 @@ describe("getPriceDisplay", () => {
       amount: 850000,
       currency: "COP",
       formatted: "$ 850.000",
-      taxLabel: "Precio sin IVA",
+      taxLabel: "IVA incluido",
       note: PRICE_REFERENCE_NOTE,
     });
     expect(PRICE_REFERENCE_NOTE).toBe("Precio de referencia, sujeto a confirmación del asesor");

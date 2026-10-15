@@ -303,7 +303,7 @@ model CatalogProduct {
   specs            Json                @default("[]") // [{ label, value }] en orden
   images           Json                @default("[]") // [{ url, alt }] en orden
   datasheetUrl     String?
-  price            Decimal?            @db.Decimal(14, 2) // SIN IVA, en priceCurrency
+  price            Decimal?            @db.Decimal(14, 2) // IVA incluido, en priceCurrency
   priceCurrency    String              @default("COP") // "COP" | "USD"
   consultPrice     Boolean             @default(false)
   availability     CatalogAvailability @default(on_request)

@@ -56,7 +56,7 @@ describe("buildProductAdvisorMessage", () => {
     });
     expect(message).toContain("Teltonika RUT956");
     expect(message).toContain("Referencia: RUT956");
-    expect(message).toContain("$ 850.000 sin IVA");
+    expect(message).toContain("$ 850.000 IVA incluido");
     expect(message).toContain(URL_);
   });
 
@@ -110,7 +110,7 @@ describe("productAdvisorLinks", () => {
       product({ consultPrice: false, price: 850000, priceCurrency: "COP", priceUpdatedAt: null }),
       { whatsapp: WA, phoneRaw: "+573180008152", productUrl: URL_ },
     );
-    expect(decodeURIComponent(links.whatsapp.split("?text=")[1])).toContain("$ 850.000 COP sin IVA");
+    expect(decodeURIComponent(links.whatsapp.split("?text=")[1])).toContain("$ 850.000 COP IVA incluido");
   });
 });
 
@@ -120,7 +120,7 @@ describe("productAdvisorLinks currency", () => {
       product({ consultPrice: false, price: 71.19, priceCurrency: "USD", priceUpdatedAt: null }),
       { whatsapp: WA, phoneRaw: "+573180008152", productUrl: URL_ },
     );
-    expect(decodeURIComponent(links.whatsapp.split("?text=")[1])).toContain("US$ 71,19 USD sin IVA");
+    expect(decodeURIComponent(links.whatsapp.split("?text=")[1])).toContain("US$ 71,19 USD IVA incluido");
   });
 });
 

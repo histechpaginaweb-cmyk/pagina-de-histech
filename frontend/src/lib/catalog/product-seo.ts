@@ -131,7 +131,7 @@ function trimToFit(text: string, max: number): string {
   return `${base.replace(/[\s.,;:\-–/+(]+$/, "")}…`;
 }
 
-/** Meta description with the price (+ IVA) or the consult text. The admin `seoDescription` wins verbatim. */
+/** Meta description with the price (IVA included) or the consult text. The admin `seoDescription` wins verbatim. */
 export function buildProductDescription(product: PublicProduct): string {
   const override = product.seoDescription?.trim();
   if (override) return override;
@@ -140,7 +140,7 @@ export function buildProductDescription(product: PublicProduct): string {
   const brand = product.brand?.name;
   const head = ref ? `${ref}${brand ? ` de ${brand}` : ""}` : product.name;
   const price = hasVisiblePrice(product)
-    ? `Precio ${product.priceCurrency === "USD" ? formatUsd(product.price) : formatCop(product.price)} + IVA en Colombia.`
+    ? `Precio ${product.priceCurrency === "USD" ? formatUsd(product.price) : formatCop(product.price)} IVA incluido en Colombia.`
     : CONSULT_PRICE_TEXT;
   const tail = `${price} ${DESCRIPTION_TAIL}`;
 

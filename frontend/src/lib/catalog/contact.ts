@@ -6,7 +6,7 @@ export function productReference(product: Pick<PublicProduct, "sku" | "model">):
   return product.sku?.trim() || product.model?.trim() || null;
 }
 
-/** Prefilled WhatsApp text for one product. Price only when it is public (always "sin IVA"). */
+/** Prefilled WhatsApp text for one product. Price only when it is public (always "IVA incluido"). */
 export function buildProductAdvisorMessage({
   name,
   reference,
@@ -21,7 +21,7 @@ export function buildProductAdvisorMessage({
 }): string {
   const lines = [`Hola, me interesa el producto ${name}.`];
   if (reference) lines.push(`Referencia: ${reference}`);
-  if (price) lines.push(`Precio publicado: ${price} sin IVA`);
+  if (price) lines.push(`Precio publicado: ${price} IVA incluido`);
   lines.push(`Enlace: ${url}`, "¿Me pueden asesorar?");
   return lines.join("\n");
 }

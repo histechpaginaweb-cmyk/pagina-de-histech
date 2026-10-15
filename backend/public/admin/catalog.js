@@ -225,7 +225,7 @@
         h(
           "tr",
           {},
-          ["Producto", "Precio sin IVA", "Disponibilidad", "Estado", ""].map((t) => h("th", {}, t)),
+          ["Producto", "Precio con IVA incluido", "Disponibilidad", "Estado", ""].map((t) => h("th", {}, t)),
         ),
       ),
       h("tbody", {}, items.map((p) => productRow(p, reload))),
@@ -237,7 +237,7 @@
       class: "cat-price",
       inputmode: "numeric",
       placeholder: "Sin precio",
-      "aria-label": "Precio sin IVA",
+      "aria-label": "Precio con IVA incluido",
       value: p.price ?? "",
     });
     const currency = select(currencyOptions(), p.priceCurrency || "COP", { "aria-label": "Moneda" });
@@ -542,9 +542,9 @@
         "div",
         { class: "row" },
         field(
-          "Precio sin IVA",
+          "Precio con IVA incluido",
           bind("price", h("input", { value: f.price, inputmode: "decimal", placeholder: "Ej. 1500000 o 71,19 (vacío = sin precio)" })),
-          "Sin IVA. COP sin decimales; USD admite hasta 2 decimales.",
+          "IVA incluido. COP sin decimales; USD admite hasta 2 decimales.",
         ),
         field("Moneda", bind("priceCurrency", select(currencyOptions(), f.priceCurrency), "change")),
         field("Disponibilidad", bind("availability", select(availabilityOptions(), f.availability), "change")),
@@ -784,7 +784,7 @@
         h(
           "p",
           { class: "muted" },
-          "Los precios se publican siempre sin IVA. Si lo desactivas, todos los productos muestran «Consultar precio», aunque tengan un precio guardado.",
+          "Los precios se publican con IVA incluido. Si lo desactivas, todos los productos muestran «Consultar precio», aunque tengan un precio guardado.",
         ),
         h("div", { class: "card-actions" }, save),
       ),

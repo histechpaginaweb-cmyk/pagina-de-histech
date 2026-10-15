@@ -1,6 +1,6 @@
 import type { Availability, PriceCurrency, PublicProduct } from "./types";
 
-export const PRICE_TAX_LABEL = "Precio sin IVA";
+export const PRICE_TAX_LABEL = "IVA incluido";
 export const PRICE_CONSULT_LABEL = "Consultar precio";
 export const PRICE_REFERENCE_NOTE = "Precio de referencia, sujeto a confirmación del asesor";
 

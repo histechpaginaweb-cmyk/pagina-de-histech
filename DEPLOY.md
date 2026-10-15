@@ -260,7 +260,7 @@ npm run catalog:seed
 
 ### 7.3) Visibilidad de precios
 
-- Los precios se guardan en **COP, sin IVA** y se muestran como "Precio sin IVA".
+- Los precios se guardan en **COP, con IVA incluido** y se muestran como "IVA incluido".
 - **Interruptor global** (`/admin` > Catálogo > Ajustes): al desactivar "Mostrar precios en la tienda", todo el
   catálogo muestra "Consultar precio".
 - **Por producto:** la casilla "Consultar precio" oculta solo ese precio.

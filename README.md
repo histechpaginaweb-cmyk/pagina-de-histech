@@ -25,7 +25,7 @@ de producto, contacto con asesor por WhatsApp/teléfono/cotización y SEO con JS
 - **Backend:** módulo `backend/catalog/` — API pública `GET /api/catalog/...` (solo publicados)
   y API admin `/api/admin/catalog/...`. Se gestiona desde `/admin`.
 - **Frontend:** `frontend/src/app/tienda/`, `frontend/src/lib/catalog/` (lógica pura con tests).
-- **Precios:** en COP **sin IVA**; un interruptor global y una casilla por producto permiten
+- **Precios:** en COP **con IVA incluido**; un interruptor global y una casilla por producto permiten
   mostrar "Consultar precio". Ver [`DEPLOY.md`](DEPLOY.md) sección 7 (esquema, seed y precios).
 - **Tests:** `cd backend && npm test` y `cd frontend && npm test`.
 

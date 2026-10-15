@@ -76,7 +76,7 @@ describe("productJsonLd", () => {
     expect(json).not.toContain("InStock");
   });
 
-  it("emits an Offer with VAT-excluded price specification when the price is visible", () => {
+  it("emits an Offer with VAT-included price specification when the price is visible", () => {
     const ld = productJsonLd(withPrice(), { siteUrl: SITE });
     expect(ld.offers).toEqual({
       "@type": "Offer",
@@ -89,7 +89,7 @@ describe("productJsonLd", () => {
         "@type": "PriceSpecification",
         price: 850000,
         priceCurrency: "COP",
-        valueAddedTaxIncluded: false,
+        valueAddedTaxIncluded: true,
       },
     });
   });
@@ -164,8 +164,8 @@ describe("productMetadataInput", () => {
     expect(productMetadataInput(product()).other).toEqual({ "og:type": "product" });
   });
 
-  it("includes the price + IVA in the description only when the price is public", () => {
-    expect(productMetadataInput(withPrice()).description).toContain("Precio $ 850.000 + IVA en Colombia.");
+  it("includes the price with IVA included in the description only when the price is public", () => {
+    expect(productMetadataInput(withPrice()).description).toContain("Precio $ 850.000 IVA incluido en Colombia.");
     expect(productMetadataInput(product()).description).not.toMatch(/\$|IVA|COP/);
   });
 

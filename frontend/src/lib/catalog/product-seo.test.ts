@@ -120,7 +120,7 @@ describe("buildProductDescription", () => {
   it("follows the template with the formatted price and stays within 160 chars", () => {
     const desc = buildProductDescription(product({ shortDescription: "Switch no administrable de 16 puertos Gigabit." }));
     expect(desc).toBe(
-      "RG-ES116G-L de Reyee: Switch no administrable de 16 puertos Gigabit. Precio $ 189.900 + IVA en Colombia. Asesoría y cotización inmediata con HISTECH.",
+      "RG-ES116G-L de Reyee: Switch no administrable de 16 puertos Gigabit. Precio $ 189.900 IVA incluido en Colombia. Asesoría y cotización inmediata con HISTECH.",
     );
     expect(desc.length).toBeLessThanOrEqual(160);
   });
@@ -135,7 +135,7 @@ describe("buildProductDescription", () => {
     );
     expect(desc.length).toBeLessThanOrEqual(160);
     expect(desc).toContain("…");
-    expect(desc).toContain("Precio $ 12.345.678 + IVA en Colombia.");
+    expect(desc).toContain("Precio $ 12.345.678 IVA incluido en Colombia.");
     expect(desc.endsWith("Asesoría y cotización inmediata con HISTECH.")).toBe(true);
   });
 
@@ -147,7 +147,7 @@ describe("buildProductDescription", () => {
 
   it("formats USD prices with the existing formatter", () => {
     expect(buildProductDescription(product({ price: 71.19, priceCurrency: "USD" }))).toContain(
-      "Precio US$ 71,19 + IVA en Colombia.",
+      "Precio US$ 71,19 IVA incluido en Colombia.",
     );
   });
 
@@ -165,7 +165,7 @@ describe("buildProductDescription", () => {
 
   it("works without brand or short description", () => {
     const desc = buildProductDescription(product({ brand: null, shortDescription: null }));
-    expect(desc.startsWith("RG-ES116G-L. Precio $ 189.900 + IVA en Colombia.")).toBe(true);
+    expect(desc.startsWith("RG-ES116G-L. Precio $ 189.900 IVA incluido en Colombia.")).toBe(true);
   });
 });
 

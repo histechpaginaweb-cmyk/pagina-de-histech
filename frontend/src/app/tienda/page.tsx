@@ -9,7 +9,7 @@ type Props = { searchParams: Promise<RawSearchParams> };
 
 const TITLE = "Tienda de equipos de red Ruijie y Reyee";
 const DESCRIPTION =
-  "Switches y switches PoE, routers, firewalls y transceptores de fibra Ruijie y Reyee con precios publicados + IVA. Busca por número de parte y recibe asesoría y cotización de HISTECH.";
+  "Switches y switches PoE, routers, firewalls y transceptores de fibra Ruijie y Reyee con precios publicados con IVA incluido. Busca por número de parte y recibe asesoría y cotización de HISTECH.";
 
 export async function generateMetadata({ searchParams }: Props) {
   const params = parseListingParams(await searchParams);

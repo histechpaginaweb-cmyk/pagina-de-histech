@@ -108,7 +108,7 @@ type ProductOffer = {
     "@type": "PriceSpecification";
     price: number;
     priceCurrency: PriceCurrency;
-    valueAddedTaxIncluded: false;
+    valueAddedTaxIncluded: true;
   };
 };
 
@@ -164,7 +164,7 @@ export function productJsonLd(product: PublicProduct, { siteUrl }: { siteUrl: st
         "@type": "PriceSpecification",
         price: product.price,
         priceCurrency: product.priceCurrency,
-        valueAddedTaxIncluded: false,
+        valueAddedTaxIncluded: true,
       },
     };
   }
